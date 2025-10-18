@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+:root {
+    --background: #ffffff;
+    --foreground: #171717;
+    --navy-dark: #0A0A1E;
+    /* 明るめのネイビー */
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+    --color-gold: #FFD700;
+    /* Gold */
+    --color-gold-light: #FFDAB9;
+    /* Light Gold */
+    --color-bronze: #CD7F32;
+    /* Bronze */
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0A0A1E;
+        --foreground: #ededed;
+    }
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@supports (color: color-mix(in lab, red, red)) {
+    .bg-navy-dark\/50 {
+        background-color: color-mix(in oklab, var(--navy-dark) 50%, transparent);
+    }
+}
