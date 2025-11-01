@@ -4,72 +4,66 @@ import { CheckCircle } from "lucide-react";
 
 export function MainFeaturesSection() {
   return (
-    <section className="py-20 px-4 bg-navy-dark/30">
-      <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h3 className="text-4xl font-serif font-semibold mb-6">
-            アリアとできる、3つのこと
+    <section className="py-40 px-6 bg-navy-dark/30">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-36">
+          <h3 className="text-4xl font-serif font-semibold mb-16">
+            Vertexとできる、3つのこと
           </h3>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            話すたび、思考が整っていく。<br />
-            アリアは、あなたの考えに静かに耳を傾け、一緒に道を探していきます。
+          <p className="text-xl text-muted-foreground max-w-5xl mx-auto leading-relaxed py-4">
+            深い静寂の中、思考は水面のように揺らぎ、道筋を見失うことは、もうない。<br />
+            AI戦略パートナー「Vertex」は、あなたの戦略の「核」へ、研ぎ澄まされた問いかけの「波紋」を広げます。
           </p>
         </div>
 
-        <div className="space-y-12">
-          {mainFeatures.map((feature, index) => {
+        {/* グリッド表示（カード型） */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          {mainFeatures.map((feature) => {
             const Icon = feature.icon;
             const color = feature.color;
             return (
-              <div key={feature.id} className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12`}>
-                {/* Feature Content */}
-                <div className="flex-1 space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center`}>
-                      <div className="text-navy-deepest">
-                        <Icon />
-                      </div>
-                      {/* <Icon className="w-8 h-8 text-navy-deepest" /> */}
+              <Card key={feature.id} className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md hover:border-gold/40 transition-all duration-300 group">
+                <CardContent className="p-12 h-full flex flex-col">
+                  {/* アイコンとタイトル */}
+                  <div className="flex items-start space-x-8 mb-12">
+                    <div className={`w-18 h-18 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="w-9 h-9 text-navy-deepest" />
                     </div>
-                    <div>
+                    <div className="flex-1 space-y-4">
                       <h4 className="text-2xl font-serif font-semibold">{feature.title}</h4>
-                      <p className="text-gold text-sm">{feature.subtitle}</p>
+                      <p className="text-gold text-base font-medium">{feature.subtitle}</p>
                     </div>
                   </div>
                   
-                  <p className="text-lg text-muted-foreground leading-relaxed">
+                  {/* 説明文 */}
+                  <p className="text-muted-foreground leading-relaxed mb-12 flex-1 text-lg py-2">
                     {feature.description}
                   </p>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* 対話例 */}
+                  <div className="bg-navy-dark/80 border border-gold/20 rounded-lg p-8 mb-12">
+                    <div className="flex items-center space-x-5 mb-6">
+                      <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center">
+                        <Icon className="w-6 h-6 text-navy-deepest" />
+                      </div>
+                      <span className="text-base font-medium text-gold">Vertexとの対話例</span>
+                    </div>
+                    <div className="text-base whitespace-pre-line text-muted-foreground leading-relaxed font-mono">
+                      {feature.demo}
+                    </div>
+                  </div>
+
+                  {/* チェックリスト */}
+                  <div className="space-y-5">
                     {feature.benefits.map((benefit, idx) => (
-                      <div key={idx} className="flex items-center space-x-2">
-                        <CheckCircle className="w-4 h-4 text-gold" />
-                        <span className="text-sm">{benefit}</span>
+                      <div key={idx} className="flex items-center space-x-5">
+                        <CheckCircle className="w-6 h-6 text-gold flex-shrink-0" />
+                        <span className="text-base text-muted-foreground leading-relaxed">{benefit}</span>
                       </div>
                     ))}
                   </div>
-                </div>
-
-                {/* Chat Demo */}
-                <div className="flex-1">
-                  <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md">
-                    <CardContent className="p-6">
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-2 mb-4">
-                          <div className="w-6 h-6 bg-gold rounded-full flex items-center justify-center">
-                            <Icon className="w-4 h-4 text-navy-deepest" />
-                          </div>
-                          <span className="text-sm font-medium text-gold">アリアとの対話例</span>
-                        </div>
-                        <div className="text-sm whitespace-pre-line text-muted-foreground leading-relaxed font-mono">
-                          {feature.demo}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             );
           })}
         </div>

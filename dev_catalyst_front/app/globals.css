@@ -1,40 +1,301 @@
 @import "tailwindcss";
 
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+    --background-solid: #f8fafc;
+    --foreground: #0f172a;
+    --card: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    --card-solid: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    --popover-foreground: #0f172a;
+    --primary: #f59e0b;
+    --primary-foreground: #ffffff;
+    --secondary: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    --secondary-foreground: #0f172a;
+    --muted: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    --muted-foreground: #374151;
+    --accent: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    --accent-foreground: #0f172a;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --border: #cbd5e1;
+    --input: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    --ring: #f59e0b;
     --navy-dark: #0A0A1E;
-    /* 明るめのネイビー */
+    --radius: 0.5rem;
+}
+
+.dark {
+    --background: #000000;
+    --foreground: #ffffff;
+    --card: #1a1a1a;
+    --card-foreground: #ffffff;
+    --popover: #1a1a1a;
+    --popover-foreground: #ffffff;
+    --primary: #d4af37;
+    --primary-foreground: #000000;
+    --secondary: #2a2a2a;
+    --secondary-foreground: #ffffff;
+    --muted: #2a2a2a;
+    --muted-foreground: #a0a0a0;
+    --accent: #333333;
+    --accent-foreground: #ffffff;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --border: #404040;
+    --input: #2a2a2a;
+    --ring: #d4af37;
+    --navy-dark: #000000;
 }
 
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
-    --color-gold: #FFD700;
-    /* Gold */
-    --color-gold-light: #FFDAB9;
-    /* Light Gold */
-    --color-bronze: #CD7F32;
-    /* Bronze */
+    --color-gold: var(--color-gold);
+    --color-gold-light: var(--color-gold-light);
+    --color-bronze: var(--color-bronze);
+    --navy-dark: var(--navy-dark);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0A0A1E;
-        --foreground: #ededed;
-    }
+:root {
+    --color-gold: #f59e0b;
+    --color-gold-light: #fbbf24;
+    --color-bronze: #d97706;
+    --color-gold-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    --color-gold-light-gradient: linear-gradient(135deg, #fbbf24 0%, #fde047 100%);
+    --color-bronze-gradient: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+}
+
+.dark {
+    --color-gold: #d4af37;
+    --color-gold-light: #f4e4a6;
+    --color-bronze: #b8860b;
+}
+
+html {
+    color-scheme: light dark;
 }
 
 body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background-solid, #f8fafc);
+    color: var(--foreground) !important;
+    accent-color: AccentColor;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* 強制的な文字色設定 */
+html.light body {
+    color: #0f172a !important;
+    background: #f8fafc !important;
+}
+
+html.dark body {
+    color: #ffffff !important;
+    background: #000000 !important;
+}
+
+/* 全体的なテーマ切り替えトランジション */
+* {
+    transition: background-color 0.3s ease-in-out,
+        color 0.3s ease-in-out,
+        border-color 0.3s ease-in-out,
+        text-shadow 0.3s ease-in-out,
+        box-shadow 0.3s ease-in-out,
+        opacity 0.3s ease-in-out,
+        transform 0.3s ease-in-out;
+}
+
+/* テーマ切り替え時の要素の再描画を強制 */
+html.dark *,
+html.light * {
+    transform: translateZ(0);
+}
+
+/* テーマ切り替え時のちらつき防止 */
+html.dark {
+    color-scheme: dark;
+}
+
+html.light {
+    color-scheme: light;
+}
+
+/* ライトモード用グラデーション背景 */
+body:not(.dark) {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+    min-height: 100vh;
+}
+
+/* ダークモード専用背景 */
+.dark body {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #2d2d4a 100%) !important;
+    min-height: 100vh;
+}
+
+/* システムカラーのフォールバック */
+@supports not (color: AccentColor) {
+    :root {
+        --primary: var(--fallback-accent, #0066cc);
+        --ring: var(--fallback-accent, #0066cc);
+        --color-gold: var(--fallback-accent, #0066cc);
+    }
+}
+
+/* カラーミックスのサポート */
 @supports (color: color-mix(in lab, red, red)) {
     .bg-navy-dark\/50 {
         background-color: color-mix(in oklab, var(--navy-dark) 50%, transparent);
     }
+}
+
+/* フォント設定 */
+body {
+    font-family: 'Roboto', 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* タイトル用セリフフォント */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-serif {
+    font-family: 'Playfair Display', 'Noto Serif JP', Georgia, serif;
+}
+
+/* マットで洗練された質感 */
+.glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+    background: rgba(26, 26, 26, 0.9);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+/* 静かな光沢効果 */
+.subtle-glow {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.dark .subtle-glow {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+}
+
+/* ライトモード用グラデーション効果 */
+.gradient-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.gradient-button {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    transition: all 0.3s ease;
+}
+
+.gradient-button:hover {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-accent {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+}
+
+/* テキスト視認性向上 */
+.text-enhanced {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
+
+.text-gold-enhanced {
+    color: #f59e0b;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    font-weight: 700;
+}
+
+.text-dark-enhanced {
+    color: #0f172a;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+}
+
+/* ダークモード専用テキストスタイル */
+.dark .text-gold-enhanced {
+    color: #d4af37;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+}
+
+/* ダークモード専用シャドウなしスタイル */
+.dark .shadow-none {
+    text-shadow: none !important;
+}
+
+/* 文字色の強制
+適用 */
+html.light * {
+    color: inherit;
+}
+
+html.dark * {
+    color: inherit;
+}
+
+/* 特定要素の文字色を確実に設定 */
+html.light .text-foreground,
+html.light .text-card-foreground,
+html.light .text-popover-foreground {
+    color: #0f172a !important;
+}
+
+html.dark .text-foreground,
+html.dark .text-card-foreground,
+html.dark .text-popover-foreground {
+    color: #ffffff !important;
+}
+
+/* muted-foregroundの色も確実に設定 */
+html.light .text-muted-foreground {
+    color: #374151 !important;
+}
+
+html.dark .text-muted-foreground {
+    color: #a0a0a0 !important;
+}
+
+/* Tailwindのデフォルト文字色をオーバーライド */
+html.light {
+    --tw-text-opacity: 1;
+    color: rgb(15 23 42 / var(--tw-text-opacity)) !important;
+}
+
+html.dark {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
 }

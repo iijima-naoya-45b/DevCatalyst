@@ -5,13 +5,13 @@ import { Badge } from "./ui/badge";
 import { Switch } from "./ui/switch";
 import { Separator } from "./ui/separator";
 import { Progress } from "./ui/progress";
-import { 
-  CreditCard, 
-  Crown, 
-  Zap, 
-  Shield, 
-  Check, 
-  X, 
+import {
+  CreditCard,
+  Crown,
+  Zap,
+  Shield,
+  Check,
+  X,
   Calendar,
   AlertCircle,
   TrendingUp,
@@ -39,7 +39,7 @@ export function PlanManagement() {
       yearlyPrice: 29800,
       features: [
         'AI戦略分析 月5回',
-        'ターゲット分析 月3回', 
+        'ターゲット分析 月3回',
         '基本レポート出力',
         'メールサポート',
         'データ保存期間 3ヶ月'
@@ -100,7 +100,7 @@ export function PlanManagement() {
   ];
 
   const currentPlanData = plans.find(p => p.id === currentPlan);
-  
+
   const usage = {
     aiAnalysis: { used: 3, limit: currentPlanData?.limits.aiAnalysis || 5 },
     targetAnalysis: { used: 1, limit: currentPlanData?.limits.targetAnalysis || 3 },
@@ -181,7 +181,7 @@ export function PlanManagement() {
                     {usage.aiAnalysis.used}/{usage.aiAnalysis.limit === -1 ? '無制限' : usage.aiAnalysis.limit}
                   </span>
                 </div>
-                <Progress 
+                <Progress
                   value={getUsagePercentage(usage.aiAnalysis.used, usage.aiAnalysis.limit)}
                   className="h-2"
                 />
@@ -193,7 +193,7 @@ export function PlanManagement() {
                     {usage.targetAnalysis.used}/{usage.targetAnalysis.limit === -1 ? '無制限' : usage.targetAnalysis.limit}
                   </span>
                 </div>
-                <Progress 
+                <Progress
                   value={getUsagePercentage(usage.targetAnalysis.used, usage.targetAnalysis.limit)}
                   className="h-2"
                 />
@@ -205,7 +205,7 @@ export function PlanManagement() {
                     {usage.projects.used}/{usage.projects.limit === -1 ? '無制限' : usage.projects.limit}
                   </span>
                 </div>
-                <Progress 
+                <Progress
                   value={getUsagePercentage(usage.projects.used, usage.projects.limit)}
                   className="h-2"
                 />
@@ -216,12 +216,12 @@ export function PlanManagement() {
           {/* Billing Cycle Toggle */}
           <div className="flex items-center space-x-4 p-4 bg-gold/5 rounded-lg border border-gold/20">
             <div className="flex items-center space-x-2">
-              <span className={billingCycle === 'monthly' ? 'text-foreground' : 'text-muted-foreground'}>月額</span>
+              <span className={`transition-colors duration-200 ${billingCycle === 'monthly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>月額</span>
               <Switch
                 checked={billingCycle === 'yearly'}
                 onCheckedChange={(checked: boolean) => setBillingCycle(checked ? 'yearly' : 'monthly')}
               />
-              <span className={billingCycle === 'yearly' ? 'text-foreground' : 'text-muted-foreground'}>年額</span>
+              <span className={`transition-colors duration-200 ${billingCycle === 'yearly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>年額</span>
             </div>
             {billingCycle === 'yearly' && (
               <Badge variant="outline" className="border-gold text-gold bg-gold/10">
@@ -251,17 +251,17 @@ export function PlanManagement() {
       {/* Plan Comparison */}
       <div className="space-y-6">
         <h2 className="text-2xl font-serif font-semibold">プラン比較・変更</h2>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {plans.map((plan) => {
             const Icon = plan.icon;
             const isCurrentPlan = plan.id === currentPlan;
-            
+
             return (
               <Card key={plan.id} className={`
                 relative border transition-all duration-300 hover:shadow-lg
-                ${isCurrentPlan 
-                  ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent' 
+                ${isCurrentPlan
+                  ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent'
                   : 'border-gold/25 bg-navy-dark/40 hover:border-gold/40'
                 }
                 backdrop-blur-md
@@ -273,7 +273,7 @@ export function PlanManagement() {
                     </Badge>
                   </div>
                 )}
-                
+
                 <CardHeader className="text-center">
                   <div className={`w-16 h-16 mx-auto rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center mb-4`}>
                     <Icon className="w-8 h-8 text-navy-deepest" />
@@ -289,7 +289,7 @@ export function PlanManagement() {
                     </div>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-6">
                   <div className="space-y-3">
                     {plan.features.map((feature, index) => (
@@ -299,17 +299,16 @@ export function PlanManagement() {
                       </div>
                     ))}
                   </div>
-                  
+
                   <Button
                     onClick={() => handleUpgrade(plan.id)}
                     disabled={isCurrentPlan}
-                    className={`w-full ${
-                      isCurrentPlan
-                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                        : plan.recommended
+                    className={`w-full ${isCurrentPlan
+                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                      : plan.recommended
                         ? 'bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light'
                         : 'bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light'
-                    }`}
+                      }`}
                   >
                     {isCurrentPlan ? (
                       <>
@@ -355,7 +354,7 @@ export function PlanManagement() {
                 変更
               </Button>
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>次回請求日</span>
@@ -387,7 +386,7 @@ export function PlanManagement() {
                 <X className="w-4 h-4 mr-2" />
                 プランをキャンセル
               </Button>
-              
+
               <Button
                 variant="outline"
                 className="w-full justify-start border-blue-400/30 text-blue-400 hover:bg-blue-400/5"
@@ -396,7 +395,7 @@ export function PlanManagement() {
                 サポートに連絡
               </Button>
             </div>
-            
+
             {showCancelDialog && (
               <div className="p-4 border border-orange-400/20 rounded-lg bg-orange-400/5">
                 <div className="space-y-3">

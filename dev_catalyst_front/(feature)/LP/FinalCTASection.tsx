@@ -4,8 +4,8 @@ import { Brain, ArrowRight } from "lucide-react";
 export function FinalCTASection({ onStartTrial }: { onStartTrial: () => void }) {
   return (
     <section className="py-20 px-4 bg-gradient-to-r from-navy-dark via-navy to-navy-dark">
-      <div className="container mx-auto text-center">
-        <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto space-y-8">
           <h3 className="text-4xl md:text-5xl font-serif font-bold">
             今夜、
             <span className="bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">

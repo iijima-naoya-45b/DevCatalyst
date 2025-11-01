@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { 
-  ArrowRight, 
-  ArrowDown, 
-  Home, 
-  Lightbulb, 
-  Target, 
-  Map, 
+import {
+  ArrowRight,
+  ArrowDown,
+  Home,
+  Lightbulb,
+  Target,
+  Map,
   Settings,
   Smartphone,
   Monitor,
@@ -141,7 +141,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
           <h1 className="text-3xl md:text-4xl font-serif font-semibold bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
             devCatalist 画面遷移図
           </h1>
-          <div className="w-3 h-3 bg-gold rounded-full animate-pulse" style={{animationDelay: '1s'}} />
+          <div className="w-3 h-3 bg-gold rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
         </div>
         <p className="text-muted-foreground text-lg">
           インタラクティブな画面フロー・ビジュアライゼーション
@@ -158,7 +158,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               variant={selectedFlow === 'recommended' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSelectedFlow('recommended')}
-              className={selectedFlow === 'recommended' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold'}
+              className={`${selectedFlow === 'recommended' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold hover:bg-gold/10'} transition-all duration-200`}
             >
               推奨フロー
             </Button>
@@ -166,7 +166,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               variant={selectedFlow === 'basic' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSelectedFlow('basic')}
-              className={selectedFlow === 'basic' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold'}
+              className={`${selectedFlow === 'basic' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold hover:bg-gold/10'} transition-all duration-200`}
             >
               基本ナビ
             </Button>
@@ -174,7 +174,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               variant={selectedFlow === 'action' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSelectedFlow('action')}
-              className={selectedFlow === 'action' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold'}
+              className={`${selectedFlow === 'action' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold hover:bg-gold/10'} transition-all duration-200`}
             >
               アクション
             </Button>
@@ -189,7 +189,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               variant={viewMode === 'desktop' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setViewMode('desktop')}
-              className={viewMode === 'desktop' ? 'bg-bronze text-navy-deepest' : 'border-bronze/30 text-bronze'}
+              className={`${viewMode === 'desktop' ? 'bg-bronze text-navy-deepest' : 'border-bronze/30 text-bronze hover:bg-bronze/10'} transition-all duration-200`}
             >
               <Monitor className="w-4 h-4 mr-2" />
               Desktop
@@ -198,7 +198,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               variant={viewMode === 'tablet' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setViewMode('tablet')}
-              className={viewMode === 'tablet' ? 'bg-bronze text-navy-deepest' : 'border-bronze/30 text-bronze'}
+              className={`${viewMode === 'tablet' ? 'bg-bronze text-navy-deepest' : 'border-bronze/30 text-bronze hover:bg-bronze/10'} transition-all duration-200`}
             >
               <Tablet className="w-4 h-4 mr-2" />
               Tablet
@@ -207,7 +207,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               variant={viewMode === 'mobile' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setViewMode('mobile')}
-              className={viewMode === 'mobile' ? 'bg-bronze text-navy-deepest' : 'border-bronze/30 text-bronze'}
+              className={`${viewMode === 'mobile' ? 'bg-bronze text-navy-deepest' : 'border-bronze/30 text-bronze hover:bg-bronze/10'} transition-all duration-200`}
             >
               <Smartphone className="w-4 h-4 mr-2" />
               Mobile
@@ -239,14 +239,14 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
             </Badge>
           </div>
         </CardHeader>
-        
+
         <CardContent className="relative h-[500px]">
           {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5" 
-               style={{
-                 backgroundImage: `radial-gradient(circle at 25% 25%, #d4af37 0%, transparent 50%),
+          <div className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage: `radial-gradient(circle at 25% 25%, #d4af37 0%, transparent 50%),
                                   radial-gradient(circle at 75% 75%, #b8860b 0%, transparent 50%)`
-               }} />
+            }} />
 
           {/* Screen Nodes */}
           {screens.map((screen, index) => {
@@ -263,14 +263,14 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               >
                 <div className={`
                   relative w-32 h-24 md:w-40 md:h-28 rounded-xl border-2 transition-all duration-300
-                  ${isActive 
-                    ? 'border-gold shadow-lg shadow-gold/25 scale-110' 
+                  ${isActive
+                    ? 'border-gold shadow-lg shadow-gold/25 scale-110'
                     : 'border-gold/30 hover:border-gold/60 hover:scale-105'
                   }
                   bg-gradient-to-br ${screen.color} p-1
                 `}>
                   <div className="w-full h-full bg-navy-dark/90 rounded-lg p-3 flex flex-col items-center justify-center text-center">
-                    <Icon className={`w-6 h-6 mb-2 ${isActive ? 'text-gold' : 'text-gold/70'}`} />
+                    <Icon className={`w-6 h-6 mb-2 transition-colors duration-200 ${isActive ? 'text-gold' : 'text-gold/70 hover:text-gold/90'}`} />
                     <h4 className="text-xs font-semibold text-foreground leading-tight">
                       {screen.title}
                     </h4>
@@ -278,7 +278,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
                       {screen.subtitle}
                     </p>
                   </div>
-                  
+
                   {/* Status Indicator */}
                   <div className={`
                     absolute -top-2 -right-2 w-6 h-6 rounded-full border-2 border-navy-dark flex items-center justify-center
@@ -312,11 +312,11 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
           {flows[selectedFlow]?.map((flow, index) => {
             const fromIndex = screens.findIndex(s => s.id === flow.from);
             const fromPos = getScreenPosition(fromIndex);
-            
+
             return flow.to.map((toId, toIndex) => {
               const toScreenIndex = screens.findIndex(s => s.id === toId);
               const toPos = getScreenPosition(toScreenIndex);
-              
+
               return (
                 <svg
                   key={`${flow.from}-${toId}-${index}-${toIndex}`}

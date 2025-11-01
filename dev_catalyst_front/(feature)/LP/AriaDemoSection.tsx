@@ -1,14 +1,14 @@
 import { Badge } from "../../(feature)/common/ui/badge";
 import { AriaChat } from "../../(feature)/common/AriaChat";
 
-export function AriaDemoSection({ showAriaDemo, onStartTrial }: { showAriaDemo: boolean; onStartTrial: () => void }) {
+export function AriaDemoSection({ showAriaDemo }: { showAriaDemo: boolean }) {
   if (!showAriaDemo) {
     return null;
   }
 
   return (
     <section className="py-20 px-4 border-t border-gold/20">
-      <div className="container mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <Badge className="bg-gold/10 text-gold border-gold/30 mb-4">
             LIVE DEMO
@@ -20,7 +20,7 @@ export function AriaDemoSection({ showAriaDemo, onStartTrial }: { showAriaDemo: 
             静かに耳を傾け、一緒に考えてくれる。そんな対話を、少し体験してみてください。
           </p>
         </div>
-        <AriaChat initialMode="demo" onStartAnalysis={onStartTrial} />
+        <AriaChat initialMode="demo" />
       </div>
     </section>
   );
