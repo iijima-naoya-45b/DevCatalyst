@@ -4,18 +4,21 @@ import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { 
-  Send, 
-  Sparkles, 
-  TrendingUp, 
-  Target, 
+import {
+  Send,
+  Sparkles,
+  TrendingUp,
+  Target,
   Lightbulb,
   Brain,
-  MessageCircle,
   Zap,
-  BarChart3,
-  PlusCircle
+  BarChart3
 } from "lucide-react";
+import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, RadialLinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut, Bar, Radar } from 'react-chartjs-2';
+
+// Chart.jsの登録
+ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, RadialLinearScale, PointElement, LineElement, Tooltip, Legend);
 
 interface Message {
   id: string;
@@ -30,20 +33,20 @@ interface Message {
   }[];
   isStreaming?: boolean;
   displayedContent?: string;
+  chartData?: any; // グラフデータを追加
 }
 
 interface AriaChatProps {
-  initialMode?: 'demo' | 'full';
   onStartAnalysis?: () => void;
 }
 
-export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProps) {
+export function AriaChat({ onStartAnalysis }: AriaChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+
   const [ariaThinking, setAriaThinking] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  
+
   // ストリーミング中かチェック
   const isStreaming = messages.some(msg => msg.isStreaming);
 
@@ -68,18 +71,18 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
 
     const fullContent = streamingMessage.content;
     const currentDisplayed = streamingMessage.displayedContent || '';
-    
+
     if (currentDisplayed.length < fullContent.length) {
       // 単語/文節単位で表示（より自然な塊で表示）
       const remainingContent = fullContent.substring(currentDisplayed.length);
-      
+
       // 次に表示する文字数を決定（1-8文字のランダムな塊）
       let chunkSize = 1;
-      
+
       // 改行の場合は即座に表示
       if (remainingContent.startsWith('\n')) {
         chunkSize = 1;
-      } 
+      }
       // 句読点や記号の後は短めに
       else if (currentDisplayed.match(/[。、！？\n]$/)) {
         chunkSize = Math.floor(Math.random() * 3) + 1; // 1-3文字
@@ -88,7 +91,7 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
       else {
         chunkSize = Math.floor(Math.random() * 4) + 3; // 3-6文字
       }
-      
+
       // 残りの文字数を超えないように調整
       chunkSize = Math.min(chunkSize, remainingContent.length);
 
@@ -97,9 +100,9 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
           prevMessages.map(msg =>
             msg.id === streamingMessage.id
               ? {
-                  ...msg,
-                  displayedContent: fullContent.substring(0, currentDisplayed.length + chunkSize)
-                }
+                ...msg,
+                displayedContent: fullContent.substring(0, currentDisplayed.length + chunkSize)
+              }
               : msg
           )
         );
@@ -126,7 +129,7 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
         "こんにちは。私はアリア、あなたの思考パートナーです。✨\n\n起業やビジネスについて、どんな小さなことでも、一緒に考えていきましょう。\n\n例えば：\n• 漠然としたアイデアを形にしたい\n• 競合との向き合い方に悩んでいる\n• 何から始めればいいか分からない\n• 具体的な戦略を立てたい\n\n今、あなたの心にあることを、聞かせてもらえますか？",
         [
           "アイデアがあるんだけど...",
-          "競合が気になって", 
+          "競合が気になって",
           "これから何をすればいいか",
           "計画を立てたいんだけど"
         ]
@@ -162,10 +165,10 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
 
   const simulateAriaResponse = (userInput: string) => {
     setAriaThinking(true);
-    
+
     setTimeout(() => {
       // アリアの応答を開始（ストリーミング開始）
-      
+
       // キーワードベースの応答シミュレーション（より詳細で具体的に）
       if (userInput.includes('競合') || userInput.includes('ライバル')) {
         addAriaMessage(
@@ -388,7 +391,7 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
 
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
-    
+
     addUserMessage(inputValue);
     simulateAriaResponse(inputValue);
     setInputValue('');
@@ -399,6 +402,474 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
     simulateAriaResponse(suggestion);
   };
 
+  const handleAnalysis = () => {
+    // ユーザーメッセージとして「分析する。」を追加
+    addUserMessage('分析する。');
+
+    // Aria思考中状態を設定
+    setAriaThinking(true);
+
+    setTimeout(() => {
+      // 分析データを生成
+      const analysisData = generateAnalysisFromConversation();
+
+      // チャートデータを生成
+      const chartData = generateChartData(analysisData);
+
+      // Ariaが分析結果をチャート付きで返す
+      const analysisMessage = formatAnalysisAsChatMessage(analysisData);
+
+      // チャートデータを含むメッセージを追加
+      const newMessage: Message = {
+        id: Date.now().toString(),
+        type: 'aria',
+        content: analysisMessage,
+        timestamp: new Date(),
+        chartData: chartData,
+        isStreaming: true,
+        displayedContent: ''
+      };
+
+      setMessages(prevMessages => [...prevMessages, newMessage]);
+      setAriaThinking(false);
+
+      if (onStartAnalysis) {
+        onStartAnalysis();
+      }
+    }, 800); // 少し遅延させて自然な流れに
+  };
+
+  // 対話内容に基づいて分析データを生成する関数
+  const generateAnalysisFromConversation = () => {
+    const userMessages = messages.filter(msg => msg.type === 'user');
+    const ariaMessages = messages.filter(msg => msg.type === 'aria');
+
+    // キーワードベースで分析内容を決定
+    const allContent = messages.map(msg => msg.content).join(' ');
+
+    let strengths = [
+      "明確なビジョンと情熱を持っている",
+      "継続的な学習意欲"
+    ];
+    let opportunities = [
+      "デジタル化の波に乗るチャンス",
+      "ニッチ市場での先行者優位性"
+    ];
+    let risks = [
+      "競合の参入による市場の変化",
+      "技術の急速な進歩への対応"
+    ];
+    let recommendations = [
+      "MVP（最小実行可能製品）の早期リリース",
+      "ターゲット顧客の詳細なペルソナ設定"
+    ];
+    let marketInsights = {
+      size: "約500億円（国内市場）",
+      growth: "年率15%の成長",
+      competition: "中程度（参入障壁あり）"
+    };
+    let nextSteps = [
+      "1週間以内：詳細な市場調査の実施",
+      "2週間以内：MVPの設計とプロトタイプ作成",
+      "1ヶ月以内：初期顧客へのヒアリング開始",
+      "3ヶ月以内：正式ローンチの準備"
+    ];
+
+    // 対話内容に基づくカスタマイズ
+    if (allContent.includes('競合') || allContent.includes('ライバル')) {
+      strengths.push("競合分析への意識の高さ");
+      risks.push("価格競争への巻き込まれ");
+      recommendations.push("差別化戦略の明確化");
+      marketInsights.competition = "高い（価格競争激化中）";
+    }
+
+    if (allContent.includes('アイデア') || allContent.includes('ビジネス')) {
+      strengths.push("創造性とイノベーション思考");
+      opportunities.push("新規市場の開拓可能性");
+      recommendations.push("アイデアの実現可能性検証");
+      nextSteps.unshift("1週間以内：アイデアの詳細化と検証");
+    }
+
+    if (allContent.includes('価格') || allContent.includes('料金')) {
+      strengths.push("価格戦略への理解");
+      risks.push("価格設定の難しさ");
+      recommendations.push("価値ベース価格設定の採用");
+      marketInsights.growth = "年率12%の成長（価格競争影響）";
+    }
+
+    if (allContent.includes('マーケティング') || allContent.includes('集客')) {
+      strengths.push("マーケティングへの関心");
+      opportunities.push("デジタルマーケティングの活用");
+      recommendations.push("オムニチャネル戦略の構築");
+      nextSteps.unshift("2週間以内：マーケティング戦略の策定");
+    }
+
+    if (allContent.includes('ターゲット') || allContent.includes('顧客')) {
+      strengths.push("顧客志向の思考");
+      opportunities.push("特定ニーズへの対応");
+      recommendations.push("ペルソナの詳細化と検証");
+      marketInsights.size = "約300億円（ターゲット市場）";
+    }
+
+    if (allContent.includes('不安') || allContent.includes('心配')) {
+      strengths.push("リスク管理への意識");
+      risks.push("過度な慎重さによる機会損失");
+      recommendations.push("段階的なリスクテイク戦略");
+      nextSteps.unshift("1週間以内：リスク評価と軽減策の検討");
+    }
+
+    // Vertexからの分析コメントを生成
+    const vertexMessage = generateVertexAnalysisMessage(allContent, userMessages.length);
+
+    return {
+      strengths: strengths.slice(0, 4), // 最大4つまで
+      opportunities: opportunities.slice(0, 4),
+      risks: risks.slice(0, 4),
+      recommendations: recommendations.slice(0, 4),
+      marketInsights,
+      nextSteps: nextSteps.slice(0, 4),
+      vertexMessage
+    };
+  };
+
+  // Vertexの分析コメントを生成する関数
+  const generateVertexAnalysisMessage = (content: string, messageCount: number) => {
+    const messages = [
+      "対話を通じて、あなたのビジネスに対する深い洞察を得ることができました。分析結果をご覧ください。",
+      "お話しいただいた内容から、いくつかの重要なポイントを整理しました。",
+      "あなたの思考プロセスと課題意識を踏まえ、戦略的な分析を行いました。",
+      "対話の中で見えてきた課題と可能性を、体系的に分析してみました。"
+    ];
+
+    let baseMessage = messages[Math.min(messageCount - 1, messages.length - 1)] || messages[0];
+
+    // 内容に基づく追加コメント
+    if (content.includes('競合') || content.includes('ライバル')) {
+      baseMessage += "特に競合に関するご懸念は、差別化戦略の重要性を示しています。";
+    }
+
+    if (content.includes('アイデア') || content.includes('ビジネス')) {
+      baseMessage += "あなたのアイデアには大きな可能性があります。";
+    }
+
+    if (content.includes('不安') || content.includes('心配')) {
+      baseMessage += "不安に感じることも、慎重な戦略立案につながる大切な要素です。";
+    }
+
+    if (content.includes('価格') || content.includes('料金')) {
+      baseMessage += "価格戦略についてのご相談は、収益性を考える上で重要なポイントですね。";
+    }
+
+    return baseMessage;
+  };
+
+  // 分析結果をチャート付きメッセージに変換する関数
+  const formatAnalysisAsChatMessage = (analysisData: any) => {
+    // テキストメッセージ部分
+    let message = `📊 **戦略分析結果**\n\n`;
+
+    // Vertexからのコメント
+    if (analysisData.vertexMessage) {
+      message += `${analysisData.vertexMessage}\n\n`;
+    }
+
+    message += `以下、会話内容から分析した結果を視覚化してお見せします。\n\n`;
+    message += `[CHART:MARKET_INSIGHTS]\n\n`;
+    message += `[CHART:STRENGTHS]\n\n`;
+    message += `[CHART:OPPORTUNITIES]\n\n`;
+    message += `[CHART:RECOMMENDATIONS]\n\n`;
+    message += `[CHART:SWOT_RADAR]\n\n`;
+
+    // 次のステップ（テキスト）
+    message += `**📅 次のステップ**\n\n`;
+    analysisData.nextSteps.forEach((step: string, index: number) => {
+      const timeIcon = ['⚡', '📅', '📆', '🗓️'][index] || '📅';
+      message += `${timeIcon} ${step}\n`;
+    });
+    message += `\n`;
+
+    message += `この分析結果について、さらに詳しく話し合いましょうか？`;
+
+    return message;
+  };
+
+  // チャートデータを生成する関数
+  const generateChartData = (analysisData: any) => {
+    return {
+      marketInsights: {
+        labels: ['市場規模', '成長性', '競合状況'],
+        datasets: [{
+          label: '市場インサイト',
+          data: [85, 90, 70], // 動的に調整可能
+          backgroundColor: [
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 99, 132, 0.6)',
+          ],
+          borderColor: [
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 99, 132, 1)',
+          ],
+          borderWidth: 2,
+        }]
+      },
+      strengths: {
+        labels: analysisData.strengths,
+        datasets: [{
+          label: 'あなたの強み',
+          data: analysisData.strengths.map((_: any, index: number) =>
+            Math.round((100 / analysisData.strengths.length) * (analysisData.strengths.length - index))
+          ),
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 159, 64, 0.6)',
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+          ],
+          borderWidth: 2,
+        }]
+      },
+      opportunities: {
+        labels: analysisData.opportunities,
+        datasets: [{
+          label: 'チャンス',
+          data: analysisData.opportunities.map((_: any, index: number) =>
+            Math.round((100 / analysisData.opportunities.length) * (analysisData.opportunities.length - index))
+          ),
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2,
+        }]
+      },
+      recommendations: {
+        labels: analysisData.recommendations,
+        datasets: [{
+          label: '推奨アクション（優先度）',
+          data: [40, 30, 20, 10].slice(0, analysisData.recommendations.length),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(255, 159, 64, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+          ],
+          borderWidth: 2,
+        }]
+      },
+      swotRadar: {
+        labels: ['強み', '機会', '市場性', '実行力', '差別化'],
+        datasets: [{
+          label: 'SWOT総合分析',
+          data: [
+            (analysisData.strengths.length / 4) * 100,
+            (analysisData.opportunities.length / 4) * 100,
+            85,
+            75,
+            80
+          ],
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 2,
+          pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+        }]
+      }
+    };
+  };
+
+  // メッセージ内のチャートマーカーをグラフコンポーネントに置き換える関数
+  const renderMessageWithCharts = (content: string, chartData: any) => {
+    const parts = content.split(/(\[CHART:[A-Z_]+\])/g);
+
+    return (
+      <div className="space-y-6">
+        {parts.map((part, index) => {
+          // チャートマーカーの検出
+          if (part === '[CHART:MARKET_INSIGHTS]') {
+            return (
+              <div key={index} className="my-4">
+                <h4 className="text-sm font-semibold mb-3 text-gold flex items-center">
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  📈 市場インサイト
+                </h4>
+                <div className="bg-navy-dark/60 rounded-xl p-4 border border-gold/10">
+                  <div className="max-w-xs mx-auto">
+                    <Doughnut
+                      data={chartData.marketInsights}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                          legend: {
+                            position: 'bottom',
+                            labels: { color: '#f0e6d2', font: { size: 11 } }
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          } else if (part === '[CHART:STRENGTHS]') {
+            return (
+              <div key={index} className="my-4">
+                <h4 className="text-sm font-semibold mb-3 text-blue-400 flex items-center">
+                  <Target className="w-4 h-4 mr-2" />
+                  💪 あなたの強み
+                </h4>
+                <div className="bg-navy-dark/60 rounded-xl p-4 border border-blue-400/10">
+                  <div className="max-w-xs mx-auto">
+                    <Doughnut
+                      data={chartData.strengths}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                          legend: {
+                            position: 'bottom',
+                            labels: { color: '#f0e6d2', font: { size: 10 } }
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          } else if (part === '[CHART:OPPORTUNITIES]') {
+            return (
+              <div key={index} className="my-4">
+                <h4 className="text-sm font-semibold mb-3 text-green-400 flex items-center">
+                  <Lightbulb className="w-4 h-4 mr-2" />
+                  🚀 チャンス
+                </h4>
+                <div className="bg-navy-dark/60 rounded-xl p-4 border border-green-400/10">
+                  <Bar
+                    data={chartData.opportunities}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: true,
+                      plugins: {
+                        legend: {
+                          display: false
+                        }
+                      },
+                      scales: {
+                        y: {
+                          beginAtZero: true,
+                          ticks: { color: '#f0e6d2' },
+                          grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                        },
+                        x: {
+                          ticks: { color: '#f0e6d2', font: { size: 10 } },
+                          grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                        }
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          } else if (part === '[CHART:RECOMMENDATIONS]') {
+            return (
+              <div key={index} className="my-4">
+                <h4 className="text-sm font-semibold mb-3 text-orange-400 flex items-center">
+                  <Zap className="w-4 h-4 mr-2" />
+                  🎯 推奨アクション
+                </h4>
+                <div className="bg-navy-dark/60 rounded-xl p-4 border border-orange-400/10">
+                  <Bar
+                    data={chartData.recommendations}
+                    options={{
+                      indexAxis: 'y',
+                      responsive: true,
+                      maintainAspectRatio: true,
+                      plugins: {
+                        legend: {
+                          display: false
+                        }
+                      },
+                      scales: {
+                        x: {
+                          beginAtZero: true,
+                          ticks: { color: '#f0e6d2' },
+                          grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                        },
+                        y: {
+                          ticks: { color: '#f0e6d2', font: { size: 10 } },
+                          grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                        }
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          } else if (part === '[CHART:SWOT_RADAR]') {
+            return (
+              <div key={index} className="my-4">
+                <h4 className="text-sm font-semibold mb-3 text-purple-400 flex items-center">
+                  <Brain className="w-4 h-4 mr-2" />
+                  📊 SWOT総合分析
+                </h4>
+                <div className="bg-navy-dark/60 rounded-xl p-4 border border-purple-400/10">
+                  <div className="max-w-sm mx-auto">
+                    <Radar
+                      data={chartData.swotRadar}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                          legend: {
+                            display: false
+                          }
+                        },
+                        scales: {
+                          r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#f0e6d2', font: { size: 11 } },
+                            ticks: {
+                              color: '#f0e6d2',
+                              backdropColor: 'transparent'
+                            }
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          } else if (part.trim()) {
+            // 通常のテキスト
+            return (
+              <p key={index} className="whitespace-pre-wrap leading-relaxed">
+                {part}
+              </p>
+            );
+          }
+          return null;
+        })}
+      </div>
+    );
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -407,16 +878,16 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* チャット履歴 */}
       <Card className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md shadow-2xl mb-6">
         <CardContent className="p-0">
-          <div 
+          <div
             ref={chatContainerRef}
             className="h-96 overflow-y-auto p-6 space-y-6"
           >
             {messages.map((message) => (
-              <div key={message.id} className={`flex items-start space-x-3 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+              <div key={message.id} className={`flex items-start space-x-3 transition-all duration-300 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
                 {/* アバター */}
                 <div className="flex-shrink-0">
                   {message.type === 'aria' ? (
@@ -440,15 +911,21 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
                 </div>
 
                 {/* メッセージ内容 */}
-                <div className={`flex-1 ${message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}>
-                  <div className={`rounded-2xl p-4 ${
-                    message.type === 'aria' 
-                      ? 'bg-navy-medium border border-gold/20' 
-                      : 'bg-blue-600 text-white'
-                  } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}>
-                    <p className="whitespace-pre-wrap leading-relaxed">
-                      {message.type === 'aria' ? (message.displayedContent || message.content) : message.content}
-                    </p>
+                <div className={`flex-1 transition-all duration-300 ${message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}>
+                  <div className={`rounded-2xl p-4 ${message.type === 'aria'
+                    ? 'bg-navy-medium border border-gold/20'
+                    : 'bg-blue-600 text-white'
+                    } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}>
+                    {/* テキストメッセージとチャートを分離してレンダリング */}
+                    {message.type === 'aria' && message.chartData ? (
+                      <>
+                        {renderMessageWithCharts(message.displayedContent || message.content, message.chartData)}
+                      </>
+                    ) : (
+                      <p className="whitespace-pre-wrap leading-relaxed">
+                        {message.type === 'aria' ? (message.displayedContent || message.content) : message.content}
+                      </p>
+                    )}
                   </div>
 
                   {/* インサイトカード */}
@@ -456,11 +933,10 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
                     <div className="mt-4 space-y-2">
                       {message.insights.map((insight, index) => (
                         <div key={index} className="flex items-center space-x-3 p-3 bg-gold/5 border border-gold/20 rounded-lg">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                            insight.type === 'strategy' ? 'bg-gold/20' :
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${insight.type === 'strategy' ? 'bg-gold/20' :
                             insight.type === 'opportunity' ? 'bg-green-500/20' :
-                            'bg-orange-400/20'
-                          }`}>
+                              'bg-orange-400/20'
+                            }`}>
                             {insight.type === 'strategy' && <Target className="w-3 h-3 text-gold" />}
                             {insight.type === 'opportunity' && <TrendingUp className="w-3 h-3 text-green-400" />}
                             {insight.type === 'risk' && <Zap className="w-3 h-3 text-orange-400" />}
@@ -493,10 +969,10 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
                   )}
 
                   {/* タイムスタンプ */}
-                  <div className={`mt-2 text-xs text-muted-foreground ${message.type === 'user' ? 'text-right' : ''}`}>
-                    {message.timestamp.toLocaleTimeString('ja-JP', { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
+                  <div className={`mt-2 text-xs text-muted-foreground transition-all duration-200 ${message.type === 'user' ? 'text-right' : ''}`}>
+                    {message.timestamp.toLocaleTimeString('ja-JP', {
+                      hour: '2-digit',
+                      minute: '2-digit'
                     })}
                   </div>
                 </div>
@@ -515,8 +991,8 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
                   <div className="flex items-center space-x-2">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gold rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                     <span className="text-sm text-gold">アリアが静かに考えています...</span>
                   </div>
@@ -549,37 +1025,37 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
                 <Send className="w-4 h-4" />
               </Button>
             </div>
-            
+
             {onStartAnalysis && (
               <Button
-                onClick={onStartAnalysis}
+                onClick={handleAnalysis}
                 className="bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light whitespace-nowrap"
               >
                 <BarChart3 className="w-4 h-4 mr-2" />
-                もっと話す
+                分析する
               </Button>
             )}
           </div>
 
           {/* クイックアクション */}
           <div className="mt-4 flex flex-wrap gap-2">
-            <Badge 
-              variant="outline" 
-              className={`border-gold/30 text-gold bg-gold/5 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-gold/10' : 'opacity-50 cursor-not-allowed'}`}
+            <Badge
+              variant="outline"
+              className={`border-gold/30 text-gold bg-gold/5 transition-all duration-200 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-gold/10 hover:border-gold/50' : 'opacity-50 cursor-not-allowed'}`}
               onClick={() => !ariaThinking && !isStreaming && handleSuggestionClick("アイデアがあるんだけど...")}>
               <Lightbulb className="w-3 h-3 mr-1" />
               アイデアの相談
             </Badge>
-            <Badge 
-              variant="outline" 
-              className={`border-bronze/30 text-bronze bg-bronze/5 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-bronze/10' : 'opacity-50 cursor-not-allowed'}`}
+            <Badge
+              variant="outline"
+              className={`border-bronze/30 text-bronze bg-bronze/5 transition-all duration-200 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-bronze/10 hover:border-bronze/50' : 'opacity-50 cursor-not-allowed'}`}
               onClick={() => !ariaThinking && !isStreaming && handleSuggestionClick("競合が気になって")}>
               <Target className="w-3 h-3 mr-1" />
               競合のこと
             </Badge>
-            <Badge 
-              variant="outline" 
-              className={`border-copper/30 text-copper bg-copper/5 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-copper/10' : 'opacity-50 cursor-not-allowed'}`}
+            <Badge
+              variant="outline"
+              className={`border-copper/30 text-copper bg-copper/5 transition-all duration-200 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-copper/10 hover:border-copper/50' : 'opacity-50 cursor-not-allowed'}`}
               onClick={() => !ariaThinking && !isStreaming && handleSuggestionClick("これから何をすればいいか")}>
               <TrendingUp className="w-3 h-3 mr-1" />
               次の一歩
@@ -587,6 +1063,7 @@ export function AriaChat({ initialMode = 'demo', onStartAnalysis }: AriaChatProp
           </div>
         </CardContent>
       </Card>
+
     </div>
   );
 }

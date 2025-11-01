@@ -5,7 +5,7 @@ import { Clock } from "lucide-react";
 export function OnboardingStepsSection() {
   return (
     <section className="py-20 px-4">
-      <div className="container mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h3 className="text-4xl font-serif font-semibold mb-6">
             今夜から、アリアと話せます
@@ -15,7 +15,7 @@ export function OnboardingStepsSection() {
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {onboardingSteps.map((step, index) => {
               const Icon = step.icon;

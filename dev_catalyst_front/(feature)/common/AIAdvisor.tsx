@@ -6,11 +6,11 @@ import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { Badge } from "./ui/badge";
 import { AriaChat } from "./AriaChat";
-import { 
-  Lightbulb, 
-  Zap, 
-  Target, 
-  TrendingUp, 
+import {
+  Lightbulb,
+  Zap,
+  Target,
+  TrendingUp,
   AlertCircle,
   CheckCircle,
   ArrowRight,
@@ -93,7 +93,7 @@ export function AIAdvisor() {
           </div>
           <Button
             onClick={() => setShowAriaChat(!showAriaChat)}
-            className={`${showAriaChat ? 'bg-gold text-navy-deepest' : 'bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light'}`}
+            className={`transition-all duration-300 ${showAriaChat ? 'bg-gold text-navy-deepest shadow-lg' : 'bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light hover:shadow-xl'}`}
           >
             <MessageSquare className="w-4 h-4 mr-2" />
             {showAriaChat ? 'フォーム分析に戻る' : 'アリアと対話する'}
@@ -140,7 +140,7 @@ export function AIAdvisor() {
                   id="idea"
                   placeholder="あなたのビジネスアイデアを詳しく説明してください..."
                   value={businessInfo.idea}
-                  onChange={(e) => setBusinessInfo({...businessInfo, idea: e.target.value})}
+                  onChange={(e) => setBusinessInfo({ ...businessInfo, idea: e.target.value })}
                   className="min-h-[100px]"
                 />
               </div>
@@ -151,7 +151,7 @@ export function AIAdvisor() {
                   id="stage"
                   placeholder="アイデア段階、MVP開発中、既にローンチ済みなど"
                   value={businessInfo.currentStage}
-                  onChange={(e) => setBusinessInfo({...businessInfo, currentStage: e.target.value})}
+                  onChange={(e) => setBusinessInfo({ ...businessInfo, currentStage: e.target.value })}
                 />
               </div>
 
@@ -161,7 +161,7 @@ export function AIAdvisor() {
                   id="resources"
                   placeholder="資金、時間、人材、技術スキルなど"
                   value={businessInfo.resources}
-                  onChange={(e) => setBusinessInfo({...businessInfo, resources: e.target.value})}
+                  onChange={(e) => setBusinessInfo({ ...businessInfo, resources: e.target.value })}
                 />
               </div>
 
@@ -171,11 +171,11 @@ export function AIAdvisor() {
                   id="timeline"
                   placeholder="6ヶ月でローンチ、1年で売上目標達成など"
                   value={businessInfo.timeline}
-                  onChange={(e) => setBusinessInfo({...businessInfo, timeline: e.target.value})}
+                  onChange={(e) => setBusinessInfo({ ...businessInfo, timeline: e.target.value })}
                 />
               </div>
 
-              <Button 
+              <Button
                 onClick={handleAnalyze}
                 disabled={isAnalyzing || !businessInfo.idea}
                 className="w-full bg-bronze hover:bg-bronze-light text-navy-dark"
@@ -368,14 +368,14 @@ export function AIAdvisor() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button 
+                <Button
                   className="h-12 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light"
                   onClick={() => setIsAnalyzing(true)}
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   AI分析を再生成
                 </Button>
-                <Button 
+                <Button
                   variant="outline"
                   className="h-12 border-gold/30 text-gold hover:bg-gold/5"
                 >
@@ -383,7 +383,7 @@ export function AIAdvisor() {
                   追加質問をする
                 </Button>
               </div>
-              
+
               <div className="space-y-4">
                 <Label>改善リクエスト・コメント</Label>
                 <Textarea

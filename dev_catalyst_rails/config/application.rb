@@ -28,5 +28,38 @@ module DevCatalystRails
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # タイムゾーン設定
+    config.time_zone = 'UTC'
+
+    # CORS設定
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins ENV.fetch('FRONTEND_URL', 'http://localhost:3001')
+        resource '*',
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head],
+          credentials: true
+      end
+    end
+
+    # セッション設定（Redis使用）
+    config.session_store :cookie_store, {
+      key: '_dev_catalyst_session',
+      secure: Rails.env.production?,
+      httponly: true,
+      same_site: :lax,
+      expire_after: 2.weeks
+    }
+
+    # キャッシュ設定
+    config.cache_store = :redis_cache_store, {
+      url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/1'),
+      expires_in: 1.hour
+    }
+
+    # 自動読み込みパス
+    config.autoload_paths += %W(#{config.root}/app/services)
+    config.autoload_paths += %W(#{config.root}/app/serializers)
   end
 end

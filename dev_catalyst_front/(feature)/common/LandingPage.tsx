@@ -3,10 +3,10 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { AriaChat } from "./AriaChat";
-import { 
-  Sparkles, 
-  TrendingUp, 
-  Target, 
+import {
+  Sparkles,
+  TrendingUp,
+  Target,
   Brain,
   Users,
   Shield,
@@ -184,8 +184,8 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
         {/* Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-gold/8 via-transparent to-copper/5 pointer-events-none" />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/3 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-bronze/4 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}} />
-        
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-bronze/4 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
+
         <div className="container mx-auto text-center relative z-10">
           {/* Service Logo & Name */}
           <div className="flex items-center justify-center space-x-4 mb-8">
@@ -220,13 +220,13 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                 へ。
               </span>
             </h2>
-            
+
             <div className="space-y-6">
               <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light">
                 78%の経営者が感じる「戦略立案の孤独」を解決。<br />
                 AIパートナー「<strong className="text-gold">アリア</strong>」との対話で、データに基づく確信ある意思決定を実現。
               </p>
-              
+
               <div className="flex items-center justify-center space-x-8 text-sm text-muted-foreground">
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 text-green-400" />
@@ -264,7 +264,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                 5分でわかるライブデモ
               </Button>
             </div>
-            
+
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
                 ✓ クレジットカード不要　✓ 30秒でセットアップ完了　✓ 今なら14日間無料
@@ -390,7 +390,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
             {mainFeatures.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div key={feature.id} className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12`}>
+                <div key={feature.id} className={`flex flex-col transition-all duration-500 ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 hover:scale-[1.02]`}>
                   {/* Feature Content */}
                   <div className="flex-1 space-y-6">
                     <div className="flex items-center space-x-4">
@@ -402,7 +402,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                         <p className="text-gold text-sm">{feature.subtitle}</p>
                       </div>
                     </div>
-                    
+
                     <p className="text-lg text-muted-foreground leading-relaxed">
                       {feature.description}
                     </p>
@@ -463,11 +463,11 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                     {index < onboardingSteps.length - 1 && (
                       <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-gold to-bronze transform translate-x-4 -translate-y-1/2" />
                     )}
-                    
+
                     <div className="w-16 h-16 bg-gradient-to-br from-gold to-bronze rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
                       <Icon className="w-8 h-8 text-navy-deepest" />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="text-sm text-gold font-medium">STEP {step.step}</div>
                       <h4 className="text-lg font-semibold">{step.title}</h4>
@@ -501,8 +501,8 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
             {plans.map((plan) => (
               <Card key={plan.id} className={`
                 relative border transition-all duration-300 hover:shadow-2xl
-                ${plan.popular 
-                  ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent scale-105' 
+                ${plan.popular
+                  ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent scale-105'
                   : 'border-gold/25 bg-navy-dark/40 hover:border-gold/40'
                 }
                 backdrop-blur-md
@@ -515,7 +515,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                     </Badge>
                   </div>
                 )}
-                
+
                 <CardHeader className="text-center pb-8">
                   <CardTitle className="text-2xl font-serif mb-2">{plan.name}</CardTitle>
                   <div className="space-y-2">
@@ -524,7 +524,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                   </div>
                   <p className="text-muted-foreground">{plan.description}</p>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-6">
                   <div className="space-y-3">
                     {plan.features.map((feature, index) => (
@@ -534,14 +534,13 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                       </div>
                     ))}
                   </div>
-                  
+
                   <Button
                     onClick={onStartTrial}
-                    className={`w-full h-12 ${
-                      plan.popular
+                    className={`w-full h-12 ${plan.popular
                         ? 'bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light'
                         : 'bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light'
-                    }`}
+                      }`}
                   >
                     {plan.cta}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -574,15 +573,15 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                       <Star key={i} className="w-4 h-4 text-gold fill-current" />
                     ))}
                   </div>
-                  
+
                   <p className="text-muted-foreground leading-relaxed">
                     "{testimonial.content}"
                   </p>
-                  
+
                   <div className="bg-gold/5 border border-gold/20 rounded-lg p-3">
                     <div className="text-sm font-medium text-gold">{testimonial.result}</div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-3 pt-4 border-t border-gold/20">
                     <div className="w-12 h-12 bg-gradient-to-br from-gold to-bronze rounded-full flex items-center justify-center">
                       <span className="text-navy-deepest font-semibold text-sm">
@@ -613,13 +612,13 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                 待っています
               </span>
             </h3>
-            
+
             <p className="text-xl text-muted-foreground leading-relaxed">
               複雑な戦略立案の孤独から解放されて、データに基づく確信を手に入れましょう。
               <br />
               今すぐアリアとの戦略セッションを始めてください。
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 onClick={onStartTrial}
@@ -630,7 +629,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                 <ArrowRight className="w-5 h-5 ml-3" />
               </Button>
             </div>
-            
+
             <div className="text-sm text-muted-foreground">
               クレジットカード不要 • 最短30秒でセットアップ完了 • いつでもキャンセル可能
             </div>

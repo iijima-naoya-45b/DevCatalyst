@@ -17,7 +17,7 @@ interface HeaderProps {
 
 export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlowDiagram, showPlanManagement, onTogglePlanManagement, onLogout }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   const navigation = [
     { id: 'dashboard', label: 'ダッシュボード', icon: Home },
     { id: 'advisor', label: 'AI戦略分析', icon: Lightbulb },
@@ -35,10 +35,10 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
               <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-gold via-gold-light to-bronze rounded-xl flex items-center justify-center relative overflow-hidden shadow-lg group-hover:shadow-gold/25 transition-all duration-300">
                 {/* Sailing Ship Icon with Particles */}
                 <svg className="w-5 h-5 md:w-7 md:h-7 text-navy-deepest" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M3 18h18v2H3v-2zm6.5-14L12 2l2.5 2h-5zm2.5 2v8l6-2V6l-6 2zm0 0V6l-6 2v6l6-2z"/>
-                  <circle cx="18" cy="8" r="1" className="animate-pulse" fill="currentColor" opacity="0.7"/>
-                  <circle cx="6" cy="10" r="0.8" className="animate-pulse" fill="currentColor" opacity="0.5" style={{animationDelay: '0.5s'}}/>
-                  <circle cx="20" cy="12" r="0.6" className="animate-pulse" fill="currentColor" opacity="0.6" style={{animationDelay: '1s'}}/>
+                  <path d="M3 18h18v2H3v-2zm6.5-14L12 2l2.5 2h-5zm2.5 2v8l6-2V6l-6 2zm0 0V6l-6 2v6l6-2z" />
+                  <circle cx="18" cy="8" r="1" className="animate-pulse" fill="currentColor" opacity="0.7" />
+                  <circle cx="6" cy="10" r="0.8" className="animate-pulse" fill="currentColor" opacity="0.5" style={{ animationDelay: '0.5s' }} />
+                  <circle cx="20" cy="12" r="0.6" className="animate-pulse" fill="currentColor" opacity="0.6" style={{ animationDelay: '1s' }} />
                 </svg>
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-gold-light to-silver rounded-full animate-ping"></div>
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-gold/10 to-transparent rounded-xl animate-pulse"></div>
@@ -51,11 +51,11 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
               <div className="hidden sm:flex items-center space-x-2">
                 <div className="w-1 h-1 bg-gold rounded-full animate-pulse"></div>
                 <span className="text-xs text-gold/70 tracking-wide font-medium">革新の煌めきを、あなたのビジネスに</span>
-                <div className="w-1 h-1 bg-gold rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                <div className="w-1 h-1 bg-gold rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
               </div>
             </div>
           </div>
-          
+
           <nav className="hidden md:flex space-x-2">
             {navigation.map((item) => {
               const Icon = item.icon;
@@ -65,28 +65,26 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
                   key={item.id}
                   variant={isActive ? "default" : "ghost"}
                   onClick={() => onViewChange(item.id)}
-                  className={`flex items-center space-x-3 px-4 py-2 transition-all duration-300 font-medium tracking-wide ${
-                    isActive 
-                      ? "bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-xl shadow-gold/20 border border-gold/30" 
+                  className={`flex items-center space-x-3 px-4 py-2 transition-all duration-300 font-medium tracking-wide ${isActive
+                      ? "bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-xl shadow-gold/20 border border-gold/30"
                       : "text-foreground/80 hover:bg-navy-medium/50 hover:text-gold-light hover:shadow-lg border border-transparent hover:border-gold/10"
-                  }`}
+                    }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span className="text-sm">{item.label}</span>
                 </Button>
               );
             })}
-            
+
             {/* Flow Diagram Toggle */}
             {onToggleFlowDiagram && (
               <Button
                 variant={showFlowDiagram ? "default" : "ghost"}
                 onClick={onToggleFlowDiagram}
-                className={`flex items-center space-x-3 px-4 py-2 transition-all duration-300 font-medium tracking-wide ${
-                  showFlowDiagram 
-                    ? "bg-gradient-to-r from-copper to-bronze text-navy-deepest hover:from-copper-light hover:to-bronze-light shadow-xl shadow-copper/20 border border-copper/30" 
+                className={`flex items-center space-x-3 px-4 py-2 transition-all duration-300 font-medium tracking-wide ${showFlowDiagram
+                    ? "bg-gradient-to-r from-copper to-bronze text-navy-deepest hover:from-copper-light hover:to-bronze-light shadow-xl shadow-copper/20 border border-copper/30"
                     : "text-foreground/80 hover:bg-navy-medium/50 hover:text-copper-light hover:shadow-lg border border-transparent hover:border-copper/10"
-                }`}
+                  }`}
               >
                 <GitBranch className="w-4 h-4" />
                 <span className="text-sm">画面遷移図</span>
@@ -109,7 +107,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
                   <SheetTitle className="text-gold font-serif text-lg">ナビゲーション</SheetTitle>
                 </div>
               </SheetHeader>
-              
+
               <nav className="space-y-2">
                 {navigation.map((item) => {
                   const Icon = item.icon;
@@ -122,18 +120,17 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
                         onViewChange(item.id);
                         setMobileMenuOpen(false);
                       }}
-                      className={`w-full justify-start space-x-3 h-12 transition-all duration-300 ${
-                        isActive 
-                          ? "bg-gradient-to-r from-gold to-bronze text-navy-deepest" 
+                      className={`w-full justify-start space-x-3 h-12 transition-all duration-300 ${isActive
+                          ? "bg-gradient-to-r from-gold to-bronze text-navy-deepest"
                           : "text-foreground hover:bg-navy-medium hover:text-gold-light"
-                      }`}
+                        }`}
                     >
                       <Icon className="w-5 h-5" />
                       <span>{item.label}</span>
                     </Button>
                   );
                 })}
-                
+
                 {/* Flow Diagram Toggle */}
                 {onToggleFlowDiagram && (
                   <Button
@@ -142,18 +139,17 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
                       onToggleFlowDiagram();
                       setMobileMenuOpen(false);
                     }}
-                    className={`w-full justify-start space-x-3 h-12 transition-all duration-300 ${
-                      showFlowDiagram 
-                        ? "bg-gradient-to-r from-copper to-bronze text-navy-deepest" 
+                    className={`w-full justify-start space-x-3 h-12 transition-all duration-300 ${showFlowDiagram
+                        ? "bg-gradient-to-r from-copper to-bronze text-navy-deepest"
                         : "text-foreground hover:bg-navy-medium hover:text-copper-light"
-                    }`}
+                      }`}
                   >
                     <GitBranch className="w-5 h-5" />
                     <span>画面遷移図</span>
                   </Button>
                 )}
               </nav>
-              
+
               <div className="absolute bottom-6 left-6 right-6">
                 <div className="border-t border-gold/20 pt-4">
                   <div className="flex items-center space-x-3">
@@ -176,7 +172,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
             <p className="text-xs text-gold/70 tracking-wide font-medium uppercase">ソロプレナー</p>
             <p className="text-sm text-foreground font-medium tracking-wide">田中 太郎</p>
           </div>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative p-1">
@@ -195,9 +191,9 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
                 <span>プロフィール設定</span>
               </DropdownMenuItem>
               {onTogglePlanManagement && (
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   onClick={onTogglePlanManagement}
-                  className={`focus:bg-navy-medium ${showPlanManagement ? 'bg-gold/10 text-gold' : ''}`}
+                  className={`focus:bg-navy-medium transition-colors duration-200 ${showPlanManagement ? 'bg-gold/10 text-gold' : 'hover:bg-navy-medium/70'}`}
                 >
                   <Crown className="w-4 h-4 mr-2" />
                   <span>プラン管理</span>
@@ -205,7 +201,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
               )}
               <DropdownMenuSeparator className="bg-gold/20" />
               {onLogout && (
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   onClick={onLogout}
                   className="focus:bg-red-900/20 text-red-400"
                 >
