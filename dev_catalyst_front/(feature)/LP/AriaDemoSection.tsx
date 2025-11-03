@@ -20,7 +20,7 @@ export function AriaDemoSection({ showAriaDemo }: { showAriaDemo: boolean }) {
             静かに耳を傾け、一緒に考えてくれる。そんな対話を、少し体験してみてください。
           </p>
         </div>
-        <AriaChat initialMode="demo" />
+        <AriaChat />
       </div>
     </section>
   );

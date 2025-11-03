@@ -1,0 +1,146 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+
+# Rails OAuth + JWT + Devise認証セットアップスクリプト
+
+def main
+  puts "🔐 Rails OAuth + JWT + Devise認証セットアップ"
+  puts "=" * 50
+  
+  check_environment
+  check_gemfile
+  setup_instructions
+end
+
+def check_environment
+  puts "\n📋 環境確認:"
+  
+  # .env.development の確認
+  env_file = '.env.development'
+  if File.exist?(env_file)
+    puts "  ✅ #{env_file} が存在します"
+    
+    env_content = File.read(env_file)
+    required_vars = %w[JWT_SECRET_KEY JWT_EXPIRATION_TIME GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GITHUB_CLIENT_ID GITHUB_CLIENT_SECRET]
+    
+    required_vars.each do |var|
+      if env_content.include?(var)
+        value = env_content.match(/#{var}=(.+)/)&.[](1)
+        status = value&.include?('your_') ? '⚠️  未設定' : '✅ 設定済み'
+        puts "    #{status} #{var}"
+      else
+        puts "    ❌ #{var} が見つかりません"
+      end
+    end
+  else
+    puts "  ❌ #{env_file} が見つかりません"
+  end
+end
+
+def check_gemfile
+  puts "\n📦 Gem確認:"
+  
+  gemfile_content = File.read('Gemfile')
+  required_gems = %w[devise jwt omniauth omniauth-google-oauth2 omniauth-github omniauth-rails_csrf_protection rack-cors]
+  
+  required_gems.each do |gem_name|
+    if gemfile_content.include?(gem_name)
+      puts "  ✅ #{gem_name}"
+    else
+      puts "  ❌ #{gem_name} が見つかりません"
+    end
+  end
+end
+
+def setup_instructions
+  puts "\n🚀 セットアップ手順:"
+  
+  puts "\n1. Gemのインストール:"
+  puts "   bundle install"
+  
+  puts "\n2. データベースのマイグレーション:"
+  puts "   rails db:migrate"
+  
+  puts "\n3. OAuth アプリケーションの設定:"
+  puts "\n   📱 Google OAuth2:"
+  puts "   - Google Cloud Console: https://console.cloud.google.com/"
+  puts "   - 新しいプロジェクトを作成"
+  puts "   - OAuth 2.0 認証情報を作成"
+  puts "   - リダイレクトURI: http://localhost:3001/users/auth/google_oauth2/callback"
+  puts "   - クライアントIDとシークレットを .env.development に設定"
+  
+  puts "\n   🐙 GitHub OAuth:"
+  puts "   - GitHub Developer Settings: https://github.com/settings/developers"
+  puts "   - New OAuth App を作成"
+  puts "   - Authorization callback URL: http://localhost:3001/users/auth/github/callback"
+  puts "   - クライアントIDとシークレットを .env.development に設定"
+  
+  puts "\n4. 環境変数の設定例:"
+  puts "   JWT_SECRET_KEY=your_super_secret_jwt_key_here"
+  puts "   JWT_EXPIRATION_TIME=24"
+  puts "   GOOGLE_CLIENT_ID=123456789-abcdef.apps.googleusercontent.com"
+  puts "   GOOGLE_CLIENT_SECRET=GOCSPX-abcdef123456"
+  puts "   GITHUB_CLIENT_ID=abcdef123456"
+  puts "   GITHUB_CLIENT_SECRET=abcdef123456789"
+  
+  puts "\n5. サーバー起動:"
+  puts "   rails server -p 3001"
+  
+  puts "\n6. API エンドポイント:"
+  puts "   # 通常認証"
+  puts "   POST /api/v1/auth/login          - ログイン"
+  puts "   POST /api/v1/auth/register       - ユーザー登録"
+  puts "   DELETE /api/v1/auth/logout       - ログアウト"
+  puts "   POST /api/v1/auth/verify_token   - トークン検証"
+  puts ""
+  puts "   # OAuth認証"
+  puts "   GET  /users/auth/google_oauth2   - Google OAuth開始"
+  puts "   GET  /users/auth/github          - GitHub OAuth開始"
+  puts "   GET  /users/auth/:provider/callback - OAuth コールバック"
+  puts ""
+  puts "   # ユーザー管理"
+  puts "   GET  /api/v1/users/me            - ユーザー情報取得"
+  puts "   PUT  /api/v1/users/me            - ユーザー情報更新"
+  
+  puts "\n7. 認証フロー:"
+  puts "   【通常認証】"
+  puts "   - フロントエンド → POST /api/v1/auth/login"
+  puts "   - Rails → JWTトークンを返却"
+  puts "   - フロントエンド → Authorization: Bearer <token> でAPI呼び出し"
+  puts ""
+  puts "   【OAuth認証】"
+  puts "   - フロントエンド → GET /users/auth/google_oauth2"
+  puts "   - OAuth プロバイダー → Rails コールバック"
+  puts "   - Rails → フロントエンドにリダイレクト（JWTトークン付き）"
+  puts "   - フロントエンド → トークンを保存してダッシュボードへ"
+  
+  puts "\n📝 注意事項:"
+  puts "   - 本番環境では JWT_SECRET_KEY を必ず変更してください"
+  puts "   - OAuth設定のコールバックURLは正確に設定してください"
+  puts "   - JWTトークンは Authorization ヘッダーで送信: 'Bearer <token>'"
+  puts "   - OAuth認証後はパスワード不要でログイン可能です"
+  
+  puts "\n🔍 トラブルシューティング:"
+  puts "   - OAuth設定は各プロバイダーのドキュメントを参照"
+  puts "   - CORS エラーが発生した場合は config/initializers/cors.rb を確認"
+  puts "   - JWT エラーは JWT_SECRET_KEY の設定を確認"
+  puts "   - ログは rails server の出力で確認"
+  
+  puts "\n✨ セットアップ完了後のテスト:"
+  puts "   # 通常ユーザー登録"
+  puts "   curl -X POST http://localhost:3001/api/v1/auth/register \\"
+  puts "     -H 'Content-Type: application/json' \\"
+  puts "     -d '{\"user\":{\"name\":\"Test User\",\"email\":\"test@example.com\",\"password\":\"password\",\"password_confirmation\":\"password\"}}'"
+  puts ""
+  puts "   # OAuth認証テスト"
+  puts "   ブラウザで http://localhost:3001/users/auth/google_oauth2 にアクセス"
+  
+  puts "\n" + "=" * 50
+  puts "🎉 OAuth + JWT + Devise認証セットアップガイド完了！"
+end
+
+if __FILE__ == $0
+  main
+end

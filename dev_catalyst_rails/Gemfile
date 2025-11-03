@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.3"
 
 # Database
-gem "pg", "~> 1.1"  # PostgreSQL adapter
+gem "sqlite3", ">= 1.4"  # SQLite adapter
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -13,6 +13,11 @@ gem "puma", ">= 5.0"
 gem "jbuilder"
 
 # Authentication & Authorization
+gem "devise"  # Authentication
+gem "omniauth"  # OAuth authentication
+gem "omniauth-google-oauth2"  # Google OAuth
+gem "omniauth-github"  # GitHub OAuth
+gem "omniauth-rails_csrf_protection"  # CSRF protection for OmniAuth
 gem "bcrypt", "~> 3.1.7"  # Use Active Model has_secure_password
 gem "jwt"  # JSON Web Token
 gem "pundit"  # Authorization
@@ -24,6 +29,8 @@ gem "rack-cors"  # Cross-Origin Resource Sharing
 gem "stripe"  # Stripe payment processing
 gem "octokit"  # GitHub API
 gem "httparty"  # HTTP requests
+gem "faraday"  # HTTP client
+gem "faraday-retry"  # Retry middleware for Faraday
 
 # Background Jobs
 gem "sidekiq"  # Background job processing

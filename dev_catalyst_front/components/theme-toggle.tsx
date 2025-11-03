@@ -36,7 +36,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative inline-flex h-10 w-20 items-center rounded-full bg-slate-200 dark:bg-slate-700 transition-all duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2"
+      className="relative inline-flex h-10 w-20 items-center rounded-full bg-slate-200 dark:bg-slate-700 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-amber-500/25 dark:hover:shadow-slate-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 active:scale-105"
       title={`${isDark ? 'ライト' : 'ダーク'}モードに切り替え`}
     >
       {/* トグルスイッチの背景 */}
@@ -44,8 +44,8 @@ export function ThemeToggle() {
 
       {/* スライドするボール */}
       <div
-        className={`absolute h-8 w-8 rounded-full bg-white shadow-lg transition-all duration-300 transform ${isDark ? 'translate-x-11' : 'translate-x-1'
-          } flex items-center justify-center`}
+        className={`absolute h-8 w-8 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform ${isDark ? 'translate-x-11' : 'translate-x-1'
+          } flex items-center justify-center hover:scale-110`}
       >
         {isDark ? (
           <Moon className="h-4 w-4 text-slate-700" />

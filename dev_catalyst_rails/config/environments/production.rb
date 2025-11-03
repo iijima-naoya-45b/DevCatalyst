@@ -57,6 +57,14 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "example.com" }
 
+  # 本番環境のセッション設定 - セキュリティ強化
+  config.session_store :cookie_store,
+    key: '_dev_catalyst_session',
+    secure: true,              # HTTPS必須
+    same_site: :strict,        # より厳格なCSRF対策
+    httponly: true,            # XSS対策
+    expire_after: 24.hours     # セッション有効期限
+
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
   #   user_name: Rails.application.credentials.dig(:smtp, :user_name),

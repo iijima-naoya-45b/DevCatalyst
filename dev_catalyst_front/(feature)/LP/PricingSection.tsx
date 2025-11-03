@@ -3,16 +3,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../(feature)/common
 import { Badge } from "../../(feature)/common/ui/badge";
 import { Target, CheckCircle } from "lucide-react";
 import { Button } from "../../(feature)/common/ui/button";
+import { useRouter } from "next/navigation";
 
 export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
+  const router = useRouter()
+
+  const handleStartTrial = () => {
+    router.push('/login')
+  }
+
   return (
     <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-navy-dark/30">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-semibold mb-4 sm:mb-6">
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-semibold mb-4 sm:mb-6 text-foreground dark:text-white">
             あなたに合った、話し方を
           </h3>
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground px-2">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground dark:text-gray-300 px-2">
             まずは無料で試して、気に入ったらいつでも一緒に。
           </p>
         </div>
@@ -21,11 +28,11 @@ export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
           {plans.map((plan) => (
             <Card key={plan.id} className={`
               relative border transition-all duration-300 hover:shadow-2xl
-              ${plan.popular 
-                ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent sm:scale-105' 
-                : 'border-gold/25 bg-navy-dark/40 hover:border-gold/40'
+              ${plan.popular
+                ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent dark:from-gold/20 dark:to-gold/5 sm:scale-105'
+                : 'border-gold/25 dark:border-gold/40 bg-navy-dark/40 dark:bg-slate-800/60 hover:border-gold/40 dark:hover:border-gold/60'
               }
-              backdrop-blur-md
+              backdrop-blur-md dark:text-white
             `}>
               {plan.popular && (
                 <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2">
@@ -35,29 +42,29 @@ export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
                   </Badge>
                 </div>
               )}
-              
+
               <CardHeader className="text-center pb-4 sm:pb-6 md:pb-8 px-4 sm:px-6">
-                <CardTitle className="text-xl sm:text-2xl font-serif mb-2">{plan.name}</CardTitle>
+                <CardTitle className="text-xl sm:text-2xl font-serif mb-2 text-foreground dark:text-white">{plan.name}</CardTitle>
                 <div className="space-y-1 sm:space-y-2">
-                  <div className="text-3xl sm:text-4xl font-bold">{plan.price}</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">{plan.period}</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-foreground dark:text-white">{plan.price}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground dark:text-gray-400">{plan.period}</div>
                 </div>
-                <p className="text-sm sm:text-base text-muted-foreground">{plan.description}</p>
+                <p className="text-sm sm:text-base text-muted-foreground dark:text-gray-300">{plan.description}</p>
               </CardHeader>
-              
+
               <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
                 <div className="space-y-2 sm:space-y-3">
                   {plan.features.map((feature, index) => (
                     <div key={index} className="flex items-center space-x-2 sm:space-x-3">
-                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gold flex-shrink-0" />
-                      <span className="text-xs sm:text-sm">{feature}</span>
+                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gold dark:text-gold-light flex-shrink-0" />
+                      <span className="text-xs sm:text-sm text-foreground dark:text-gray-200">{feature}</span>
                     </div>
                   ))}
                 </div>
-                
+
                 <Button
-                  onClick={onStartTrial}
-                  className="w-full h-10 sm:h-12 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light text-sm sm:text-base"
+                  onClick={handleStartTrial}
+                  className="w-full h-10 sm:h-12 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light hover:shadow-xl hover:shadow-gold/30 hover:-translate-y-0.5 transition-all duration-300 ease-out text-sm sm:text-base"
                 >
                   {plan.cta}
                 </Button>

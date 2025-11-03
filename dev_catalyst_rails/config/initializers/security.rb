@@ -37,7 +37,9 @@ Rails.application.configure do
     
     # 開発環境での設定
     if Rails.env.development?
-      policy.connect_src :self, :https, "http://localhost:3000", "ws://localhost:3000"
+      frontend_url = ENV['FRONTEND_URL'] || 'http://localhost:3000'
+      frontend_ws_url = frontend_url.gsub(/^http/, 'ws')
+      policy.connect_src :self, :https, frontend_url, frontend_ws_url
     end
   end
   

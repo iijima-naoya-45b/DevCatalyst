@@ -309,7 +309,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                 実際にアリアと対話して、AIの戦略支援力を体験してください
               </p>
             </div>
-            <AriaChat initialMode="demo" onStartAnalysis={onStartTrial} />
+            <AriaChat onStartAnalysis={onStartTrial} />
           </div>
         </section>
       )}

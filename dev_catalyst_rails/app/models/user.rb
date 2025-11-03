@@ -1,127 +1,184 @@
-# == Schema Information
-#
-# Table name: users
-#
-#  id              :bigint           not null, primary key
-#  email           :string           not null
-#  password_digest :string           not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#
-# Indexes
-#
-#  index_users_on_email      (email) UNIQUE
-#  index_users_on_created_at (created_at)
-#
+# frozen_string_literal: true
 
 class User < ApplicationRecord
-  include PsychologicalSupport
-  
-  has_secure_password
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable,
+         :omniauthable, omniauth_providers: [:google_oauth2, :github]
 
-  # アソシエーション
-  has_many :refresh_tokens, dependent: :destroy
-  has_many :projects, dependent: :destroy
-  has_many :subscriptions, dependent: :destroy
-  has_one :psychological_profile, dependent: :destroy
-  has_one :skill_profile, dependent: :destroy
+  # Validations
+  validates :email, presence: true, uniqueness: true
+  validates :name, presence: true
+  validates :provider, presence: true, if: :oauth_user?
+  validates :uid, presence: true, uniqueness: { scope: :provider }, if: :oauth_user?
+  validates :plan, inclusion: { in: %w[free standard premium] }
 
-  # バリデーション
-  validates :email, presence: true, 
-                   uniqueness: { case_sensitive: false },
-                   format: { with: URI::MailTo::EMAIL_REGEXP, message: "有効なメールアドレスを入力してください" }
-  
-  validates :password, length: { minimum: 8, message: "パスワードは8文字以上で入力してください" },
-                      format: { 
-                        with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-                        message: "パスワードは大文字、小文字、数字を含む必要があります"
-                      },
-                      if: :password_required?
+  # Enums
+  enum :plan, { free: 0, standard: 1, premium: 2 }
 
-  # コールバック
-  before_save :normalize_email
-  after_create :create_psychological_profile
+  # Scopes
+  # Rails enumは自動的に User.free, User.standard, User.premium スコープを生成します
+  scope :with_plan, ->(plan_name) { where(plan: plan_name) if plan_name.present? }
+  scope :oauth_users, -> { where.not(provider: nil) }
+  scope :regular_users, -> { where(provider: nil) }
 
-  # スコープ
-  scope :recent, -> { order(created_at: :desc) }
-  scope :with_active_subscriptions, -> { joins(:subscriptions).where(subscriptions: { status: 'active' }) }
-
-  # インスタンスメソッド
-  
-  # 心理学的プロファイルの更新
-  def update_psychological_state(state_data)
-    profile = psychological_profile || build_psychological_profile
-    profile.update!(state_data)
-  end
-
-  # アクティブなサブスクリプションの確認
-  def has_active_subscription?
-    subscriptions.where(status: 'active').exists?
-  end
-
-  # ユーザーの経験レベル取得
-  def experience_level
-    skill_profile&.experience_level || 'beginner'
-  end
-
-  # 認知負荷レベル取得
-  def cognitive_load_level
-    psychological_profile&.cognitive_load_level || 5
-  end
-
-  # 自己効力感スコア取得
-  def self_efficacy_score
-    psychological_profile&.self_efficacy_score || 50
-  end
-
-  # プロジェクト数によるユーザーレベル判定
-  def user_level
-    case projects.count
-    when 0
-      'newcomer'
-    when 1..3
-      'beginner'
-    when 4..10
-      'intermediate'
-    else
-      'advanced'
+  # OAuth authentication
+  def self.from_omniauth(auth)
+    where(email: auth.info.email).first_or_create do |user|
+      user.email = auth.info.email
+      user.name = auth.info.name || auth.info.email.split('@').first
+      user.provider = auth.provider
+      user.uid = auth.uid
+      
+      # 開発用プロバイダーの場合は画像URLがない場合がある
+      user.avatar_url = auth.info.image if auth.info.respond_to?(:image)
+      user.plan = :free # デフォルトプラン
+      
+      # パスワードは不要（OAuth認証のため）
+      user.password = Devise.friendly_token[0, 20]
     end
   end
 
-  # 心理学的安心感を配慮したエラーメッセージ
-  def friendly_error_message(error_type)
-    case error_type
-    when :authentication_failed
-      "ログイン情報が正しくありません。もう一度お試しください。"
-    when :account_locked
-      "セキュリティのため一時的にアカウントがロックされています。しばらく待ってから再度お試しください。"
-    when :password_reset_required
-      "安全のためパスワードの更新が必要です。新しいパスワードを設定してください。"
+  # JWT token generation
+  def generate_jwt_tokens
+    access_token_payload = {
+      user_id: id,
+      email: email,
+      type: 'access',
+      exp: access_token_expiration_time.to_i
+    }
+    
+    refresh_token_payload = {
+      user_id: id,
+      email: email,
+      type: 'refresh',
+      exp: refresh_token_expiration_time.to_i
+    }
+    
+    {
+      access_token: JWT.encode(access_token_payload, jwt_secret_key),
+      refresh_token: JWT.encode(refresh_token_payload, jwt_secret_key),
+      expires_in: ENV['JWT_ACCESS_TOKEN_EXPIRATION']&.to_i || 15.minutes.to_i
+    }
+  end
+
+  # 後方互換性のため
+  def generate_jwt_token
+    generate_jwt_tokens[:access_token]
+  end
+
+  # JWT token verification
+  def self.from_jwt_token(token, token_type: 'access')
+    begin
+      decoded_token = JWT.decode(token, jwt_secret_key)
+      payload = decoded_token[0]
+      
+      # トークンタイプの検証
+      if payload['type'] != token_type
+        Rails.logger.error "Invalid token type: expected #{token_type}, got #{payload['type']}"
+        return nil
+      end
+      
+      user_id = payload['user_id']
+      find(user_id)
+    rescue JWT::DecodeError, JWT::ExpiredSignature, ActiveRecord::RecordNotFound => e
+      Rails.logger.error "JWT decode error: #{e.message}"
+      nil
+    end
+  end
+
+  # リフレッシュトークンからアクセストークンを再生成
+  def self.refresh_access_token(refresh_token)
+    user = from_jwt_token(refresh_token, token_type: 'refresh')
+    return nil unless user
+    
+    user.generate_jwt_tokens
+  end
+
+  # User info for API response
+  def as_json(options = {})
+    super(options.merge(
+      only: [:id, :email, :name, :plan, :created_at, :updated_at],
+      methods: [:avatar_url]
+    ))
+  end
+
+  def avatar_url
+    # OAuth認証の場合はプロバイダーのアバター、そうでなければGravatar
+    read_attribute(:avatar_url).presence || default_avatar_url
+  end
+
+  def default_avatar_url
+    # GravatarまたはデフォルトアバターのURL
+    "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}?d=identicon&s=200"
+  end
+
+  # Plan check methods
+  def free_plan?
+    plan == 'free'
+  end
+
+  def standard_plan?
+    plan == 'standard'
+  end
+
+  def premium_plan?
+    plan == 'premium'
+  end
+
+  def can_access_feature?(feature)
+    case feature
+    when :basic_features
+      true # すべてのプランで利用可能
+    when :advanced_features
+      standard_plan? || premium_plan?
+    when :premium_features
+      premium_plan?
     else
-      "問題が発生しました。サポートチームがお手伝いします。"
+      false
     end
   end
 
   private
 
-  # メールアドレスの正規化
-  def normalize_email
-    self.email = email.strip.downcase if email.present?
+  def oauth_user?
+    provider.present?
   end
 
-  # 心理学的プロファイルの初期作成
-  def create_psychological_profile
-    PsychologicalProfile.create!(
-      user: self,
-      cognitive_load_level: 5,
-      self_efficacy_score: 50,
-      risk_tolerance: 5,
-      learning_style: 'visual'
-    )
-  end
-
-  # パスワード必須チェック
+  # Devise methods override for OAuth users
   def password_required?
-    new_record? || password.present?
+    super && provider.blank?
+  end
+
+  def email_required?
+    true
+  end
+
+  def email_changed?
+    false
+  end
+
+  def self.jwt_secret_key
+    ENV['JWT_SECRET_KEY'] || Rails.application.secret_key_base
+  end
+
+  def jwt_secret_key
+    self.class.jwt_secret_key
+  end
+
+  def jwt_expiration_time
+    expiration_hours = ENV['JWT_EXPIRATION_TIME']&.to_i || 24
+    expiration_hours.hours.from_now
+  end
+
+  def access_token_expiration_time
+    expiration_minutes = ENV['JWT_ACCESS_TOKEN_EXPIRATION']&.to_i || 15
+    expiration_minutes.minutes.from_now
+  end
+
+  def refresh_token_expiration_time
+    expiration_days = ENV['JWT_REFRESH_TOKEN_EXPIRATION']&.to_i || 7
+    expiration_days.days.from_now
   end
 end

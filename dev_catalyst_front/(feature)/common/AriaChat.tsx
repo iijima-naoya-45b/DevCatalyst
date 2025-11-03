@@ -706,7 +706,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                   <TrendingUp className="w-4 h-4 mr-2" />
                   📈 市場インサイト
                 </h4>
-                <div className="bg-navy-dark/60 rounded-xl p-4 border border-gold/10">
+                <div className="bg-navy-dark/60 dark:bg-navy-dark/60 bg-gray-100 rounded-xl p-4 border border-gold/10 dark:border-gold/10 border-gray-400">
                   <div className="max-w-xs mx-auto">
                     <Doughnut
                       data={chartData.marketInsights}
@@ -732,7 +732,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                   <Target className="w-4 h-4 mr-2" />
                   💪 あなたの強み
                 </h4>
-                <div className="bg-navy-dark/60 rounded-xl p-4 border border-blue-400/10">
+                <div className="bg-navy-dark/60 dark:bg-navy-dark/60 bg-gray-100 rounded-xl p-4 border border-blue-400/10 dark:border-blue-400/10 border-blue-300">
                   <div className="max-w-xs mx-auto">
                     <Doughnut
                       data={chartData.strengths}
@@ -758,7 +758,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                   <Lightbulb className="w-4 h-4 mr-2" />
                   🚀 チャンス
                 </h4>
-                <div className="bg-navy-dark/60 rounded-xl p-4 border border-green-400/10">
+                <div className="bg-navy-dark/60 dark:bg-navy-dark/60 bg-gray-100 rounded-xl p-4 border border-green-400/10 dark:border-green-400/10 border-green-300">
                   <Bar
                     data={chartData.opportunities}
                     options={{
@@ -792,7 +792,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                   <Zap className="w-4 h-4 mr-2" />
                   🎯 推奨アクション
                 </h4>
-                <div className="bg-navy-dark/60 rounded-xl p-4 border border-orange-400/10">
+                <div className="bg-navy-dark/60 dark:bg-navy-dark/60 bg-gray-100 rounded-xl p-4 border border-orange-400/10 dark:border-orange-400/10 border-orange-300">
                   <Bar
                     data={chartData.recommendations}
                     options={{
@@ -827,7 +827,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                   <Brain className="w-4 h-4 mr-2" />
                   📊 SWOT総合分析
                 </h4>
-                <div className="bg-navy-dark/60 rounded-xl p-4 border border-purple-400/10">
+                <div className="bg-navy-dark/60 dark:bg-navy-dark/60 bg-gray-100 rounded-xl p-4 border border-purple-400/10 dark:border-purple-400/10 border-purple-300">
                   <div className="max-w-sm mx-auto">
                     <Radar
                       data={chartData.swotRadar}
@@ -859,7 +859,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
           } else if (part.trim()) {
             // 通常のテキスト
             return (
-              <p key={index} className="whitespace-pre-wrap leading-relaxed">
+              <p key={index} className="whitespace-pre-wrap leading-relaxed text-foreground dark:text-foreground text-gray-800">
                 {part}
               </p>
             );
@@ -880,7 +880,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
   return (
     <div className="max-w-7xl mx-auto">
       {/* チャット履歴 */}
-      <Card className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md shadow-2xl mb-6">
+      <Card className="border border-gold/25 dark:border-gold/25 border-gray-800 bg-navy-dark/40 dark:bg-navy-dark/40 bg-white/90 backdrop-blur-md shadow-2xl mb-6">
         <CardContent className="p-0">
           <div
             ref={chatContainerRef}
@@ -913,7 +913,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                 {/* メッセージ内容 */}
                 <div className={`flex-1 transition-all duration-300 ${message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}>
                   <div className={`rounded-2xl p-4 ${message.type === 'aria'
-                    ? 'bg-navy-medium border border-gold/20'
+                    ? 'bg-navy-medium dark:bg-navy-medium bg-gray-50 border border-gold/20 dark:border-gold/20 border-gray-300'
                     : 'bg-blue-600 text-white'
                     } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}>
                     {/* テキストメッセージとチャートを分離してレンダリング */}
@@ -922,7 +922,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                         {renderMessageWithCharts(message.displayedContent || message.content, message.chartData)}
                       </>
                     ) : (
-                      <p className="whitespace-pre-wrap leading-relaxed">
+                      <p className={`whitespace-pre-wrap leading-relaxed ${message.type === 'aria' ? 'text-foreground dark:text-foreground text-gray-800' : ''}`}>
                         {message.type === 'aria' ? (message.displayedContent || message.content) : message.content}
                       </p>
                     )}
@@ -932,7 +932,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                   {message.insights && message.insights.length > 0 && !message.isStreaming && (
                     <div className="mt-4 space-y-2">
                       {message.insights.map((insight, index) => (
-                        <div key={index} className="flex items-center space-x-3 p-3 bg-gold/5 border border-gold/20 rounded-lg">
+                        <div key={index} className="flex items-center space-x-3 p-3 bg-gold/5 dark:bg-gold/5 bg-yellow-50 border border-gold/20 dark:border-gold/20 border-yellow-300 rounded-lg">
                           <div className={`w-6 h-6 rounded-full flex items-center justify-center ${insight.type === 'strategy' ? 'bg-gold/20' :
                             insight.type === 'opportunity' ? 'bg-green-500/20' :
                               'bg-orange-400/20'
@@ -942,8 +942,8 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                             {insight.type === 'risk' && <Zap className="w-3 h-3 text-orange-400" />}
                           </div>
                           <div className="flex-1">
-                            <h5 className="font-medium text-sm">{insight.title}</h5>
-                            <p className="text-xs text-muted-foreground">{insight.description}</p>
+                            <h5 className="font-medium text-sm text-foreground dark:text-foreground text-gray-800">{insight.title}</h5>
+                            <p className="text-xs text-muted-foreground dark:text-muted-foreground text-gray-600">{insight.description}</p>
                           </div>
                         </div>
                       ))}
@@ -960,7 +960,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                           size="sm"
                           onClick={() => handleSuggestionClick(suggestion)}
                           disabled={ariaThinking || isStreaming}
-                          className="border-gold/30 text-gold hover:bg-gold/10 text-xs"
+                          className="border-gold/30 dark:border-gold/30 border-yellow-400 text-gold dark:text-gold text-yellow-700 hover:bg-gold/10 dark:hover:bg-gold/10 hover:bg-yellow-100 text-xs"
                         >
                           {suggestion}
                         </Button>
@@ -987,7 +987,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                     <Brain className="w-5 h-5" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="bg-navy-medium border border-gold/20 rounded-2xl p-4">
+                <div className="bg-navy-medium dark:bg-navy-medium bg-gray-50 border border-gold/20 dark:border-gold/20 border-gray-300 rounded-2xl p-4">
                   <div className="flex items-center space-x-2">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gold rounded-full animate-bounce"></div>
@@ -1004,7 +1004,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
       </Card>
 
       {/* 入力エリア */}
-      <Card className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md shadow-xl">
+      <Card className="border border-gold/25 dark:border-gold/25 border-gray-800 bg-navy-dark/40 dark:bg-navy-dark/40 bg-white/90 backdrop-blur-md shadow-xl">
         <CardContent className="p-4">
           <div className="flex items-center space-x-4">
             <div className="flex-1 relative">
@@ -1014,13 +1014,13 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                 onKeyPress={handleKeyPress}
                 placeholder="今、考えていることを話してみてください..."
                 disabled={ariaThinking || isStreaming}
-                className="pr-12 h-12 bg-navy-medium border-gold/20 focus:border-gold text-foreground placeholder-muted-foreground"
+                className="pr-12 h-12 bg-navy-medium dark:bg-navy-medium bg-white border-gold/20 dark:border-gold/20 border-gray-300 focus:border-gold dark:focus:border-gold focus:border-blue-500 text-foreground dark:text-foreground text-gray-900 placeholder-muted-foreground dark:placeholder-muted-foreground placeholder-gray-500"
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || ariaThinking || isStreaming}
                 size="sm"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light hover:shadow-lg hover:shadow-gold/30 hover:scale-110 transition-all duration-300 ease-out"
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -1029,7 +1029,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
             {onStartAnalysis && (
               <Button
                 onClick={handleAnalysis}
-                className="bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light whitespace-nowrap"
+                className="bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light hover:shadow-lg hover:shadow-bronze/30 hover:-translate-y-0.5 transition-all duration-300 ease-out whitespace-nowrap"
               >
                 <BarChart3 className="w-4 h-4 mr-2" />
                 分析する
@@ -1041,21 +1041,21 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
           <div className="mt-4 flex flex-wrap gap-2">
             <Badge
               variant="outline"
-              className={`border-gold/30 text-gold bg-gold/5 transition-all duration-200 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-gold/10 hover:border-gold/50' : 'opacity-50 cursor-not-allowed'}`}
+              className={`border-gold/30 dark:border-gold/30 border-yellow-400 text-gold dark:text-gold text-yellow-700 bg-gold/5 dark:bg-gold/5 bg-yellow-50 transition-all duration-300 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-gold/10 dark:hover:bg-gold/10 hover:bg-yellow-100 hover:border-gold/50 dark:hover:border-gold/50 hover:border-yellow-500 hover:scale-105 hover:shadow-md hover:shadow-gold/20 dark:hover:shadow-gold/20 hover:shadow-yellow-300/20' : 'opacity-50 cursor-not-allowed'}`}
               onClick={() => !ariaThinking && !isStreaming && handleSuggestionClick("アイデアがあるんだけど...")}>
               <Lightbulb className="w-3 h-3 mr-1" />
               アイデアの相談
             </Badge>
             <Badge
               variant="outline"
-              className={`border-bronze/30 text-bronze bg-bronze/5 transition-all duration-200 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-bronze/10 hover:border-bronze/50' : 'opacity-50 cursor-not-allowed'}`}
+              className={`border-bronze/30 dark:border-bronze/30 border-orange-400 text-bronze dark:text-bronze text-orange-700 bg-bronze/5 dark:bg-bronze/5 bg-orange-50 transition-all duration-300 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-bronze/10 dark:hover:bg-bronze/10 hover:bg-orange-100 hover:border-bronze/50 dark:hover:border-bronze/50 hover:border-orange-500 hover:scale-105 hover:shadow-md hover:shadow-bronze/20 dark:hover:shadow-bronze/20 hover:shadow-orange-300/20' : 'opacity-50 cursor-not-allowed'}`}
               onClick={() => !ariaThinking && !isStreaming && handleSuggestionClick("競合が気になって")}>
               <Target className="w-3 h-3 mr-1" />
               競合のこと
             </Badge>
             <Badge
               variant="outline"
-              className={`border-copper/30 text-copper bg-copper/5 transition-all duration-200 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-copper/10 hover:border-copper/50' : 'opacity-50 cursor-not-allowed'}`}
+              className={`border-copper/30 dark:border-copper/30 border-amber-400 text-copper dark:text-copper text-amber-700 bg-copper/5 dark:bg-copper/5 bg-amber-50 transition-all duration-300 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-copper/10 dark:hover:bg-copper/10 hover:bg-amber-100 hover:border-copper/50 dark:hover:border-copper/50 hover:border-amber-500 hover:scale-105 hover:shadow-md hover:shadow-copper/20 dark:hover:shadow-copper/20 hover:shadow-amber-300/20' : 'opacity-50 cursor-not-allowed'}`}
               onClick={() => !ariaThinking && !isStreaming && handleSuggestionClick("これから何をすればいいか")}>
               <TrendingUp className="w-3 h-3 mr-1" />
               次の一歩
