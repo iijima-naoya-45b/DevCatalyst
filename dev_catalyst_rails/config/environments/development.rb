@@ -35,8 +35,22 @@ Rails.application.configure do
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
 
-  # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  # Set host to be used by links generated in mailer templates.
+  backend_url = ENV['BACKEND_URL'] || 'http://localhost:3001'
+  uri = URI.parse(backend_url)
+  config.action_mailer.default_url_options = { host: uri.host, port: uri.port, protocol: uri.scheme }
+  
+  # OAuth認証のためのセッション設定
+  # 環境変数でHTTPSを使用している場合はsecureフラグを有効化
+  # ローカル開発でHTTPSを使用する場合は FORCE_SSL=true を設定
+  use_secure_cookies = ENV['FORCE_SSL'] == 'true' || ENV['RAILS_ENV'] == 'production'
+  
+  config.session_store :cookie_store, 
+    key: '_dev_catalyst_session', 
+    secure: use_secure_cookies,
+    same_site: :lax,
+    httponly: true,
+    expire_after: 24.hours
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

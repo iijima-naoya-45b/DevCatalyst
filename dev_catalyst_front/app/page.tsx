@@ -12,9 +12,7 @@ import { PricingSection } from '../(feature)/LP/PricingSection';
 import { FinalCTASection } from '../(feature)/LP/FinalCTASection';
 
 export default function LandingPage() {
-  const onStartTrial = () => {
-    console.log('onStartTrial');
-  };
+  const onStartTrial = () => {  };
 
 
 

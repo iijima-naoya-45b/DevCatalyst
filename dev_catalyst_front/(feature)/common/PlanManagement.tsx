@@ -117,9 +117,7 @@ export function PlanManagement() {
   };
 
   const handleUpgrade = (planId: string) => {
-    // Mock Stripe integration
-    console.log(`Upgrading to ${planId}`);
-    setCurrentPlan(planId);
+    // Mock Stripe integration    setCurrentPlan(planId);
   };
 
   const handleCancel = () => {
@@ -421,9 +419,7 @@ export function PlanManagement() {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => {
-                        console.log('Plan cancelled');
-                        setShowCancelDialog(false);
+                      onClick={() => {                        setShowCancelDialog(false);
                       }}
                     >
                       キャンセル実行

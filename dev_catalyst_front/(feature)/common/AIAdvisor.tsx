@@ -114,7 +114,7 @@ export function AIAdvisor() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <AriaChat initialMode="full" />
+              <AriaChat />
             </CardContent>
           </Card>
         </div>

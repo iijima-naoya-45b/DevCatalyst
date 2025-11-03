@@ -1,0 +1,115 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+
+# Rails JWT + Devise認証セットアップスクリプト
+
+def main
+  puts "🔐 Rails JWT + Devise認証セットアップ"
+  puts "=" * 40
+  
+  check_environment
+  check_gemfile
+  setup_instructions
+end
+
+def check_environment
+  puts "\n📋 環境確認:"
+  
+  # .env.development の確認
+  env_file = '.env.development'
+  if File.exist?(env_file)
+    puts "  ✅ #{env_file} が存在します"
+    
+    env_content = File.read(env_file)
+    jwt_vars = %w[JWT_SECRET_KEY JWT_EXPIRATION_TIME]
+    
+    jwt_vars.each do |var|
+      if env_content.include?(var)
+        value = env_content.match(/#{var}=(.+)/)&.[](1)
+        status = value&.include?('your_') ? '⚠️  未設定' : '✅ 設定済み'
+        puts "    #{status} #{var}"
+      else
+        puts "    ❌ #{var} が見つかりません"
+      end
+    end
+  else
+    puts "  ❌ #{env_file} が見つかりません"
+  end
+end
+
+def check_gemfile
+  puts "\n📦 Gem確認:"
+  
+  gemfile_content = File.read('Gemfile')
+  required_gems = %w[devise jwt rack-cors]
+  
+  required_gems.each do |gem_name|
+    if gemfile_content.include?(gem_name)
+      puts "  ✅ #{gem_name}"
+    else
+      puts "  ❌ #{gem_name} が見つかりません"
+    end
+  end
+end
+
+def setup_instructions
+  puts "\n🚀 セットアップ手順:"
+  
+  puts "\n1. Gemのインストール:"
+  puts "   bundle install"
+  
+  puts "\n2. データベースのマイグレーション:"
+  puts "   rails db:migrate"
+  
+  puts "\n3. JWT設定:"
+  puts "   JWT_SECRET_KEY を安全な値に変更してください"
+  puts "   JWT_EXPIRATION_TIME でトークンの有効期限を設定（時間単位）"
+  
+  puts "\n4. 環境変数の設定例:"
+  puts "   JWT_SECRET_KEY=your_super_secret_jwt_key_here"
+  puts "   JWT_EXPIRATION_TIME=24"
+  
+  puts "\n5. サーバー起動:"
+  puts "   rails server -p 3001"
+  
+  puts "\n6. API エンドポイント:"
+  puts "   POST /api/v1/auth/login          - ログイン"
+  puts "   POST /api/v1/auth/register       - ユーザー登録"
+  puts "   DELETE /api/v1/auth/logout       - ログアウト"
+  puts "   POST /api/v1/auth/forgot_password - パスワードリセット要求"
+  puts "   POST /api/v1/auth/reset_password  - パスワードリセット"
+  puts "   POST /api/v1/auth/verify_token    - トークン検証"
+  puts "   GET  /api/v1/users/me            - ユーザー情報取得"
+  puts "   PUT  /api/v1/users/me            - ユーザー情報更新"
+  puts "   PUT  /api/v1/users/change_password - パスワード変更"
+  puts "   DELETE /api/v1/users/me          - アカウント削除"
+  
+  puts "\n7. 認証フロー:"
+  puts "   - フロントエンド → POST /api/v1/auth/login"
+  puts "   - Rails → JWTトークンを返却"
+  puts "   - フロントエンド → Authorization: Bearer <token> でAPI呼び出し"
+  
+  puts "\n📝 注意事項:"
+  puts "   - JWTトークンは Authorization ヘッダーで送信: 'Bearer <token>'"
+  puts "   - トークンはローカルストレージに保存"
+  puts "   - 本番環境では JWT_SECRET_KEY を必ず変更してください"
+  
+  puts "\n🔍 トラブルシューティング:"
+  puts "   - ログは rails server の出力で確認"
+  puts "   - CORS エラーが発生した場合は config/initializers/cors.rb を確認"
+  puts "   - JWT エラーは JWT_SECRET_KEY の設定を確認"
+  
+  puts "\n✨ セットアップ完了後のテスト:"
+  puts "   curl -X POST http://localhost:3001/api/v1/auth/register \\"
+  puts "     -H 'Content-Type: application/json' \\"
+  puts "     -d '{\"user\":{\"name\":\"Test User\",\"email\":\"test@example.com\",\"password\":\"password\",\"password_confirmation\":\"password\"}}'"
+  
+  puts "\n" + "=" * 40
+  puts "🎉 JWT + Devise認証セットアップガイド完了！"
+end
+
+if __FILE__ == $0
+  main
+end

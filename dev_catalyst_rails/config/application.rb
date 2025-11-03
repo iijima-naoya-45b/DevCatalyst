@@ -24,39 +24,31 @@ module DevCatalystRails
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    # Only loads a smaller set of middleware suitable for API only apps.
-    # Middleware like session, flash, cookies can be added back manually.
-    # Skip views, helpers and assets when generating a new resource.
-    config.api_only = true
+    # OAuth認証のためにセッションとCookieを有効化
+    # config.api_only = true
 
     # タイムゾーン設定
     config.time_zone = 'UTC'
 
-    # CORS設定
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins ENV.fetch('FRONTEND_URL', 'http://localhost:3001')
-        resource '*',
-          headers: :any,
-          methods: [:get, :post, :put, :patch, :delete, :options, :head],
-          credentials: true
-      end
+    # CORS設定は config/initializers/cors.rb で行う
+
+    # セッション設定（OAuth認証のために有効化）
+    config.session_store :cookie_store, key: '_dev_catalyst_session'
+
+    # キャッシュ設定（開発環境ではメモリキャッシュを使用）
+    if Rails.env.development?
+      config.cache_store = :memory_store
+    else
+      config.cache_store = :redis_cache_store, {
+        url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/1'),
+        expires_in: 1.hour
+      }
     end
 
-    # セッション設定（Redis使用）
-    config.session_store :cookie_store, {
-      key: '_dev_catalyst_session',
-      secure: Rails.env.production?,
-      httponly: true,
-      same_site: :lax,
-      expire_after: 2.weeks
-    }
-
-    # キャッシュ設定
-    config.cache_store = :redis_cache_store, {
-      url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/1'),
-      expires_in: 1.hour
-    }
+    # OAuth認証に必要なミドルウェアを追加
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_dev_catalyst_session'
+    config.middleware.use ActionDispatch::Flash
 
     # 自動読み込みパス
     config.autoload_paths += %W(#{config.root}/app/services)

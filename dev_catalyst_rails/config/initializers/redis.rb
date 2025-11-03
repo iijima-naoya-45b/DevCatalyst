@@ -1,13 +1,10 @@
 # Redis設定
 
-# Redis接続設定
+# Redis接続設定（新しいRedis gem対応）
 redis_config = {
   url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/0'),
   timeout: 5,
-  reconnect_attempts: 3,
-  reconnect_delay: 0.5,
-  reconnect_delay_max: 5.0,
-  inherit_socket: false
+  reconnect_attempts: 3
 }
 
 # Redis接続の初期化
@@ -21,6 +18,14 @@ rescue Redis::CannotConnectError => e
   Rails.logger.error "Failed to connect to Redis: #{e.message}"
   # 開発環境では警告のみ、本番環境ではエラーを発生
   raise e if Rails.env.production?
+rescue => e
+  Rails.logger.error "Redis configuration error: #{e.message}"
+  # 開発環境ではRedisなしでも動作するようにする
+  unless Rails.env.production?
+    Rails.logger.warn "Continuing without Redis in development mode"
+  else
+    raise e
+  end
 end
 
 # Sidekiq設定（バックグラウンドジョブ用）
@@ -30,9 +35,6 @@ if defined?(Sidekiq)
     
     # サーバー側の設定
     config.concurrency = ENV.fetch('SIDEKIQ_CONCURRENCY', 5).to_i
-    
-    # デッドジョブの保持期間
-    config.death_timeout = 1.week
   end
 
   Sidekiq.configure_client do |config|
@@ -53,17 +55,5 @@ Rails.application.configure do
   }
 end
 
-# セッションストアの設定
-Rails.application.config.session_store :redis_session_store, {
-  key: '_dev_catalyst_session',
-  redis: {
-    url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/2'),
-    expire_after: 2.weeks,
-    key_prefix: 'dev_catalyst:session:',
-    pool_size: ENV.fetch('RAILS_MAX_THREADS', 5).to_i,
-    pool_timeout: 5
-  },
-  secure: Rails.env.production?,
-  httponly: true,
-  same_site: :lax
-}
+# セッションストアの設定（API専用なので無効化）
+# Rails.application.config.session_store :disabled

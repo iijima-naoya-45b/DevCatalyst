@@ -2,7 +2,6 @@ import { Brain } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ThemeToggleSwitch } from "@/components/theme-toggle-switch";
 import { ThemeToggleAnimated } from "@/components/theme-toggle-animated";
-import { ThemeSelector } from "@/components/theme-selector";
 
 export function Header() {
   return (
@@ -21,19 +20,15 @@ export function Header() {
             <li><a href="#" className="hover:underline text-enhanced hover:text-gold-enhanced">Contact</a></li>
           </ul>
           <div className="flex items-center gap-3">
-            {/* モバイル: シンプルなトグルスイッチ */}
             <div className="sm:hidden">
               <ThemeToggleSwitch size="sm" />
             </div>
-            {/* タブレット: 中サイズのアニメーション付きトグル */}
             <div className="hidden sm:block lg:hidden">
               <ThemeToggle />
             </div>
-            {/* デスクトップ: アニメーション付きトグル + セレクター */}
             <div className="hidden lg:flex items-center gap-2">
               <ThemeToggleAnimated />
               <div className="ml-2">
-                <ThemeSelector />
               </div>
             </div>
           </div>
