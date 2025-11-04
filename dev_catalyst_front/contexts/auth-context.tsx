@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth as useAuthHook, type User, type AuthResponse, type LoginCredentials, type RegisterCredentials, ApiClient } from '@/lib/auth';
+import { useAuth as useAuthHook, type User, type AuthResponse, type LoginCredentials, type RegisterCredentials, type ForgotPasswordData, ApiClient } from '@/lib/auth';
 import { useAuthToken } from '@/lib/hooks/use-auth-token';
 
 interface AuthContextType {
@@ -10,6 +10,7 @@ interface AuthContextType {
     login: (credentials: LoginCredentials) => Promise<AuthResponse>;
     register: (credentials: RegisterCredentials) => Promise<AuthResponse>;
     logout: () => Promise<void>;
+    forgotPassword: (data: ForgotPasswordData) => Promise<AuthResponse>;
     loginWithOAuth: (provider: 'google' | 'github') => void;
     handleOAuthCallback: (params: URLSearchParams) => any;
     apiClient: ApiClient;
@@ -61,6 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login: auth.login,
         register: auth.register,
         logout: auth.logout,
+        forgotPassword: auth.forgotPassword,
         loginWithOAuth: auth.loginWithOAuth,
         handleOAuthCallback: auth.handleOAuthCallback,
         apiClient: auth.apiClient,

@@ -267,13 +267,6 @@ Devise.setup do |config|
   # OmniAuth設定
   config.omniauth_path_prefix = '/users/auth'
   
-  # 開発環境でのCSRF設定
-  if Rails.env.development?
-    OmniAuth.config.test_mode = false
-    OmniAuth.config.allowed_request_methods = [:post, :get]
-    OmniAuth.config.silence_get_warning = true
-  end
-  
   # Google OAuth設定
   config.omniauth :google_oauth2, 
     ENV['GOOGLE_CLIENT_ID'],

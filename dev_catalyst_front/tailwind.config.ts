@@ -74,6 +74,10 @@ const config: Config = {
                 "fade-in": "fadeIn 0.5s ease-in-out",
                 "slide-up": "slideUp 0.3s ease-out",
                 "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                "aria-float": "ariaFloat 3s ease-in-out infinite",
+                "aria-pulse": "ariaPulse 2s ease-in-out infinite",
+                "aria-glow": "ariaGlow 2.5s ease-in-out infinite",
+                "aria-rotate": "ariaRotate 8s linear infinite",
             },
             keyframes: {
                 fadeIn: {
@@ -83,6 +87,26 @@ const config: Config = {
                 slideUp: {
                     "0%": { transform: "translateY(10px)", opacity: "0" },
                     "100%": { transform: "translateY(0)", opacity: "1" },
+                },
+                ariaFloat: {
+                    "0%, 100%": { transform: "translateY(0px)" },
+                    "50%": { transform: "translateY(-6px)" },
+                },
+                ariaPulse: {
+                    "0%, 100%": { transform: "scale(1)" },
+                    "50%": { transform: "scale(1.05)" },
+                },
+                ariaGlow: {
+                    "0%, 100%": { 
+                        filter: "drop-shadow(0 0 8px rgba(245, 158, 11, 0.4))",
+                    },
+                    "50%": { 
+                        filter: "drop-shadow(0 0 16px rgba(245, 158, 11, 0.8))",
+                    },
+                },
+                ariaRotate: {
+                    "0%": { transform: "rotate(0deg)" },
+                    "100%": { transform: "rotate(360deg)" },
                 },
             },
         },

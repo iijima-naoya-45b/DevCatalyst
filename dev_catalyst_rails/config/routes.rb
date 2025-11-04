@@ -38,6 +38,11 @@ Rails.application.routes.draw do
   get '/auth/success', to: 'auth#success'
   get '/auth/error', to: 'auth#error'
 
+  # Letter opener web (development only)
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
   get "health" => "rails/health#show"

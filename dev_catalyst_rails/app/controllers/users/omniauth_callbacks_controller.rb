@@ -4,6 +4,12 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # CSRF保護をスキップ（OAuth認証のため）
   skip_before_action :verify_authenticity_token
   
+  # Passthrough method - OmniAuth認証の開始点
+  def passthru
+    # Deviseのデフォルトのpassthroughメソッドを呼び出す
+    super
+  end
+  
   # Google OAuth2 callback
   def google_oauth2
     Rails.logger.info "Google OAuth callback received"

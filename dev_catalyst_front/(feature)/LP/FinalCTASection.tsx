@@ -1,20 +1,33 @@
+import { useState, useEffect } from "react";
 import { Button } from "../../(feature)/common/ui/button";
 import { Brain, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuth } from '@/contexts/auth-context';
 
 export function FinalCTASection({ onStartTrial }: { onStartTrial: () => void }) {
-  const router = useRouter()
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleStartTrial = () => {
-    router.push('/login')
+    // クライアントサイドでのみ認証チェック
+    if (isClient && isAuthenticated()) {
+      router.push('/dashboard');
+    } else {
+      router.push('/login');
+    }
   }
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-r from-navy-dark via-navy to-navy-dark dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <section className="py-20 px-4 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="max-w-7xl mx-auto text-center">
         <div className="max-w-6xl mx-auto space-y-8">
-          <h3 className="text-4xl md:text-5xl font-serif font-bold text-white">
-            今夜、
+          <h3 className="text-4xl md:text-5xl font-serif font-bold">
+            <span className="text-white">今夜、</span>
             <span className="bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
               アリアと話してみませんか
             </span>
