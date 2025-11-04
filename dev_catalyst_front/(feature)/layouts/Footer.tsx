@@ -8,8 +8,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
           <div className="text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start space-x-2 mb-3">
-              <Brain className="w-6 h-6 text-gold" />
-              <span className="text-lg font-bold">devCatalist</span>
+              <Brain className="w-6 h-6 text-navy-deepest" />
+              <span className="text-lg font-bold">devCatalyst</span>
             </div>
             <p className="text-sm text-navy-deepest/80">
               AI戦略パートナー「Vertex」で、<br />

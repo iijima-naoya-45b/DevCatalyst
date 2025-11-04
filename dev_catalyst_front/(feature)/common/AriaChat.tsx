@@ -880,7 +880,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
   return (
     <div className="max-w-7xl mx-auto">
       {/* チャット履歴 */}
-      <Card className="border border-gold/25 dark:border-gold/25 border-amber-300 bg-gradient-to-br from-amber-50/95 via-orange-50/90 to-yellow-50/95 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 backdrop-blur-md shadow-2xl mb-6">
+      <Card className="border border-gold/25 dark:border-gold/25 bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 backdrop-blur-md shadow-2xl mb-6">
         <CardContent className="p-0">
           <div
             ref={chatContainerRef}
@@ -902,8 +902,8 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                       </div>
                     </div>
                   ) : (
-                    <Avatar className="w-10 h-10 ring-2 ring-blue-400/40">
-                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                    <Avatar className="w-10 h-10 ring-2 ring-gold/40">
+                      <AvatarFallback className="bg-gradient-to-br from-gray-600 to-gray-700 text-white">
                         You
                       </AvatarFallback>
                     </Avatar>
@@ -913,8 +913,8 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                 {/* メッセージ内容 */}
                 <div className={`flex-1 transition-all duration-300 ${message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}>
                   <div className={`rounded-2xl p-4 ${message.type === 'aria'
-                    ? 'bg-gradient-to-br from-amber-100/80 to-yellow-100/80 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30 border-amber-300'
-                    : 'bg-blue-600 text-white'
+                    ? 'bg-gold/5 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30'
+                    : 'bg-gradient-to-r from-gold to-bronze text-navy-deepest'
                     } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}>
                     {/* テキストメッセージとチャートを分離してレンダリング */}
                     {message.type === 'aria' && message.chartData ? (
@@ -987,7 +987,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                     <Brain className="w-5 h-5 animate-aria-pulse" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="bg-gradient-to-br from-amber-100/80 to-yellow-100/80 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30 border-amber-300 rounded-2xl p-4">
+                <div className="bg-gold/5 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30 rounded-2xl p-4">
                   <div className="flex items-center space-x-2">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gold rounded-full animate-bounce"></div>
@@ -1004,7 +1004,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
       </Card>
 
       {/* 入力エリア */}
-      <Card className="border border-gold/25 dark:border-gold/25 border-amber-300 bg-gradient-to-br from-amber-50/95 via-orange-50/90 to-yellow-50/95 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 backdrop-blur-md shadow-xl">
+      <Card className="border border-gold/25 dark:border-gold/25 bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 backdrop-blur-md shadow-xl">
         <CardContent className="p-4">
           <div className="flex items-center space-x-4">
             <div className="flex-1 relative">
