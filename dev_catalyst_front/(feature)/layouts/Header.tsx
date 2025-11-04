@@ -1,9 +1,25 @@
+'use client';
+
 import { Brain } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ThemeToggleSwitch } from "@/components/theme-toggle-switch";
 import { ThemeToggleAnimated } from "@/components/theme-toggle-animated";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useAuth } from '@/contexts/auth-context';
 
 export function Header() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
+  const handleGetStarted = () => {
+    if (isAuthenticated()) {
+      router.push('/dashboard');
+    } else {
+      router.push('/login');
+    }
+  };
+
   return (
     <header className="p-4 bg-gradient-to-br from-gradient-start via-gradient-mid to-gradient-end text-slate-800 border-b border-slate-300 shadow-lg dark:bg-navy-main dark:text-foreground dark:border-gold/30">
       <div className="container mx-auto flex justify-between items-center">
@@ -29,6 +45,12 @@ export function Header() {
             <div className="hidden lg:flex items-center gap-2">
               <ThemeToggleAnimated />
               <div className="ml-2">
+                <Button
+                  onClick={handleGetStarted}
+                  className="bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light"
+                >
+                  {isAuthenticated() ? 'ダッシュボード' : '始める'}
+                </Button>
               </div>
             </div>
           </div>

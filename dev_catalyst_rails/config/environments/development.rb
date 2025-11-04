@@ -30,7 +30,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
@@ -39,6 +39,10 @@ Rails.application.configure do
   backend_url = ENV['BACKEND_URL'] || 'http://localhost:3001'
   uri = URI.parse(backend_url)
   config.action_mailer.default_url_options = { host: uri.host, port: uri.port, protocol: uri.scheme }
+  
+  # Use letter_opener for email preview in development
+  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.perform_deliveries = true
   
   # OAuth認証のためのセッション設定
   # 環境変数でHTTPSを使用している場合はsecureフラグを有効化

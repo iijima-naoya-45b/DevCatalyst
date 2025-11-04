@@ -140,6 +140,20 @@ class User < ApplicationRecord
     end
   end
 
+  # パスワードリセットメールを送信
+  def send_reset_password_instructions
+    raw_token, encrypted_token = Devise.token_generator.generate(self.class, :reset_password_token)
+    
+    self.reset_password_token = encrypted_token
+    self.reset_password_sent_at = Time.current
+    save(validate: false)
+    
+    # カスタムメーラーを使用
+    UserMailer.reset_password_instructions(self, raw_token).deliver_now
+    
+    raw_token
+  end
+
   private
 
   def oauth_user?

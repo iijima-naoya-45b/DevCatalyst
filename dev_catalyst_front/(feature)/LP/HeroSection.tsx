@@ -5,11 +5,11 @@ import { useThemeForceUpdate } from '../../hooks/use-theme-force-update';
 export function HeroSection() {
   useThemeForceUpdate();
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-3 sm:px-4 py-12 sm:py-16 md:py-20 bg-gradient-to-br from-gradient-start via-gradient-mid to-gradient-end dark:bg-gradient-to-b dark:from-navy-main dark:via-navy-secondary dark:to-navy-card">
+    <section className="relative min-h-screen flex items-center justify-center px-3 sm:px-4 py-12 sm:py-16 md:py-20 bg-gradient-to-br from-gradient-start via-gradient-mid to-gradient-end dark:bg-gradient-to-br dark:from-slate-900/80 dark:via-slate-950 dark:to-black">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none dark:from-gold/30 dark:via-cyan/10 dark:to-gold/20" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl animate-pulse-slow" />
-      <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-2xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-purple-500/10 pointer-events-none dark:from-slate-700/10 dark:via-slate-800/5 dark:to-transparent" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/5 dark:bg-slate-600/5 rounded-full blur-3xl animate-pulse-slow" />
+      <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-500/5 dark:bg-slate-700/5 rounded-full blur-2xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
 
       <div className="max-w-7xl mx-auto text-center relative z-10">
         {/* Service Logo & Name */}

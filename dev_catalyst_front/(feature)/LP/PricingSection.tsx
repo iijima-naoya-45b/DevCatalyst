@@ -4,12 +4,19 @@ import { Badge } from "../../(feature)/common/ui/badge";
 import { Target, CheckCircle } from "lucide-react";
 import { Button } from "../../(feature)/common/ui/button";
 import { useRouter } from "next/navigation";
+import { useAuth } from '@/contexts/auth-context';
 
 export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
-  const router = useRouter()
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
 
   const handleStartTrial = () => {
-    router.push('/login')
+    // 認証済みならダッシュボード、未認証ならログインページへ
+    if (isAuthenticated()) {
+      router.push('/dashboard');
+    } else {
+      router.push('/login');
+    }
   }
 
   return (
