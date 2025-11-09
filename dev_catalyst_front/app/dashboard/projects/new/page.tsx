@@ -207,13 +207,13 @@ export default function NewProjectPage() {
                             <Button
                                 variant="ghost"
                                 onClick={() => router.push('/dashboard/projects')}
-                                className="text-slate-700 dark:text-gray-300 hover:text-gold-enhanced dark:hover:text-gold hover:bg-gold/10 -ml-2"
+                                className="text-slate-700 dark:text-gray-300 hover:gold-soft-text-enhanced dark:hover:gold-soft-text hover:bg-gold/10 -ml-2"
                             >
                                 <ArrowLeft className="h-4 w-4 mr-2" />
                                 プロジェクト一覧に戻る
                             </Button>
                             <div className="flex items-center space-x-3">
-                                <Brain className="h-8 w-8 text-gold" />
+                                <Brain className="h-8 w-8 gold-soft-text" />
                                 <h1 className="text-3xl font-serif font-bold text-slate-800 dark:text-gray-200">
                                     Ariaと一緒にプロジェクトを作成
                                 </h1>
@@ -222,7 +222,7 @@ export default function NewProjectPage() {
                     </div>
 
                     {/* チャット履歴 */}
-                    <Card className="border border-gold/25 dark:border-blue-900/20 border-amber-300 bg-gradient-to-br from-amber-50/95 via-orange-50/90 to-yellow-50/95 dark:bg-gradient-to-br dark:from-black/90 dark:via-slate-950/90 dark:to-black/90 backdrop-blur-md shadow-2xl">
+                    <Card className="border border-gold/30 dark:border-blue-900/20 gold-soft-gradient dark:bg-gradient-to-br dark:from-black/90 dark:via-slate-950/90 dark:to-black/90 backdrop-blur-md shadow-2xl">
                         <CardContent className="p-0">
                             <div
                                 ref={chatContainerRef}
@@ -235,11 +235,11 @@ export default function NewProjectPage() {
                                             {message.type === 'aria' ? (
                                                 <div className="relative">
                                                     <Avatar className="w-10 h-10 ring-2 ring-gold/40">
-                                                        <AvatarFallback className="bg-gradient-to-br from-gold to-bronze text-navy-deepest font-semibold">
+                                            <AvatarFallback className="gold-soft-gradient text-aria-dark-soft font-semibold">
                                                             <Brain className="w-5 h-5 animate-aria-pulse" />
                                                         </AvatarFallback>
                                                     </Avatar>
-                                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-br from-gold to-bronze rounded-full border-2 border-navy-dark flex items-center justify-center animate-aria-float">
+                                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 gold-soft-gradient rounded-full border-2 border-navy-dark flex items-center justify-center animate-aria-float">
                                                         <Sparkles className="w-2 h-2 text-navy-deepest animate-pulse" />
                                                     </div>
                                                 </div>
@@ -255,10 +255,10 @@ export default function NewProjectPage() {
                                         {/* メッセージ内容 */}
                                         <div className={`flex-1 transition-all duration-300 ${message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}>
                                             <div className={`rounded-2xl p-4 ${message.type === 'aria'
-                                                ? 'bg-gradient-to-br from-amber-100/80 to-yellow-100/80 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 border border-gold/20 dark:border-slate-600/30 border-amber-300'
+                                                ? 'gold-soft-gradient border border-gold/35 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 text-aria-dark-soft'
                                                 : 'bg-blue-600 text-white'
                                                 } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}>
-                                                <p className={`whitespace-pre-wrap leading-relaxed ${message.type === 'aria' ? 'text-gray-800 dark:text-gray-100' : ''}`}>
+                                                <p className={`whitespace-pre-wrap leading-relaxed ${message.type === 'aria' ? 'text-aria-dark-soft dark:text-aria-dark-soft' : ''}`}>
                                                     {message.type === 'aria' ? (message.displayedContent || message.content) : message.content}
                                                 </p>
                                             </div>
@@ -278,18 +278,18 @@ export default function NewProjectPage() {
                                 {ariaThinking && !isStreaming && (
                                     <div className="flex items-start space-x-3">
                                         <Avatar className="w-10 h-10 ring-2 ring-gold/40 aria-thinking">
-                                            <AvatarFallback className="bg-gradient-to-br from-gold to-bronze text-navy-deepest">
+                                            <AvatarFallback className="gold-soft-gradient text-aria-dark-soft">
                                                 <Brain className="w-5 h-5 animate-aria-pulse" />
                                             </AvatarFallback>
                                         </Avatar>
-                                        <div className="bg-gradient-to-br from-amber-100/80 to-yellow-100/80 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 border border-gold/20 dark:border-slate-600/30 border-amber-300 rounded-2xl p-4">
+                                        <div className="gold-soft-gradient border border-gold/35 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 text-aria-dark-soft rounded-2xl p-4">
                                             <div className="flex items-center space-x-2">
                                                 <div className="flex space-x-1">
                                                     <div className="w-2 h-2 bg-gold dark:bg-gold-light rounded-full animate-bounce"></div>
                                                     <div className="w-2 h-2 bg-gold dark:bg-gold-light rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                                                     <div className="w-2 h-2 bg-gold dark:bg-gold-light rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                                                 </div>
-                                                <span className="text-sm text-gold dark:text-gold-light">アリアが考えています...</span>
+                                                <span className="text-sm gold-soft-text dark:gold-soft-text-light">アリアが考えています...</span>
                                             </div>
                                         </div>
                                     </div>
@@ -299,7 +299,7 @@ export default function NewProjectPage() {
                     </Card>
 
                     {/* 入力エリア */}
-                    <Card className="border border-gold/25 dark:border-blue-900/20 border-amber-300 bg-gradient-to-br from-amber-50/95 via-orange-50/90 to-yellow-50/95 dark:bg-gradient-to-br dark:from-black/90 dark:via-slate-950/90 dark:to-black/90 backdrop-blur-md shadow-xl">
+                    <Card className="border border-gold/30 dark:border-blue-900/20 gold-soft-gradient dark:bg-gradient-to-br dark:from-black/90 dark:via-slate-950/90 dark:to-black/90 backdrop-blur-md shadow-xl">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-4">
                                 <div className="flex-1 relative">
@@ -314,13 +314,13 @@ export default function NewProjectPage() {
                                             "Ariaとチャット..."
                                         }
                                         disabled={ariaThinking || isStreaming || currentStep === 3}
-                                        className="pr-12 h-12 bg-amber-50/90 dark:bg-slate-900/90 border-gold/20 dark:border-slate-600/30 border-amber-300 focus:border-gold dark:focus:border-slate-500 focus:border-amber-500 text-gray-900 dark:text-gray-100 placeholder-amber-600 dark:placeholder-gray-500"
+                                        className="pr-12 h-12 bg-gold/10 dark:bg-slate-900/90 border border-gold/35 dark:border-slate-600/30 focus:border-gold dark:focus:border-slate-500 text-gray-900 dark:text-gray-100 placeholder-[#b5852b] dark:placeholder-gray-500"
                                     />
                                     <Button
                                         onClick={handleSendMessage}
                                         disabled={!inputValue.trim() || ariaThinking || isStreaming || currentStep === 3}
                                         size="sm"
-                                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light hover:shadow-lg hover:shadow-gold/30 hover:scale-110 transition-all duration-300 ease-out disabled:opacity-50"
+                                        className="absolute right-2 top-1/2 transform -translate-y-1/2 aria-gold-surface hover:shadow-lg hover:shadow-gold/30 hover:scale-110 transition-all duration-300 ease-out disabled:opacity-50"
                                     >
                                         <Send className="w-4 h-4" />
                                     </Button>
@@ -351,7 +351,7 @@ export default function NewProjectPage() {
                     {/* ヒントカード */}
                     <Card className="glass-effect border-gold/20 bg-white/80 dark:bg-navy-card/80">
                         <CardHeader>
-                            <CardTitle className="text-lg font-serif text-amber-700 dark:text-gold-light flex items-center space-x-2">
+                            <CardTitle className="text-lg font-serif gold-soft-text dark:gold-soft-text-light flex items-center space-x-2">
                                 <Lightbulb className="h-5 w-5" />
                                 <span>ヒント</span>
                             </CardTitle>

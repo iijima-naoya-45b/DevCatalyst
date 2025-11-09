@@ -51,7 +51,7 @@ const config: Config = {
                 "copper-light": "#cd9a5b",
                 cyan: "#4a90a4",
                 "navy-dark": "var(--navy-dark)",
-                "navy-deepest": "#000000",
+                "navy-deepest": "#0f172a",
                 "navy-darker": "#0a0a0f",
                 "navy-main": "#0a0a1a",
                 "navy-medium": "#1a1a2e",
@@ -64,6 +64,7 @@ const config: Config = {
                 // 強制的な文字色設定
                 "text-light": "#0f172a",
                 "text-dark": "#ffffff",
+                "aria-dark-soft": "#0f172a",
             },
             fontFamily: {
                 sans: ["Roboto", "Noto Sans JP", "var(--font-geist-sans)", "system-ui", "sans-serif"],

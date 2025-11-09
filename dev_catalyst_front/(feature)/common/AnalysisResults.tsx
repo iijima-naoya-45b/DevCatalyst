@@ -35,7 +35,7 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
       <Card className="w-full max-w-6xl max-h-[90vh] overflow-y-auto border border-gold/25 bg-navy-dark/95 backdrop-blur-md">
         <CardHeader className="border-b border-gold/20">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl font-serif text-gold flex items-center">
+            <CardTitle className="text-2xl font-serif gold-soft-text flex items-center">
               <BarChart3 className="w-6 h-6 mr-3" />
               戦略分析結果
             </CardTitle>
@@ -57,7 +57,7 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
                   <span className="text-navy-deepest font-bold text-sm">V</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gold mb-2">Vertexからの分析コメント</h4>
+                  <h4 className="font-semibold gold-soft-text mb-2">Vertexからの分析コメント</h4>
                   <p className="text-muted-foreground text-sm leading-relaxed">{data.vertexMessage}</p>
                 </div>
               </div>
@@ -69,9 +69,9 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
             <Card className="bg-gold/5 border-gold/20">
               <CardContent className="p-4 text-center">
                 <div className="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <PieChart className="w-6 h-6 text-gold" />
+                  <PieChart className="w-6 h-6 gold-soft-text" />
                 </div>
-                <h3 className="font-semibold text-gold mb-2">市場規模</h3>
+                <h3 className="font-semibold gold-soft-text mb-2">市場規模</h3>
                 <p className="text-sm text-muted-foreground">{data.marketInsights.size}</p>
               </CardContent>
             </Card>
@@ -101,7 +101,7 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="bg-gold/5 border-gold/20">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center text-gold">
+                <CardTitle className="text-lg flex items-center gold-soft-text">
                   <Target className="w-5 h-5 mr-2" />
                   あなたの強み
                 </CardTitle>

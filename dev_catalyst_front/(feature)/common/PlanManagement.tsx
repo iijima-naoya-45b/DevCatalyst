@@ -170,12 +170,12 @@ export function PlanManagement() {
         <CardContent className="space-y-6">
           {/* Usage Stats */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-gold">今月の使用状況</h4>
+            <h4 className="font-semibold gold-soft-text">今月の使用状況</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>AI戦略分析</span>
-                  <span className="text-gold">
+                  <span className="gold-soft-text">
                     {usage.aiAnalysis.used}/{usage.aiAnalysis.limit === -1 ? '無制限' : usage.aiAnalysis.limit}
                   </span>
                 </div>
@@ -222,7 +222,7 @@ export function PlanManagement() {
               <span className={`transition-colors duration-200 ${billingCycle === 'yearly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>年額</span>
             </div>
             {billingCycle === 'yearly' && (
-              <Badge variant="outline" className="border-gold text-gold bg-gold/10">
+              <Badge variant="outline" className="border-gold gold-soft-text bg-gold/10">
                 2ヶ月分お得
               </Badge>
             )}
@@ -230,7 +230,7 @@ export function PlanManagement() {
 
           {/* Quick Actions */}
           <div className="flex flex-wrap gap-3">
-            <Button variant="outline" className="border-gold/30 text-gold">
+            <Button variant="outline" className="border-gold/30 gold-soft-text">
               <Download className="w-4 h-4 mr-2" />
               請求書ダウンロード
             </Button>
@@ -292,7 +292,7 @@ export function PlanManagement() {
                   <div className="space-y-3">
                     {plan.features.map((feature, index) => (
                       <div key={index} className="flex items-center space-x-2">
-                        <Check className="w-4 h-4 text-gold flex-shrink-0" />
+                        <Check className="w-4 h-4 gold-soft-text flex-shrink-0" />
                         <span className="text-sm">{feature}</span>
                       </div>
                     ))}
@@ -333,7 +333,7 @@ export function PlanManagement() {
         <Card className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <CreditCard className="w-5 h-5 text-gold" />
+              <CreditCard className="w-5 h-5 gold-soft-text" />
               <span>支払い方法</span>
             </CardTitle>
           </CardHeader>
@@ -348,7 +348,7 @@ export function PlanManagement() {
                   <div className="text-sm text-muted-foreground">有効期限: 12/26</div>
                 </div>
               </div>
-              <Button variant="outline" size="sm" className="border-gold/30 text-gold">
+              <Button variant="outline" size="sm" className="border-gold/30 gold-soft-text">
                 変更
               </Button>
             </div>

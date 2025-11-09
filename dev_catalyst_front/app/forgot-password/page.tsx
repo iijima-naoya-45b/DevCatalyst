@@ -101,10 +101,10 @@ export default function ForgotPasswordPage() {
 
             <div className="max-w-xl w-full space-y-8">
                 <div className="text-center">
-                    <div className="mx-auto h-16 w-16 bg-gradient-to-br from-gold via-gold-light to-bronze rounded-2xl flex items-center justify-center mb-6 shadow-xl">
-                        <Brain className="w-8 h-8 text-navy-deepest" />
+                    <div className="mx-auto h-16 w-16 gold-soft-gradient rounded-2xl flex items-center justify-center mb-6 shadow-xl">
+                        <Brain className="w-8 h-8 text-aria-dark-soft" />
                     </div>
-                    <h1 className="text-3xl font-serif font-bold bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent dark:from-gold dark:via-gold-light dark:to-gold mb-2">
+                    <h1 className="text-3xl font-serif font-bold gold-soft-text mb-2">
                         devCatalyst
                     </h1>
                     <p className="text-gray-600 dark:text-gray-300 text-lg font-light">パスワードをお忘れの方</p>
@@ -153,11 +153,11 @@ export default function ForgotPasswordPage() {
                                 )}
                             </div>
 
-                            <Button
-                                type="submit"
-                                className="w-full h-11 bg-gradient-to-r from-gold via-gold-light to-bronze hover:from-gold-light hover:via-gold hover:to-gold text-navy-deepest font-medium text-sm rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mt-8"
-                                disabled={loading}
-                            >
+                                <Button
+                                    type="submit"
+                                    className="w-full h-11 aria-gold-surface font-medium text-sm rounded-lg transition-all duration-300 mt-8"
+                                    disabled={loading}
+                                >
                                 {loading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -174,7 +174,7 @@ export default function ForgotPasswordPage() {
                                 パスワードを思い出した方は{' '}
                                 <Link
                                     href="/login"
-                                    className="text-gold dark:text-gold-light font-medium hover:underline transition-colors"
+                                    className="gold-soft-text dark:gold-soft-text-light font-medium hover:underline transition-colors"
                                 >
                                     ログイン
                                 </Link>
@@ -183,7 +183,7 @@ export default function ForgotPasswordPage() {
                                 アカウントをお持ちでない方は{' '}
                                 <Link
                                     href="/register"
-                                    className="text-gold dark:text-gold-light font-medium hover:underline transition-colors"
+                                    className="gold-soft-text dark:gold-soft-text-light font-medium hover:underline transition-colors"
                                 >
                                     新規登録
                                 </Link>

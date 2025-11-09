@@ -150,7 +150,7 @@ export function Anchoring({ originalPrice, currentPrice, savingPercentage, onSel
             <div className="text-lg text-muted-foreground line-through">
               ¥{originalPrice.toLocaleString()}
             </div>
-            <div className="text-3xl font-bold text-gold">
+            <div className="text-3xl font-bold gold-soft-text">
               ¥{currentPrice.toLocaleString()}
             </div>
             <div className="text-sm text-green-400">
@@ -244,7 +244,7 @@ export function Authority({ expertName, credentials, recommendation, avatar, cla
             
             <div className="flex items-center space-x-1">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 text-gold fill-current" />
+                <Star key={i} className="w-4 h-4 gold-soft-text fill-current" />
               ))}
             </div>
           </div>

@@ -105,7 +105,7 @@ export default function DashboardPage() {
             case 'completed':
                 return { text: '完了', className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300' };
             case 'on-hold':
-                return { text: '保留', className: 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300' };
+                return { text: '保留', className: 'bg-gold/15 !text-aria-dark-soft border border-gold/35 dark:bg-gold/20 dark:!text-aria-dark-soft dark:border-gold/40' };
             default:
                 return { text: 'その他', className: 'bg-gray-100 text-gray-800 dark:bg-gray-900/50 dark:text-gray-300' };
         }
@@ -118,14 +118,14 @@ export default function DashboardPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-gold" />
+                <Loader2 className="h-8 w-8 animate-spin gold-soft-text" />
             </div>
         );
     }
 
     return (
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <div className="space-y-8">
+                <div className="space-y-8">
                 {/* ヘッダー */}
                 <div className="flex items-center justify-between">
                     <div>
@@ -138,12 +138,12 @@ export default function DashboardPage() {
                     </div>
                     <Button 
                         onClick={() => router.push('/dashboard/projects/new')}
-                        className="bg-gradient-to-r from-gold via-gold-light to-bronze hover:from-gold-light hover:via-gold hover:to-gold text-navy-deepest font-medium shadow-md hover:shadow-lg transition-all duration-300"
+                        className="aria-gold-surface font-medium shadow-md transition-all duration-300"
                     >
                         <Plus className="mr-2 h-4 w-4" />
                         新規プロジェクト
                     </Button>
-                </div>
+                                    </div>
 
                 {/* 統計カード */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -153,8 +153,8 @@ export default function DashboardPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="text-3xl font-bold text-gray-900 dark:text-white">{projects.length}</div>
-                        </CardContent>
-                    </Card>
+                            </CardContent>
+                        </Card>
 
                     <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-gold/20">
                         <CardHeader className="pb-3">
@@ -163,9 +163,9 @@ export default function DashboardPage() {
                         <CardContent>
                             <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                                 {projects.filter(p => p.status === 'active').length}
-                            </div>
-                        </CardContent>
-                    </Card>
+                                </div>
+                            </CardContent>
+                        </Card>
 
                     <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-gold/20">
                         <CardHeader className="pb-3">
@@ -174,21 +174,21 @@ export default function DashboardPage() {
                         <CardContent>
                             <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                                 {projects.filter(p => p.status === 'completed').length}
-                            </div>
-                        </CardContent>
-                    </Card>
+                                </div>
+                            </CardContent>
+                        </Card>
 
                     <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-gold/20">
                         <CardHeader className="pb-3">
                             <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">保留中</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-amber-600 dark:text-amber-400">
+                            <div className="text-3xl font-bold gold-soft-text dark:gold-soft-text-light">
                                 {projects.filter(p => p.status === 'on-hold').length}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
 
                 {/* プロジェクト一覧 */}
                 <div className="space-y-4">
@@ -205,7 +205,7 @@ export default function DashboardPage() {
                                 </p>
                                 <Button 
                                     onClick={() => router.push('/dashboard/projects/new')}
-                                    className="bg-gradient-to-r from-gold via-gold-light to-bronze hover:from-gold-light hover:via-gold hover:to-gold text-navy-deepest"
+                                    className="aria-gold-surface"
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     最初のプロジェクトを作成
@@ -224,18 +224,18 @@ export default function DashboardPage() {
                                         <div className="flex items-start justify-between">
                                             <div className="flex items-center gap-3 flex-1">
                                                 <div className="p-2 bg-gold/10 rounded-lg group-hover:bg-gold/20 transition-colors">
-                                                    <Folder className="h-6 w-6 text-gold" />
-                                                </div>
+                                                    <Folder className="h-6 w-6 gold-soft-text" />
+                                </div>
                                                 <div className="flex-1">
-                                                    <CardTitle className="text-lg font-serif text-gray-900 dark:text-white group-hover:text-gold transition-colors">
+                                                    <CardTitle className="text-lg font-serif text-gray-900 dark:text-white group-hover:gold-soft-text transition-colors">
                                                         {project.name}
                                                     </CardTitle>
                                                     <CardDescription className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                                                         {project.description}
-                                                    </CardDescription>
-                                                </div>
-                                            </div>
-                                            <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                                </CardDescription>
+                                        </div>
+                                    </div>
+                                            <ArrowRight className="h-5 w-5 text-gray-400 group-hover:gold-soft-text group-hover:translate-x-1 transition-all" />
                                         </div>
                                     </CardHeader>
                                     <CardContent>
@@ -248,12 +248,12 @@ export default function DashboardPage() {
                                                 <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                                                     <Calendar className="h-3 w-3 mr-1" />
                                                     {project.createdAt.toLocaleDateString('ja-JP')}
-                                                </div>
+                                    </div>
                                                 <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                                                     <Clock className="h-3 w-3 mr-1" />
                                                     {project.updatedAt.toLocaleDateString('ja-JP')}
-                                                </div>
-                                            </div>
+                                        </div>
+                                    </div>
 
                                             {/* 進捗バー */}
                                             <div>
@@ -267,16 +267,16 @@ export default function DashboardPage() {
                                                 </div>
                                                 <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
                                                     <div 
-                                                        className="bg-gradient-to-r from-gold via-gold-light to-bronze h-2 rounded-full transition-all duration-300"
+                                                        className="gold-soft-gradient h-2 rounded-full transition-all duration-300"
                                                         style={{ width: `${(project.milestonesCompleted / project.milestonesTotal) * 100}%` }}
                                                     />
-                                                </div>
-                                            </div>
                                         </div>
-                                    </CardContent>
-                                </Card>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
                             ))}
-                        </div>
+                    </div>
                     )}
                 </div>
             </div>

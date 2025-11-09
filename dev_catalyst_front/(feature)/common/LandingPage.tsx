@@ -54,7 +54,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
       subtitle: 'Interactive Brainstorming',
       description: 'アリアとの対話を通じて、あなたのビジネスアイデアを体系化。マインドマップ自動生成で思考を可視化します。',
       icon: Lightbulb,
-      color: 'from-gold to-bronze',
+      color: 'gold-soft-gradient',
       demo: '「新しいSaaSアイデアがあるんですが...」\n→「市場性はいかがでしょうか？具体的な課題は？」\n→「では競合状況を分析しましょう」',
       benefits: ['思考の整理', 'アイデア深掘り', '盲点の発見', '実現性評価']
     },
@@ -74,7 +74,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
       subtitle: 'Strategic Roadmap',
       description: 'SWOT分析から財務シミュレーションまで、包括的な事業計画を対話形式で構築します。',
       icon: BarChart3,
-      color: 'from-copper to-gold',
+      color: 'gold-soft-gradient',
       demo: '「事業計画を立てたいのですが」\n→「収益モデルから始めましょうか」\n→「3年後の予測をお見せします」',
       benefits: ['収益予測', 'リスク分析', '資金計画', 'KPI設定']
     }
@@ -182,21 +182,21 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gold/8 via-transparent to-copper/5 pointer-events-none" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/3 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute inset-0 gold-soft-gradient opacity-20 pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-bronze/4 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
 
         <div className="container mx-auto text-center relative z-10">
           {/* Service Logo & Name */}
           <div className="flex items-center justify-center space-x-4 mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-gold via-gold-light to-bronze rounded-xl flex items-center justify-center shadow-2xl">
-              <Brain className="w-8 h-8 text-navy-deepest" />
+            <div className="w-16 h-16 gold-soft-gradient rounded-xl flex items-center justify-center shadow-2xl">
+              <Brain className="w-8 h-8 text-aria-dark-soft" />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-serif font-bold bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-5xl font-serif font-bold gold-soft-text">
                 devCatalist
               </h1>
-              <p className="text-gold/70 text-sm tracking-wide">Powered by AI Strategy Partner "Aria"</p>
+              <p className="gold-soft-text/70 text-sm tracking-wide">Powered by AI Strategy Partner "Aria"</p>
             </div>
           </div>
 
@@ -206,14 +206,14 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
               <span className="text-foreground">
                 戦略の
               </span>
-              <span className="bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
+              <span className="gold-soft-text">
                 孤独
               </span>
               <span className="text-foreground">
                 から、
               </span>
               <br />
-              <span className="bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
+              <span className="gold-soft-text">
                 確信の対話
               </span>
               <span className="text-foreground">
@@ -224,7 +224,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
             <div className="space-y-6">
               <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light">
                 78%の経営者が感じる「戦略立案の孤独」を解決。<br />
-                AIパートナー「<strong className="text-gold">アリア</strong>」との対話で、データに基づく確信ある意思決定を実現。
+                AIパートナー「<strong className="gold-soft-text">アリア</strong>」との対話で、データに基づく確信ある意思決定を実現。
               </p>
 
               <div className="flex items-center justify-center space-x-8 text-sm text-muted-foreground">
@@ -249,7 +249,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 onClick={onStartTrial}
-                className="h-16 px-12 text-lg bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-2xl shadow-gold/25 transform hover:scale-105 transition-all duration-300"
+                className="h-16 px-12 text-lg aria-gold-surface transform hover:scale-105 transition-all duration-300"
               >
                 <Brain className="w-6 h-6 mr-3" />
                 アリアと戦略セッション開始
@@ -258,7 +258,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
               <Button
                 onClick={() => setShowAriaDemo(!showAriaDemo)}
                 variant="outline"
-                className="h-16 px-12 text-lg border-gold/40 text-gold hover:bg-gold/10 backdrop-blur-sm"
+                className="h-16 px-12 text-lg border-gold/40 gold-soft-text hover:bg-gold/10 backdrop-blur-sm"
               >
                 <PlayCircle className="w-6 h-6 mr-3" />
                 5分でわかるライブデモ
@@ -283,9 +283,9 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
               return (
                 <div key={index} className="text-center p-4">
                   <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Icon className="w-6 h-6 text-gold" />
+                    <Icon className="w-6 h-6 gold-soft-text" />
                   </div>
-                  <div className="text-2xl md:text-3xl font-bold text-gold mb-1">{stat.value}</div>
+                  <div className="text-2xl md:text-3xl font-bold gold-soft-text mb-1">{stat.value}</div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </div>
               );
@@ -299,7 +299,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
         <section className="py-20 px-4 border-t border-gold/20">
           <div className="container mx-auto">
             <div className="text-center mb-12">
-              <Badge className="bg-gold/10 text-gold border-gold/30 mb-4">
+              <Badge className="bg-gold/10 gold-soft-text border-gold/30 mb-4">
                 LIVE DEMO
               </Badge>
               <h3 className="text-3xl md:text-4xl font-serif font-semibold mb-4">
@@ -333,9 +333,9 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
               <CardContent className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="text-center p-6 bg-gold/5 rounded-xl border border-gold/20">
-                    <div className="text-4xl font-bold text-gold mb-2">78%</div>
+                    <div className="text-4xl font-bold gold-soft-text mb-2">78%</div>
                     <div className="text-sm text-muted-foreground">AI予測成功確率</div>
-                    <div className="text-xs text-gold mt-1">リスクレベル: 低</div>
+                    <div className="text-xs gold-soft-text mt-1">リスクレベル: 低</div>
                   </div>
                   <div className="text-center p-6 bg-bronze/5 rounded-xl border border-bronze/20">
                     <div className="text-lg font-semibold text-bronze mb-2">次の一手</div>
@@ -355,7 +355,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
           {/* Benefits */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center p-6">
-              <Clock className="w-12 h-12 text-gold mx-auto mb-4" />
+              <Clock className="w-12 h-12 gold-soft-text mx-auto mb-4" />
               <h4 className="text-xl font-semibold mb-2">時間の節約</h4>
               <p className="text-muted-foreground">複雑な分析を数分で完了</p>
             </div>
@@ -399,7 +399,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                       </div>
                       <div>
                         <h4 className="text-2xl font-serif font-semibold">{feature.title}</h4>
-                        <p className="text-gold text-sm">{feature.subtitle}</p>
+                        <p className="gold-soft-text text-sm">{feature.subtitle}</p>
                       </div>
                     </div>
 
@@ -410,7 +410,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                     <div className="grid grid-cols-2 gap-4">
                       {feature.benefits.map((benefit, idx) => (
                         <div key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="w-4 h-4 text-gold" />
+                          <CheckCircle className="w-4 h-4 gold-soft-text" />
                           <span className="text-sm">{benefit}</span>
                         </div>
                       ))}
@@ -426,7 +426,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                             <div className="w-6 h-6 bg-gold rounded-full flex items-center justify-center">
                               <Brain className="w-4 h-4 text-navy-deepest" />
                             </div>
-                            <span className="text-sm font-medium text-gold">アリアとの対話例</span>
+                            <span className="text-sm font-medium gold-soft-text">アリアとの対話例</span>
                           </div>
                           <div className="text-sm whitespace-pre-line text-muted-foreground leading-relaxed font-mono">
                             {feature.demo}
@@ -461,18 +461,18 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                 return (
                   <div key={step.step} className="text-center relative">
                     {index < onboardingSteps.length - 1 && (
-                      <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-gold to-bronze transform translate-x-4 -translate-y-1/2" />
+                      <div className="hidden md:block absolute top-8 left-full w-full h-0.5 gold-soft-gradient transform translate-x-4 -translate-y-1/2" />
                     )}
 
-                    <div className="w-16 h-16 bg-gradient-to-br from-gold to-bronze rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
-                      <Icon className="w-8 h-8 text-navy-deepest" />
+                    <div className="w-16 h-16 gold-soft-gradient rounded-full flex items-center justify-center mx-auto mb-4 relative z-10">
+                      <Icon className="w-8 h-8 text-aria-dark-soft" />
                     </div>
 
                     <div className="space-y-2">
-                      <div className="text-sm text-gold font-medium">STEP {step.step}</div>
+                      <div className="text-sm gold-soft-text font-medium">STEP {step.step}</div>
                       <h4 className="text-lg font-semibold">{step.title}</h4>
                       <p className="text-sm text-muted-foreground">{step.description}</p>
-                      <Badge variant="outline" className="border-gold/30 text-gold text-xs">
+                      <Badge variant="outline" className="border-gold/30 gold-soft-text text-xs">
                         <Clock className="w-3 h-3 mr-1" />
                         {step.time}
                       </Badge>
@@ -502,14 +502,14 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
               <Card key={plan.id} className={`
                 relative border transition-all duration-300 hover:shadow-2xl
                 ${plan.popular
-                  ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent scale-105'
+                  ? 'gold-soft-outline aria-gold-surface/40 scale-105'
                   : 'border-gold/25 bg-navy-dark/40 hover:border-gold/40'
                 }
                 backdrop-blur-md
               `}>
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-gold to-bronze text-navy-deepest px-6 py-2">
+                    <Badge className="gold-soft-gradient text-aria-dark-soft px-6 py-2 shadow-sm">
                       <Crown className="w-4 h-4 mr-2" />
                       最も人気
                     </Badge>
@@ -529,7 +529,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                   <div className="space-y-3">
                     {plan.features.map((feature, index) => (
                       <div key={index} className="flex items-center space-x-3">
-                        <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
+                        <CheckCircle className="w-5 h-5 gold-soft-text flex-shrink-0" />
                         <span className="text-sm">{feature}</span>
                       </div>
                     ))}
@@ -538,7 +538,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                   <Button
                     onClick={onStartTrial}
                     className={`w-full h-12 ${plan.popular
-                        ? 'bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light'
+                        ? 'aria-gold-surface'
                         : 'bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light'
                       }`}
                   >
@@ -570,7 +570,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                 <CardContent className="p-6 space-y-4">
                   <div className="flex items-center space-x-1 mb-4">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-gold fill-current" />
+                      <Star key={i} className="w-4 h-4 gold-soft-text fill-current" />
                     ))}
                   </div>
 
@@ -579,19 +579,19 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                   </p>
 
                   <div className="bg-gold/5 border border-gold/20 rounded-lg p-3">
-                    <div className="text-sm font-medium text-gold">{testimonial.result}</div>
+                    <div className="text-sm font-medium gold-soft-text">{testimonial.result}</div>
                   </div>
 
                   <div className="flex items-center space-x-3 pt-4 border-t border-gold/20">
-                    <div className="w-12 h-12 bg-gradient-to-br from-gold to-bronze rounded-full flex items-center justify-center">
-                      <span className="text-navy-deepest font-semibold text-sm">
+                    <div className="w-12 h-12 gold-soft-gradient rounded-full flex items-center justify-center">
+                      <span className="text-aria-dark-soft font-semibold text-sm">
                         {testimonial.name.charAt(0)}
                       </span>
                     </div>
                     <div>
                       <div className="font-semibold text-sm">{testimonial.name}</div>
                       <div className="text-xs text-muted-foreground">{testimonial.title}</div>
-                      <div className="text-xs text-gold">{testimonial.company}</div>
+                      <div className="text-xs gold-soft-text">{testimonial.company}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -608,7 +608,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
             <h3 className="text-4xl md:text-5xl font-serif font-bold">
               あなたの戦略パートナー「アリア」が
               <br />
-              <span className="bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
+              <span className="gold-soft-text">
                 待っています
               </span>
             </h3>
@@ -622,7 +622,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 onClick={onStartTrial}
-                className="h-16 px-12 text-lg bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-2xl shadow-gold/25 transform hover:scale-105 transition-all duration-300"
+                className="h-16 px-12 text-lg aria-gold-surface transform hover:scale-105 transition-all duration-300"
               >
                 <Brain className="w-6 h-6 mr-3" />
                 14日間無料でアリアと対話

@@ -12,10 +12,10 @@ export function DashboardFooter() {
                     {/* ブランド情報 */}
                     <div className="space-y-3">
                         <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-yellow-400 via-yellow-500 to-amber-600 dark:bg-gold animate-aria-pulse">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center gold-soft-gradient animate-aria-pulse">
                                 <Brain className="w-5 h-5 text-white dark:text-navy-main" />
                             </div>
-                            <span className="text-lg font-bold font-serif text-slate-800 dark:text-gold">devCatalyst</span>
+                            <span className="text-lg font-bold font-serif text-slate-800 dark:gold-soft-text">devCatalyst</span>
                         </div>
                         <p className="text-sm text-slate-600 dark:text-gray-400">
                             AIと共に、あなたの戦略を加速させる
@@ -27,22 +27,22 @@ export function DashboardFooter() {
                         <h3 className="font-semibold text-slate-800 dark:text-gray-200">リンク</h3>
                         <ul className="space-y-2 text-sm text-slate-600 dark:text-gray-400">
                             <li>
-                                <a href="/dashboard" className="hover:text-gold transition-colors">
+                                <a href="/dashboard" className="hover:gold-soft-text transition-colors">
                                     ダッシュボード
                                 </a>
                             </li>
                             <li>
-                                <a href="/dashboard/projects" className="hover:text-gold transition-colors">
+                                <a href="/dashboard/projects" className="hover:gold-soft-text transition-colors">
                                     プロジェクト一覧
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-gold transition-colors">
+                                <a href="#" className="hover:gold-soft-text transition-colors">
                                     ヘルプ & サポート
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-gold transition-colors">
+                                <a href="#" className="hover:gold-soft-text transition-colors">
                                     利用規約
                                 </a>
                             </li>
@@ -55,21 +55,21 @@ export function DashboardFooter() {
                         <div className="flex items-center space-x-3">
                             <a 
                                 href="#" 
-                                className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-gold/20 flex items-center justify-center text-slate-700 dark:text-gray-300 hover:bg-gold/30 hover:text-gold transition-all"
+                                className="w-9 h-9 rounded-lg bg-gold/15 dark:bg-gold/20 flex items-center justify-center text-aria-dark-soft dark:text-gray-300 hover:brightness-95 hover:gold-soft-text transition-all"
                                 aria-label="Twitter"
                             >
                                 <Twitter className="w-5 h-5" />
                             </a>
                             <a 
                                 href="#" 
-                                className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-gold/20 flex items-center justify-center text-slate-700 dark:text-gray-300 hover:bg-gold/30 hover:text-gold transition-all"
+                                className="w-9 h-9 rounded-lg bg-gold/15 dark:bg-gold/20 flex items-center justify-center text-aria-dark-soft dark:text-gray-300 hover:brightness-95 hover:gold-soft-text transition-all"
                                 aria-label="GitHub"
                             >
                                 <Github className="w-5 h-5" />
                             </a>
                             <a 
                                 href="#" 
-                                className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-gold/20 flex items-center justify-center text-slate-700 dark:text-gray-300 hover:bg-gold/30 hover:text-gold transition-all"
+                                className="w-9 h-9 rounded-lg bg-gold/15 dark:bg-gold/20 flex items-center justify-center text-aria-dark-soft dark:text-gray-300 hover:brightness-95 hover:gold-soft-text transition-all"
                                 aria-label="Email"
                             >
                                 <Mail className="w-5 h-5" />
@@ -79,7 +79,7 @@ export function DashboardFooter() {
                 </div>
 
                 {/* コピーライト */}
-                <div className="mt-8 pt-6 border-t border-amber-200 dark:border-gold/30 text-center text-sm text-slate-600 dark:text-gray-400">
+                <div className="mt-8 pt-6 border-t border-gold/30 dark:border-gold/30 text-center text-sm text-slate-600 dark:text-gray-400">
                     <p>&copy; {currentYear} devCatalyst. All rights reserved.</p>
                 </div>
             </div>

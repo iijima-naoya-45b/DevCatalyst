@@ -702,11 +702,11 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
           if (part === '[CHART:MARKET_INSIGHTS]') {
             return (
               <div key={index} className="my-4">
-                <h4 className="text-sm font-semibold mb-3 text-amber-600 dark:text-gold-light flex items-center">
+                <h4 className="text-sm font-semibold mb-3 gold-soft-text dark:gold-soft-text-light flex items-center">
                   <TrendingUp className="w-4 h-4 mr-2" />
                   📈 市場インサイト
                 </h4>
-                <div className="bg-amber-100/70 dark:bg-slate-800/90 rounded-xl p-4 border border-amber-300 dark:border-gold/30">
+                <div className="bg-gold/15 dark:bg-slate-800/90 rounded-xl p-4 border border-gold/35 dark:border-gold/30">
                   <div className="max-w-xs mx-auto">
                     <Doughnut
                       data={chartData.marketInsights}
@@ -893,12 +893,12 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                   {message.type === 'aria' ? (
                     <div className="relative">
                       <Avatar className="w-10 h-10 ring-2 ring-gold/40">
-                        <AvatarFallback className="bg-gradient-to-br from-gold to-bronze text-navy-deepest font-semibold">
+                        <AvatarFallback className="gold-soft-gradient text-aria-dark-soft font-semibold">
                           <Brain className="w-5 h-5 animate-aria-pulse" />
                         </AvatarFallback>
                       </Avatar>
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-br from-gold to-bronze rounded-full border-2 border-navy-dark flex items-center justify-center animate-aria-float">
-                        <Sparkles className="w-2 h-2 text-navy-deepest animate-pulse" />
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 gold-soft-gradient rounded-full border-2 border-navy-dark flex items-center justify-center animate-aria-float">
+                        <Sparkles className="w-2 h-2 text-aria-dark-soft animate-pulse" />
                       </div>
                     </div>
                   ) : (
@@ -913,8 +913,8 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                 {/* メッセージ内容 */}
                 <div className={`flex-1 transition-all duration-300 ${message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}>
                   <div className={`rounded-2xl p-4 ${message.type === 'aria'
-                    ? 'bg-gold/5 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30'
-                    : 'bg-gradient-to-r from-gold to-bronze text-navy-deepest'
+                    ? 'gold-soft-tint border border-gold/20 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 dark:border-gold/30'
+                    : 'aria-gold-surface text-aria-dark-soft'
                     } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}>
                     {/* テキストメッセージとチャートを分離してレンダリング */}
                     {message.type === 'aria' && message.chartData ? (
@@ -932,12 +932,12 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                   {message.insights && message.insights.length > 0 && !message.isStreaming && (
                     <div className="mt-4 space-y-2">
                       {message.insights.map((insight, index) => (
-                        <div key={index} className="flex items-center space-x-3 p-3 bg-amber-100/60 dark:bg-slate-700/70 border border-gold/20 dark:border-gold/30 border-amber-300 rounded-lg">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${insight.type === 'strategy' ? 'bg-gold/20' :
+                    <div key={index} className="flex items-center space-x-3 p-3 gold-soft-tint dark:bg-slate-700/70 border border-gold/35 dark:border-gold/30 rounded-lg">
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${insight.type === 'strategy' ? 'gold-soft-gradient' :
                             insight.type === 'opportunity' ? 'bg-green-500/20' :
                               'bg-orange-400/20'
                             }`}>
-                            {insight.type === 'strategy' && <Target className="w-3 h-3 text-gold" />}
+                            {insight.type === 'strategy' && <Target className="w-3 h-3 text-aria-dark-soft" />}
                             {insight.type === 'opportunity' && <TrendingUp className="w-3 h-3 text-green-400" />}
                             {insight.type === 'risk' && <Zap className="w-3 h-3 text-orange-400" />}
                           </div>
@@ -960,7 +960,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                           size="sm"
                           onClick={() => handleSuggestionClick(suggestion)}
                           disabled={ariaThinking || isStreaming}
-                          className="border-gold/30 dark:border-gold/30 border-amber-400 text-amber-700 dark:text-gold-light hover:bg-amber-100 dark:hover:bg-slate-700 text-xs"
+                          className="border-gold/35 dark:border-gold/30 gold-soft-text dark:gold-soft-text-light hover:bg-gold/15 dark:hover:bg-slate-700 text-xs"
                         >
                           {suggestion}
                         </Button>
@@ -983,18 +983,18 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
             {ariaThinking && !isStreaming && (
               <div className="flex items-start space-x-3">
                 <Avatar className="w-10 h-10 ring-2 ring-gold/40 aria-thinking">
-                  <AvatarFallback className="bg-gradient-to-br from-gold to-bronze text-navy-deepest">
+                  <AvatarFallback className="gold-soft-gradient text-aria-dark-soft">
                     <Brain className="w-5 h-5 animate-aria-pulse" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="bg-gold/5 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30 rounded-2xl p-4">
+                <div className="gold-soft-tint dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30 rounded-2xl p-4">
                   <div className="flex items-center space-x-2">
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 gold-soft-gradient rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 gold-soft-gradient rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 gold-soft-gradient rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
-                    <span className="text-sm text-gold">アリアが静かに考えています...</span>
+                    <span className="text-sm gold-soft-text">アリアが静かに考えています...</span>
                   </div>
                 </div>
               </div>
@@ -1014,13 +1014,13 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
                 onKeyPress={handleKeyPress}
                 placeholder="今、考えていることを話してみてください..."
                 disabled={ariaThinking || isStreaming}
-                className="pr-12 h-12 bg-amber-50/90 dark:bg-slate-800 border-gold/20 dark:border-gold/30 border-amber-300 focus:border-gold dark:focus:border-gold focus:border-amber-500 text-gray-900 dark:text-gray-100 placeholder-amber-600 dark:placeholder-gray-400"
+                className="pr-12 h-12 gold-soft-tint dark:bg-slate-800 border border-gold/35 dark:border-gold/30 focus:border-gold dark:focus:border-gold text-gray-900 dark:text-gray-100 placeholder-[#b5852b] dark:placeholder-gray-400"
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || ariaThinking || isStreaming}
                 size="sm"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light hover:shadow-lg hover:shadow-gold/30 hover:scale-110 transition-all duration-300 ease-out"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 aria-gold-surface hover:shadow-lg hover:shadow-gold/30 hover:scale-110 transition-all duration-300 ease-out"
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -1029,7 +1029,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
             {onStartAnalysis && (
               <Button
                 onClick={handleAnalysis}
-                className="bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light hover:shadow-lg hover:shadow-bronze/30 hover:-translate-y-0.5 transition-all duration-300 ease-out whitespace-nowrap"
+                className="aria-gold-surface hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-0.5 transition-all duration-300 ease-out whitespace-nowrap"
               >
                 <BarChart3 className="w-4 h-4 mr-2" />
                 分析する
@@ -1041,7 +1041,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
           <div className="mt-4 flex flex-wrap gap-2">
             <Badge
               variant="outline"
-              className={`border-amber-400 dark:border-gold/30 text-amber-700 dark:text-gold-light bg-amber-100/60 dark:bg-slate-700/70 transition-all duration-300 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-amber-200/60 dark:hover:bg-slate-600/80 hover:border-amber-500 dark:hover:border-gold/50 hover:scale-105 hover:shadow-md hover:shadow-amber-400/20 dark:hover:shadow-gold/20' : 'opacity-50 cursor-not-allowed'}`}
+              className={`gold-soft-outline text-aria-dark-soft gold-soft-tint transition-all duration-300 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-[rgba(249,233,201,0.2)] dark:hover:bg-slate-600/80 hover:border-gold/45 dark:hover:border-gold/40 hover:scale-105 hover:shadow-md hover:shadow-[rgba(15,23,42,0.18)] dark:hover:shadow-gold/20' : 'opacity-50 cursor-not-allowed'}`}
               onClick={() => !ariaThinking && !isStreaming && handleSuggestionClick("アイデアがあるんだけど...")}>
               <Lightbulb className="w-3 h-3 mr-1" />
               アイデアの相談

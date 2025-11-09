@@ -50,7 +50,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
               </h1>
               <div className="hidden sm:flex items-center space-x-2">
                 <div className="w-1 h-1 bg-gold rounded-full animate-pulse"></div>
-                <span className="text-xs text-gold/70 tracking-wide font-medium">革新の煌めきを、あなたのビジネスに</span>
+                <span className="text-xs gold-soft-text/70 tracking-wide font-medium">革新の煌めきを、あなたのビジネスに</span>
                 <div className="w-1 h-1 bg-gold rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
               </div>
             </div>
@@ -67,7 +67,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
                   onClick={() => onViewChange(item.id)}
                   className={`flex items-center space-x-3 px-4 py-2 transition-all duration-300 font-medium tracking-wide ${isActive
                       ? "bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-xl shadow-gold/20 border border-gold/30"
-                      : "text-foreground/80 hover:bg-navy-medium/50 hover:text-gold-light hover:shadow-lg border border-transparent hover:border-gold/10"
+                      : "text-foreground/80 hover:bg-navy-medium/50 hover:gold-soft-text-light hover:shadow-lg border border-transparent hover:border-gold/10"
                     }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -98,13 +98,13 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="sm" className="md:hidden p-2">
-                <Menu className="w-5 h-5 text-gold" />
+                <Menu className="w-5 h-5 gold-soft-text" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-80 bg-navy-darker border-gold/20">
               <SheetHeader className="space-y-4 pb-6">
                 <div className="flex items-center justify-between">
-                  <SheetTitle className="text-gold font-serif text-lg">ナビゲーション</SheetTitle>
+                  <SheetTitle className="gold-soft-text font-serif text-lg">ナビゲーション</SheetTitle>
                 </div>
               </SheetHeader>
 
@@ -122,7 +122,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
                       }}
                       className={`w-full justify-start space-x-3 h-12 transition-all duration-300 ${isActive
                           ? "bg-gradient-to-r from-gold to-bronze text-navy-deepest"
-                          : "text-foreground hover:bg-navy-medium hover:text-gold-light"
+                          : "text-foreground hover:bg-navy-medium hover:gold-soft-text-light"
                         }`}
                     >
                       <Icon className="w-5 h-5" />
@@ -158,7 +158,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
                       <AvatarFallback className="bg-gradient-to-br from-gold to-bronze text-navy-deepest">TT</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-xs text-gold/70 uppercase tracking-wide">ソロプレナー</p>
+                      <p className="text-xs gold-soft-text/70 uppercase tracking-wide">ソロプレナー</p>
                       <p className="text-sm text-foreground font-medium">田中 太郎</p>
                     </div>
                   </div>
@@ -169,7 +169,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
 
           {/* Desktop User Info */}
           <div className="text-right hidden lg:block space-y-1">
-            <p className="text-xs text-gold/70 tracking-wide font-medium uppercase">ソロプレナー</p>
+            <p className="text-xs gold-soft-text/70 tracking-wide font-medium uppercase">ソロプレナー</p>
             <p className="text-sm text-foreground font-medium tracking-wide">田中 太郎</p>
           </div>
 
@@ -193,7 +193,7 @@ export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlo
               {onTogglePlanManagement && (
                 <DropdownMenuItem
                   onClick={onTogglePlanManagement}
-                  className={`focus:bg-navy-medium transition-colors duration-200 ${showPlanManagement ? 'bg-gold/10 text-gold' : 'hover:bg-navy-medium/70'}`}
+                  className={`focus:bg-navy-medium transition-colors duration-200 ${showPlanManagement ? 'bg-gold/10 gold-soft-text' : 'hover:bg-navy-medium/70'}`}
                 >
                   <Crown className="w-4 h-4 mr-2" />
                   <span>プラン管理</span>

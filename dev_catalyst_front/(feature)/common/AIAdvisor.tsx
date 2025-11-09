@@ -106,7 +106,7 @@ export function AIAdvisor() {
           <Card className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md shadow-2xl">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Brain className="w-5 h-5 text-gold" />
+                <Brain className="w-5 h-5 gold-soft-text" />
                 <span>アリアとの戦略セッション</span>
               </CardTitle>
               <CardDescription>
@@ -359,7 +359,7 @@ export function AIAdvisor() {
           <Card className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md shadow-2xl">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <MessageSquare className="w-5 h-5 text-gold" />
+                <MessageSquare className="w-5 h-5 gold-soft-text" />
                 <span>フィードバック・追加分析</span>
               </CardTitle>
               <CardDescription>
@@ -377,7 +377,7 @@ export function AIAdvisor() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-12 border-gold/30 text-gold hover:bg-gold/5"
+                  className="h-12 border-gold/30 gold-soft-text hover:bg-gold/5"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   追加質問をする
