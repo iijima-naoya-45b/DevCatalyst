@@ -34,7 +34,7 @@ import {
     DollarSign
 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
-import type { User as UserType } from '@/lib/auth';
+import type { User as UserType } from '@/lib/types';
 import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Radar, Bar } from 'react-chartjs-2';
 

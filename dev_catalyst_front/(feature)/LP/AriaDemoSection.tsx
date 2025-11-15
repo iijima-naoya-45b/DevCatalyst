@@ -24,7 +24,7 @@ export function AriaDemoSection({ showAriaDemo }: { showAriaDemo: boolean }) {
           </p>
         </div>
         <div className={`scale-in ${isInView ? 'in-view delay-200' : ''}`}>
-          <AriaChat />
+          <AriaChat showUserAvatar={false} />
         </div>
       </div>
     </section>

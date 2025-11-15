@@ -31,6 +31,12 @@ Rails.application.routes.draw do
       put 'users/me', to: 'users#update'
       put 'users/change_password', to: 'users#change_password'
       delete 'users/me', to: 'users#destroy'
+
+      # AI chat proxy
+      post 'ai/chat', to: 'ai#chat'
+      post 'ai/chat/stream', to: 'ai#chatStream'
+      get 'ai/chat_sessions', to: 'ai#chatSessions'
+      get 'ai/chat_sessions/:id/messages', to: 'ai#chatSessionMessages'
     end
   end
 

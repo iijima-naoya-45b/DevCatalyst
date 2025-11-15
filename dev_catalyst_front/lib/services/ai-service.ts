@@ -1,74 +1,22 @@
-import { aiServiceClient, ApiClientError } from '../api-client';
-
-export interface ChatMessage {
-    role: 'user' | 'assistant' | 'system';
-    content: string;
-}
-
-export interface ChatRequest {
-    messages: ChatMessage[];
-    provider?: 'openai' | 'anthropic';
-    model?: string;
-    temperature?: number;
-    max_tokens?: number;
-    stream?: boolean;
-}
-
-export interface ChatResponse {
-    message: string;
-    provider: string;
-    model: string;
-    usage?: {
-        prompt_tokens?: number;
-        completion_tokens?: number;
-        total_tokens?: number;
-        input_tokens?: number;
-        output_tokens?: number;
-    };
-}
-
-export interface AIModel {
-    id: string;
-    name: string;
-    plan_required: string;
-}
-
-export interface AvailableModels {
-    models: {
-        openai: AIModel[];
-        anthropic: AIModel[];
-    };
-    user_plan: string;
-}
+import { aiServiceClient } from '../api-client';
+import type { ChatRequest, ChatResponse, AvailableModels } from '../types/ai';
 
 class AIService {
-    private baseURL = process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:8000';
+    private baseURL = process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000';
 
-    /**
-     * AI チャット補完
-     */
     async chatCompletion(request: ChatRequest): Promise<ChatResponse> {
         try {
-            const response = await aiServiceClient.post<ChatResponse>('/ai/chat', request);
-            return response.data as ChatResponse;
-        } catch (error: unknown) {
-            if (error instanceof ApiClientError) {
-                if (error.status === 401) {
-                    window.location.href = '/login';
-                    throw new Error('認証が必要です。ログインしてください。');
-                }
-                if (error.status === 403) {
-                    throw new Error(error.message || 'このAIプロバイダーを使用する権限がありません。');
-                }
-                throw new Error(error.message || 'AI APIの呼び出しに失敗しました。');
+            const response = await aiServiceClient.post<ChatResponse>('/api/ai/chat', request);
+            if (!response.data) {
+                throw new Error('No data received from API');
             }
-            throw new Error('AI APIの呼び出しに失敗しました。');
+            return response.data;
+        } catch (error: any) {
+            this.handleError(error);
+            throw error;
         }
     }
 
-    /**
-     * AI チャット補完（ストリーミング）
-     */
     async chatCompletionStream(
         request: ChatRequest,
         onChunk: (chunk: string) => void,
@@ -87,100 +35,28 @@ class AIService {
             });
 
             if (!response.ok) {
-                if (response.status === 401) {
-                    // 認証エラーの場合、ログインページにリダイレクト
-                    window.location.href = '/login';
-                    throw new Error('認証が必要です。ログインしてください。');
-                }
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'AI APIの呼び出しに失敗しました。');
+                await this.handleFetchError(response);
             }
 
-            const reader = response.body?.getReader();
-            if (!reader) {
-                throw new Error('ストリーミングレスポンスの読み取りに失敗しました。');
-            }
-
-            const decoder = new TextDecoder();
-            let buffer = '';
-
-            while (true) {
-                const { done, value } = await reader.read();
-
-                if (done) {
-                    break;
-                }
-
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop() || '';
-
-                for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        try {
-                            const data = JSON.parse(line.slice(6));
-
-                            if (data.error) {
-                                onError?.(data.message);
-                                return;
-                            }
-
-                            if (data.done) {
-                                onComplete?.();
-                                return;
-                            }
-
-                            if (data.content) {
-                                onChunk(data.content);
-                            }
-                        } catch (e) {
-                            console.error('Failed to parse SSE data:', e);
-                        }
-                    }
-                }
-            }
+            await this.processStream(response, onChunk, onError, onComplete);
         } catch (error: any) {
             onError?.(error.message || 'ストリーミング中にエラーが発生しました。');
         }
     }
 
-    /**
-     * 利用可能なAIモデル一覧を取得
-     */
     async getAvailableModels(): Promise<AvailableModels> {
         try {
-            const response = await aiServiceClient.get<AvailableModels>('/ai/models');
-            return response.data as AvailableModels;
-        } catch (error: unknown) {
-            if (error instanceof ApiClientError) {
-                if (error.status === 401) {
-                    window.location.href = '/login';
-                    throw new Error('認証が必要です。ログインしてください。');
-                }
-                throw new Error(error.message || 'モデル一覧の取得に失敗しました。');
+            const response = await aiServiceClient.get<AvailableModels>('/api/ai/models');
+            if (!response.data) {
+                throw new Error('No data received from API');
             }
-            throw new Error('モデル一覧の取得に失敗しました。');
+            return response.data;
+        } catch (error: any) {
+            this.handleError(error);
+            throw error;
         }
     }
 
-    /**
-     * アクセストークンを取得
-     */
-    private getAccessToken(): string | null {
-        // Cookieからアクセストークンを取得
-        const cookies = document.cookie.split(';');
-        for (const cookie of cookies) {
-            const [name, value] = cookie.trim().split('=');
-            if (name === 'access_token') {
-                return decodeURIComponent(value);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 認証状態をチェック
-     */
     async checkAuthStatus(): Promise<{
         authenticated: boolean;
         user: any;
@@ -191,12 +67,8 @@ class AIService {
                 authenticated: boolean;
                 user: any;
                 expires_in: number | null;
-            }>('/auth/check');
-            return (response.data as {
-                authenticated: boolean;
-                user: any;
-                expires_in: number | null;
-            }) || {
+            }>('/api/auth/check');
+            return response.data || {
                 authenticated: false,
                 user: null,
                 expires_in: null,
@@ -210,17 +82,101 @@ class AIService {
         }
     }
 
-    /**
-     * トークンをリフレッシュ
-     */
     async refreshToken(): Promise<boolean> {
         try {
-            await aiServiceClient.post('/auth/refresh');
+            await aiServiceClient.post('/api/auth/refresh', {});
             return true;
         } catch (error) {
             return false;
         }
     }
+
+    private getAccessToken(): string | null {
+        if (typeof document === 'undefined') return null;
+
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'access_token') {
+                return decodeURIComponent(value);
+            }
+        }
+        return null;
+    }
+
+    private handleError(error: any): void {
+        if (error.status === 401) {
+            if (typeof window !== 'undefined') {
+                window.location.href = '/login';
+            }
+            throw new Error('認証が必要です。ログインしてください。');
+        }
+        if (error.status === 403) {
+            throw new Error(error.message || 'このAIプロバイダーを使用する権限がありません。');
+        }
+        throw new Error(error.message || 'AI APIの呼び出しに失敗しました。');
+    }
+
+    private async handleFetchError(response: Response): Promise<void> {
+        if (response.status === 401) {
+            if (typeof window !== 'undefined') {
+                window.location.href = '/login';
+            }
+            throw new Error('認証が必要です。ログインしてください。');
+        }
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'AI APIの呼び出しに失敗しました。');
+    }
+
+    private async processStream(
+        response: Response,
+        onChunk: (chunk: string) => void,
+        onError?: (error: string) => void,
+        onComplete?: () => void
+    ): Promise<void> {
+        const reader = response.body?.getReader();
+        if (!reader) {
+            throw new Error('ストリーミングレスポンスの読み取りに失敗しました。');
+        }
+
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    try {
+                        const data = JSON.parse(line.slice(6));
+
+                        if (data.error) {
+                            onError?.(data.message);
+                            return;
+                        }
+
+                        if (data.done) {
+                            onComplete?.();
+                            return;
+                        }
+
+                        if (data.content) {
+                            onChunk(data.content);
+                        }
+                    } catch (e) {
+                        console.error('Failed to parse SSE data:', e);
+                    }
+                }
+            }
+        }
+    }
 }
 
 export const aiService = new AIService();
+export type { ChatRequest, ChatResponse, AvailableModels } from '../types/ai';

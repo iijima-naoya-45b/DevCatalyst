@@ -8,7 +8,7 @@ import { Badge } from '../common/ui/badge';
 import { useInView } from '../../hooks/use-in-view';
 
 // ビジュアライゼーション
-const ProductEvolution = dynamic(() => import('../../components/visualizations/ProductEvolution').then(mod => ({ default: mod.ProductEvolution })), {
+const ProductEvolution = dynamic(() => import('../../components/ui/visualizations/ProductEvolution').then(mod => ({ default: mod.ProductEvolution })), {
   ssr: false,
 });
 

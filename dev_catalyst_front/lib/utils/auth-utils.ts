@@ -8,7 +8,8 @@ export function isTokenExpired(token: string): boolean {
         const now = Date.now();
         // 有効期限の1分前になったら期限切れとみなす
         return exp - now < 60 * 1000;
-    } catch (error) {        return true;
+    } catch (error) {
+        return true;
     }
 }
 
@@ -16,20 +17,25 @@ export function isTokenExpired(token: string): boolean {
 export async function refreshAuthToken(): Promise<boolean> {
     try {
         const refreshTokenValue = TokenManager.getRefreshToken();
-        
-        if (!refreshTokenValue) {            return false;
+
+        if (!refreshTokenValue) {
+            return false;
         }
 
         // リフレッシュトークンも期限切れかチェック
-        if (isTokenExpired(refreshTokenValue)) {            TokenManager.removeToken();
+        if (isTokenExpired(refreshTokenValue)) {
+            TokenManager.removeToken();
             return false;
-        }        const apiClient = new ApiClient();
+        } const apiClient = new ApiClient();
         const response = await apiClient.refreshToken();
 
-        if (response.success && response.access_token && response.refresh_token) {
-            TokenManager.setTokens(response.access_token, response.refresh_token);            return true;
-        }        return false;
-    } catch (error) {        TokenManager.removeToken();
+        if (response.tokens) {
+            TokenManager.setTokens(response.tokens.access_token, response.tokens.refresh_token || '');
+            return true;
+        }
+        return false;
+    } catch (error) {
+        TokenManager.removeToken();
         return false;
     }
 }
@@ -37,13 +43,14 @@ export async function refreshAuthToken(): Promise<boolean> {
 // アクセストークンをチェックして、必要ならリフレッシュ
 export async function ensureValidAuthToken(): Promise<boolean> {
     const accessToken = TokenManager.getAccessToken();
-    
+
     if (!accessToken) {
         return false;
     }
 
     // トークンが期限切れまたは期限が近い場合
-    if (isTokenExpired(accessToken)) {        return await refreshAuthToken();
+    if (isTokenExpired(accessToken)) {
+        return await refreshAuthToken();
     }
 
     return true;
@@ -56,12 +63,13 @@ export async function withAuthToken<T>(
 ): Promise<T> {
     if (options.autoRefresh) {
         const accessToken = TokenManager.getAccessToken();
-        
+
         if (!accessToken) {
             throw new Error('Not authenticated. Please log in.');
         }
-        
-        if (isTokenExpired(accessToken)) {            const refreshed = await refreshAuthToken();
+
+        if (isTokenExpired(accessToken)) {
+            const refreshed = await refreshAuthToken();
             if (!refreshed) {
                 throw new Error('Authentication expired. Please log in again.');
             }
@@ -78,7 +86,8 @@ export function getTokenTimeRemaining(token: string): number {
         const exp = payload.exp * 1000;
         const now = Date.now();
         return Math.max(0, Math.floor((exp - now) / 1000));
-    } catch (error) {        return 0;
+    } catch (error) {
+        return 0;
     }
 }
 
@@ -99,7 +108,8 @@ export function getTokenInfo(token: string): {
             exp: payload.exp,
             timeRemaining: getTokenTimeRemaining(token),
         };
-    } catch (error) {        return {};
+    } catch (error) {
+        return {};
     }
 }
 

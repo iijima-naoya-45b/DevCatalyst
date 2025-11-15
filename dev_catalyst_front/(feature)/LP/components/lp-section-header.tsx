@@ -1,22 +1,7 @@
 'use client';
 
-import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-
-type LpSectionHeaderAlign = 'left' | 'center';
-
-interface LpSectionHeaderProps {
-  label?: string;
-  title: ReactNode;
-  description?: ReactNode;
-  align?: LpSectionHeaderAlign;
-  className?: string;
-  labelClassName?: string;
-  titleClassName?: string;
-  descriptionClassName?: string;
-  isVisible?: boolean;
-  transitionDelay?: number;
-}
+import { LpSectionHeaderProps, LpSectionHeaderAlign } from '../types';
 
 export function LpSectionHeader({
   label,

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import {
+import { 
   ArrowRight,
   ArrowDown,
   Home,
@@ -18,12 +18,7 @@ import {
   Zap,
   RefreshCw
 } from "lucide-react";
-
-interface ScreenFlowDiagramProps {
-  currentView: string;
-  onViewChange: (view: string) => void;
-  onShowFlow: () => void;
-}
+import { ScreenFlowDiagramProps } from "./types";
 
 export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: ScreenFlowDiagramProps) {
   const [selectedFlow, setSelectedFlow] = useState<'basic' | 'recommended' | 'action'>('recommended');

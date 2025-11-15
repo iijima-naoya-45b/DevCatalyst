@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { aiService, ChatRequest, ChatResponse, AvailableModels } from '../services/ai-service';
+import { aiService } from '../services/ai-service';
+import type { ChatRequest, ChatResponse, AvailableModels } from '../types/ai';
 
 export interface UseAIApiOptions {
     autoRefreshToken?: boolean;

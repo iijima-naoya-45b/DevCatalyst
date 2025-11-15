@@ -3,12 +3,7 @@
 import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-
-interface ThemeToggleSwitchProps {
-    size?: "sm" | "md" | "lg"
-    showLabels?: boolean
-    className?: string
-}
+import { ThemeToggleSwitchProps } from "./types/theme"
 
 export function ThemeToggleSwitch({
     size = "md",

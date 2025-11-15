@@ -2,6 +2,8 @@ import { Brain } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="py-8 px-4 gold-soft-gradient text-aria-dark-soft dark:text-aria-dark-soft">
       <div className="container mx-auto">
@@ -52,7 +54,7 @@ export function Footer() {
         
         <div className="border-t border-aria-dark-soft/20 pt-4 text-center">
           <p className="text-sm text-aria-dark-soft opacity-80">
-            &copy; 2025 DevCatalyst. All rights reserved.
+            &copy; {currentYear} DevCatalyst. All rights reserved.
           </p>
         </div>
       </div>

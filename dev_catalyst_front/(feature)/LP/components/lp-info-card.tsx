@@ -1,19 +1,7 @@
 'use client';
 
-import { CSSProperties, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-
-interface LpInfoCardProps {
-  icon?: ReactNode;
-  title?: ReactNode;
-  description?: ReactNode;
-  children?: ReactNode;
-  className?: string;
-  iconWrapperClassName?: string;
-  titleClassName?: string;
-  descriptionClassName?: string;
-  style?: CSSProperties;
-}
+import { LpInfoCardProps } from '../types';
 
 export function LpInfoCard({
   icon,

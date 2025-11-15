@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -10,12 +11,29 @@ import { ThemeToggle } from '@/components/theme-toggle';
 export function DashboardHeader() {
     const router = useRouter();
     const { user } = useAuth();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleLogout = async () => {
         router.push('/auth/logout');
     };
 
-    if (!user) return null;
+    if (!mounted || !user) {
+        return (
+            <header className="relative z-10 p-4 bg-gradient-to-r from-purple-50/60 via-pink-50/50 to-rose-50/60 text-slate-800 border-b border-purple-100/50 shadow-lg dark:bg-black/80 dark:text-foreground dark:border-blue-900/30 glass-effect backdrop-blur-md">
+                <div className="container mx-auto h-12 flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-lg bg-gold/20 animate-pulse" />
+                        <div className="h-4 w-24 bg-gold/20 rounded animate-pulse" />
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-gold/20 animate-pulse" />
+                </div>
+            </header>
+        );
+    }
 
     return (
         <header className="relative z-10 p-4 bg-gradient-to-r from-purple-50/60 via-pink-50/50 to-rose-50/60 text-slate-800 border-b border-purple-100/50 shadow-lg dark:bg-black/80 dark:text-foreground dark:border-blue-900/30 glass-effect backdrop-blur-md">

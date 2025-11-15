@@ -2,3 +2,19 @@ ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
 
 require "bundler/setup" # Set up gems listed in the Gemfile.
 require "bootsnap/setup" # Speed up boot time by caching expensive operations.
+
+railsEnvironment = ENV["RAILS_ENV"] || ENV["RACK_ENV"] || "development"
+
+if %w[development test].include?(railsEnvironment)
+  begin
+    require "dotenv"
+
+    Dotenv.load(
+      File.expand_path("../.env.local", __dir__),
+      File.expand_path("../.env.#{railsEnvironment}", __dir__),
+      File.expand_path("../.env", __dir__)
+    )
+  rescue LoadError => error
+    warn "Dotenv could not be loaded in config/boot.rb: #{error.class} #{error.message}"
+  end
+end

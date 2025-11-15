@@ -20,14 +20,17 @@ import {
   UserCheck,
   Brain
 } from "lucide-react";
+import {
+  SocialProofProps,
+  ScarcityProps,
+  AnchoringProps,
+  LossAversionProps,
+  AuthorityProps,
+  EndowmentEffectProps,
+  FreshStartProps
+} from "./types";
 
 // Social Proof Component (社会的証明)
-interface SocialProofProps {
-  userCount: number;
-  recentActions: string[];
-  className?: string;
-}
-
 export function SocialProof({ userCount, recentActions, className = "" }: SocialProofProps) {
   const [currentActionIndex, setCurrentActionIndex] = useState(0);
 
@@ -67,13 +70,6 @@ export function SocialProof({ userCount, recentActions, className = "" }: Social
 }
 
 // Scarcity Component (希少性)
-interface ScarcityProps {
-  limitedSpots?: number;
-  timeLeft?: number; // minutes
-  onAction: () => void;
-  className?: string;
-}
-
 export function Scarcity({ limitedSpots, timeLeft, onAction, className = "" }: ScarcityProps) {
   const [timeRemaining, setTimeRemaining] = useState(timeLeft || 0);
 
@@ -126,14 +122,6 @@ export function Scarcity({ limitedSpots, timeLeft, onAction, className = "" }: S
 }
 
 // Anchoring Component (アンカリング効果)
-interface AnchoringProps {
-  originalPrice: number;
-  currentPrice: number;
-  savingPercentage: number;
-  onSelect: () => void;
-  className?: string;
-}
-
 export function Anchoring({ originalPrice, currentPrice, savingPercentage, onSelect, className = "" }: AnchoringProps) {
   return (
     <Card className={`border-gold/30 bg-gold/5 backdrop-blur-sm relative ${className}`}>
@@ -171,12 +159,6 @@ export function Anchoring({ originalPrice, currentPrice, savingPercentage, onSel
 }
 
 // Loss Aversion Component (損失回避)
-interface LossAversionProps {
-  missedOpportunities: string[];
-  onPrevent: () => void;
-  className?: string;
-}
-
 export function LossAversion({ missedOpportunities, onPrevent, className = "" }: LossAversionProps) {
   return (
     <Card className={`border-red-400/30 bg-red-400/5 backdrop-blur-sm ${className}`}>
@@ -209,14 +191,6 @@ export function LossAversion({ missedOpportunities, onPrevent, className = "" }:
 }
 
 // Authority Component (権威性)
-interface AuthorityProps {
-  expertName: string;
-  credentials: string[];
-  recommendation: string;
-  avatar?: string;
-  className?: string;
-}
-
 export function Authority({ expertName, credentials, recommendation, avatar, className = "" }: AuthorityProps) {
   return (
     <Card className={`border-blue-400/30 bg-blue-400/5 backdrop-blur-sm ${className}`}>
@@ -254,14 +228,6 @@ export function Authority({ expertName, credentials, recommendation, avatar, cla
   );
 }
 
-// Endowment Effect Component (保有効果)
-interface EndowmentEffectProps {
-  currentProgress: number;
-  nextMilestone: string;
-  onContinue: () => void;
-  className?: string;
-}
-
 export function EndowmentEffect({ currentProgress, nextMilestone, onContinue, className = "" }: EndowmentEffectProps) {
   return (
     <Card className={`border-purple-400/30 bg-purple-400/5 backdrop-blur-sm ${className}`}>
@@ -294,14 +260,6 @@ export function EndowmentEffect({ currentProgress, nextMilestone, onContinue, cl
       </CardContent>
     </Card>
   );
-}
-
-// Fresh Start Effect Component (新鮮スタート効果)
-interface FreshStartProps {
-  opportunity: string;
-  timeframe: string;
-  onStart: () => void;
-  className?: string;
 }
 
 export function FreshStart({ opportunity, timeframe, onStart, className = "" }: FreshStartProps) {

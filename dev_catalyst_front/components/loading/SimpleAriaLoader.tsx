@@ -5,14 +5,11 @@ import { createPortal } from 'react-dom';
 import { useTheme } from 'next-themes';
 import { Brain, Sparkles } from 'lucide-react';
 import '../../app/loader.css';
+import { SimpleAriaLoaderProps } from '../types/loading';
 
 const SPARKLE_ANGLES = [0, 60, 120, 180, 240, 300];
 const FIRST_VISIT_DURATION = 3000;
 const REVISIT_DURATION = 1500;
-
-interface SimpleAriaLoaderProps {
-  onComplete: () => void;
-}
 
 export function SimpleAriaLoader({ onComplete }: SimpleAriaLoaderProps) {
   const { resolvedTheme } = useTheme();

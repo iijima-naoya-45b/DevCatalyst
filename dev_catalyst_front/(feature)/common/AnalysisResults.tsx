@@ -9,25 +9,7 @@ import {
   PieChart,
   Activity
 } from "lucide-react";
-
-interface AnalysisData {
-  strengths: string[];
-  opportunities: string[];
-  risks: string[];
-  recommendations: string[];
-  marketInsights: {
-    size: string;
-    growth: string;
-    competition: string;
-  };
-  nextSteps: string[];
-  vertexMessage?: string;
-}
-
-interface AnalysisResultsProps {
-  data: AnalysisData;
-  onClose: () => void;
-}
+import { AnalysisData, AnalysisResultsProps } from "./types";
 
 export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
   return (

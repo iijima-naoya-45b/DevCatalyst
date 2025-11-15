@@ -107,8 +107,9 @@ class BaseApiClient {
         return this.makeRequest<T>(url, { method: 'GET' });
     }
 
-    async post<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+    async post<T>(endpoint: string, data?: any, options: RequestInit = {}): Promise<ApiResponse<T>> {
         return this.makeRequest<T>(endpoint, {
+            ...options,
             method: 'POST',
             body: data ? JSON.stringify(data) : undefined,
         });

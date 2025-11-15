@@ -4,16 +4,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "./ui
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Lightbulb, Target, Map, TrendingUp, Settings, Menu, X, Home, GitBranch, Crown, LogOut, User } from "lucide-react";
 import { useState } from "react";
-
-interface HeaderProps {
-  currentView: string;
-  onViewChange: (view: string) => void;
-  showFlowDiagram?: boolean;
-  onToggleFlowDiagram?: () => void;
-  showPlanManagement?: boolean;
-  onTogglePlanManagement?: () => void;
-  onLogout?: () => void;
-}
+import { HeaderProps } from "./types";
 
 export function Header({ currentView, onViewChange, showFlowDiagram, onToggleFlowDiagram, showPlanManagement, onTogglePlanManagement, onLogout }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

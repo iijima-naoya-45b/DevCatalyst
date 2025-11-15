@@ -1,14 +1,7 @@
 'use client';
 
-import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-
-interface LpSectionProps {
-  id?: string;
-  children: ReactNode;
-  className?: string;
-  containerClassName?: string;
-}
+import { LpSectionProps } from '../types';
 
 export function LpSection({ id, children, className, containerClassName }: LpSectionProps) {
   return (

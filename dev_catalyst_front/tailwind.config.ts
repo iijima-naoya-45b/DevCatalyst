@@ -71,6 +71,9 @@ const config: Config = {
                 serif: ["Playfair Display", "Noto Serif JP", "Georgia", "serif"],
                 mono: ["var(--font-geist-mono)", "monospace"],
             },
+            maxWidth: {
+                "9xl": "1536px",
+            },
             animation: {
                 "fade-in": "fadeIn 0.5s ease-in-out",
                 "slide-up": "slideUp 0.3s ease-out",

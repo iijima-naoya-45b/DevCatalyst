@@ -1,12 +1,7 @@
 'use client'
 
 import { Brain } from 'lucide-react'
-
-interface LoadingProps {
-    message?: string
-    size?: 'sm' | 'md' | 'lg'
-    fullScreen?: boolean
-}
+import { LoadingProps, LoadingMessageProps } from './types/loading'
 
 export function Loading({
     message = '読み込み中...',
@@ -55,7 +50,7 @@ export function AuthLoading() {
 }
 
 // ページローディング
-export function PageLoading({ message }: { message?: string }) {
+export function PageLoading({ message }: LoadingMessageProps) {
     return (
         <Loading
             message={message || 'ページを読み込んでいます...'}
@@ -66,7 +61,7 @@ export function PageLoading({ message }: { message?: string }) {
 }
 
 // インラインローディング
-export function InlineLoading({ message }: { message?: string }) {
+export function InlineLoading({ message }: LoadingMessageProps) {
     return (
         <Loading
             message={message || '処理中...'}

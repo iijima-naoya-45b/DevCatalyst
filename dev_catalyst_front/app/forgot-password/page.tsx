@@ -56,14 +56,9 @@ export default function ForgotPasswordPage() {
         setSuccess(false);
 
         try {
-            const response = await forgotPassword({ email });
-
-            if (response.success) {
-                setSuccess(true);
-                setEmail('');
-            } else {
-                setError(response.error || 'パスワードリセットメールの送信に失敗しました。');
-            }
+            await forgotPassword({ email });
+            setSuccess(true);
+            setEmail('');
         } catch (err) {
             console.error('Forgot password error:', err);
             setError(err instanceof Error ? err.message : 'エラーが発生しました。もう一度お試しください。');
@@ -153,11 +148,11 @@ export default function ForgotPasswordPage() {
                                 )}
                             </div>
 
-                                <Button
-                                    type="submit"
-                                    className="w-full h-11 aria-gold-surface font-medium text-sm rounded-lg transition-all duration-300 mt-8"
-                                    disabled={loading}
-                                >
+                            <Button
+                                type="submit"
+                                className="w-full h-11 aria-gold-surface font-medium text-sm rounded-lg transition-all duration-300 mt-8"
+                                disabled={loading}
+                            >
                                 {loading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

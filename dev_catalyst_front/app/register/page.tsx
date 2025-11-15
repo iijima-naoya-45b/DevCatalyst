@@ -12,7 +12,7 @@ import { Loader2, Brain } from 'lucide-react';
 import { OAuthButton } from '@/components/auth/oauth-button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { useAuth } from '@/contexts/auth-context';
-import type { RegisterCredentials } from '@/lib/auth';
+import type { RegisterCredentials } from '@/lib/types';
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -105,16 +105,8 @@ export default function RegisterPage() {
         setErrors([]);
 
         try {
-            const response = await register(credentials);
-
-            if (response.success) {
-                router.push('/dashboard');
-            } else {
-                setError(response.error || 'アカウント作成に失敗しました。入力内容を確認してください。');
-                if (response.errors) {
-                    setErrors(response.errors);
-                }
-            }
+            await register(credentials);
+            router.push('/dashboard');
         } catch (err) {
             console.error('Register error:', err);
             setError(err instanceof Error ? err.message : 'アカウント作成中にエラーが発生しました。もう一度お試しください。');
@@ -288,11 +280,11 @@ export default function RegisterPage() {
                                 )}
                             </div>
 
-                                <Button
-                                    type="submit"
-                                    className="w-full h-11 aria-gold-surface font-medium text-sm rounded-lg transition-all duration-300 mt-8"
-                                    disabled={loading}
-                                >
+                            <Button
+                                type="submit"
+                                className="w-full h-11 aria-gold-surface font-medium text-sm rounded-lg transition-all duration-300 mt-8"
+                                disabled={loading}
+                            >
                                 {loading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -314,15 +306,15 @@ export default function RegisterPage() {
                                     ログイン
                                 </Link>
                             </p>
-                            </div>
+                        </div>
 
                         <div className="text-center text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
                             <Link href="/terms" className="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">
-                                    利用規約
+                                利用規約
                             </Link>
                             <span className="mx-2">·</span>
                             <Link href="/privacy" className="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">
-                                    プライバシーポリシー
+                                プライバシーポリシー
                             </Link>
                         </div>
                     </CardContent>

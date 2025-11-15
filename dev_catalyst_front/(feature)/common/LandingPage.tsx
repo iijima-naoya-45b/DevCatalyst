@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { AriaChat } from "./AriaChat";
-import {
+import { 
   Sparkles,
   TrendingUp,
   Target,
@@ -28,11 +28,7 @@ import {
   Briefcase,
   Timer
 } from "lucide-react";
-
-interface LandingPageProps {
-  onStartTrial: () => void;
-  onShowDemo: () => void;
-}
+import { LandingPageProps } from "./types";
 
 export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
   const [showAriaDemo, setShowAriaDemo] = useState(false);
@@ -309,7 +305,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                 実際にアリアと対話して、AIの戦略支援力を体験してください
               </p>
             </div>
-            <AriaChat onStartAnalysis={onStartTrial} />
+            <AriaChat onStartAnalysis={onStartTrial} showUserAvatar={false} />
           </div>
         </section>
       )}

@@ -23,11 +23,7 @@ import {
   Timer,
   PlayCircle
 } from "lucide-react";
-
-interface DashboardProps {
-  onViewChange: (view: string) => void;
-  isFirstLogin?: boolean;
-}
+import { DashboardProps } from "./types";
 
 export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps) {
   const currentProjects = [
