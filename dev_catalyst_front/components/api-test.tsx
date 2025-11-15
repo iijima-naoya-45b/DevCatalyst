@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '../(feature)/common/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../(feature)/common/ui/card';
-import { RailsApiService, AiService } from '../lib/services';
+import { RailsApiService, aiService } from '../lib/services';
 import { useApi } from '../lib/hooks/use-api';
 
 export function ApiTestComponent() {
@@ -17,7 +17,11 @@ export function ApiTestComponent() {
 
   // Test AI Service connection
   const aiHealthCheck = useApi(async () => {
-    return AiService.healthCheck();
+    const data = await aiService.getAvailableModels();
+    return {
+      data,
+      status: 200,
+    };
   });
 
   const testRailsConnection = async () => {
@@ -47,19 +51,19 @@ export function ApiTestComponent() {
 
   const testChatMessage = async () => {
     try {
-      const result = await AiService.sendMessage({
-        message: 'Hello, this is a test message',
-        context: {
-          project_id: 1,
-          user_id: 1,
-        },
+      const result = await aiService.chatCompletion({
+        messages: [
+          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'user', content: 'Hello, this is a test message.' },
+        ],
+        temperature: 0.3,
       });
       
       setTestResults(prev => ({
         ...prev,
         chat: {
           success: true,
-          data: result.data,
+          data: result,
           timestamp: new Date().toISOString(),
         },
       }));

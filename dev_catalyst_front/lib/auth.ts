@@ -1,57 +1,12 @@
 // OAuth + JWT + Devise認証関連のユーティリティ
-
-export interface User {
-    id: number;
-    email: string;
-    name: string;
-    plan: 'free' | 'standard' | 'premium';
-    avatar_url?: string;
-    provider?: string;
-    uid?: string;
-    created_at: string;
-    updated_at: string;
-}
-
-export interface AuthResponse {
-    success: boolean;
-    user?: User;
-    token?: string; // 後方互換性のため
-    access_token?: string;
-    refresh_token?: string;
-    expires_in?: number;
-    token_type?: string;
-    error?: string;
-    errors?: string[];
-    code?: string;
-}
-
-export interface LoginCredentials {
-    email: string;
-    password: string;
-}
-
-export interface RegisterCredentials {
-    email: string;
-    password: string;
-    password_confirmation: string;
-    name: string;
-}
-
-export interface ForgotPasswordData {
-    email: string;
-}
-
-export interface ResetPasswordData {
-    reset_password_token: string;
-    password: string;
-    password_confirmation: string;
-}
-
-export interface ChangePasswordData {
-    current_password: string;
-    new_password: string;
-    password_confirmation: string;
-}
+import type { AuthResponse, User } from '@/lib/types/auth';
+import type {
+    ChangePasswordData,
+    ForgotPasswordData,
+    LoginCredentials,
+    RegisterCredentials,
+    ResetPasswordData,
+} from '@/lib/types/credentials';
 
 // OAuth プロバイダーの設定
 export const OAUTH_PROVIDERS = {
@@ -86,14 +41,31 @@ export function getOAuthUrl(provider: OAuthProvider): string {
 }
 
 // Cookie管理ヘルパー
+type CookieOptions = {
+    days?: number;
+    path?: string;
+    sameSite?: 'Lax' | 'Strict' | 'None';
+    secure?: boolean;
+};
+
 export class CookieManager {
-    static setCookie(name: string, value: string, days: number = 7): void {
+    static setCookie(name: string, value: string, days?: number): void;
+    static setCookie(name: string, value: string, options: CookieOptions): void;
+    static setCookie(name: string, value: string, arg: number | CookieOptions = 7): void {
         if (typeof window === 'undefined') return;
+
+        const options: CookieOptions = typeof arg === 'number' ? { days: arg } : arg;
+        const days = options.days ?? 7;
+        const path = options.path ?? '/';
+        const sameSite = options.sameSite ?? 'Lax';
+        const secure = options.secure ?? false;
 
         const expires = new Date();
         expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
         const expiresStr = `expires=${expires.toUTCString()}`;
-        document.cookie = `${name}=${value};${expiresStr};path=/;SameSite=Lax`;
+        const secureStr = secure ? ';Secure' : '';
+
+        document.cookie = `${name}=${encodeURIComponent(value)};${expiresStr};path=${path};SameSite=${sameSite}${secureStr}`;
     }
 
     static getCookie(name: string): string | null {
@@ -107,15 +79,15 @@ export class CookieManager {
                 cookie = cookie.substring(1, cookie.length);
             }
             if (cookie.indexOf(nameEQ) === 0) {
-                return cookie.substring(nameEQ.length, cookie.length);
+                return decodeURIComponent(cookie.substring(nameEQ.length, cookie.length));
             }
         }
         return null;
     }
 
-    static deleteCookie(name: string): void {
+    static deleteCookie(name: string, path: string = '/'): void {
         if (typeof window === 'undefined') return;
-        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=${path};SameSite=Lax`;
     }
 }
 
@@ -128,38 +100,25 @@ export class TokenManager {
 
     static setTokens(accessToken: string, refreshToken: string): void {
         if (typeof window !== 'undefined') {
-            // localStorageに保存
-            localStorage.setItem(this.ACCESS_TOKEN_KEY, accessToken);
-            localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
-            localStorage.setItem(this.TOKEN_KEY, accessToken);
-
-            // Cookieにも保存（middlewareで使用するため）
-            CookieManager.setCookie(this.TOKEN_KEY, accessToken, 7);
+            CookieManager.setCookie(this.ACCESS_TOKEN_KEY, accessToken, { days: 7, path: '/', sameSite: 'Lax' });
+            CookieManager.setCookie(this.REFRESH_TOKEN_KEY, refreshToken, { days: 7, path: '/', sameSite: 'Lax' });
+            CookieManager.setCookie(this.TOKEN_KEY, accessToken, { days: 7, path: '/', sameSite: 'Lax' });
         }
     }
 
     static setToken(token: string): void {
         if (typeof window !== 'undefined') {
-            localStorage.setItem(this.TOKEN_KEY, token);
-            localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
-
-            // Cookieにも保存
-            CookieManager.setCookie(this.TOKEN_KEY, token, 7);
+            CookieManager.setCookie(this.ACCESS_TOKEN_KEY, token, { days: 7, path: '/', sameSite: 'Lax' });
+            CookieManager.setCookie(this.TOKEN_KEY, token, { days: 7, path: '/', sameSite: 'Lax' });
         }
     }
 
     static getAccessToken(): string | null {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem(this.ACCESS_TOKEN_KEY) || localStorage.getItem(this.TOKEN_KEY);
-        }
-        return null;
+        return CookieManager.getCookie(this.ACCESS_TOKEN_KEY) || CookieManager.getCookie(this.TOKEN_KEY);
     }
 
     static getRefreshToken(): string | null {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem(this.REFRESH_TOKEN_KEY);
-        }
-        return null;
+        return CookieManager.getCookie(this.REFRESH_TOKEN_KEY);
     }
 
     static getToken(): string | null {
@@ -168,29 +127,30 @@ export class TokenManager {
 
     static removeToken(): void {
         if (typeof window !== 'undefined') {
-            // localStorageから削除
-            localStorage.removeItem(this.ACCESS_TOKEN_KEY);
-            localStorage.removeItem(this.REFRESH_TOKEN_KEY);
-            localStorage.removeItem(this.TOKEN_KEY);
             localStorage.removeItem(this.USER_KEY);
 
-            // Cookieからも削除
+            CookieManager.deleteCookie(this.ACCESS_TOKEN_KEY);
+            CookieManager.deleteCookie(this.REFRESH_TOKEN_KEY);
             CookieManager.deleteCookie(this.TOKEN_KEY);
         }
     }
 
     static setUser(user: User): void {
         if (typeof window !== 'undefined') {
-            localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+            CookieManager.setCookie(this.USER_KEY, JSON.stringify(user), { days: 7, path: '/', sameSite: 'Lax' });
         }
     }
 
     static getUser(): User | null {
-        if (typeof window !== 'undefined') {
-            const userStr = localStorage.getItem(this.USER_KEY);
-            return userStr ? JSON.parse(userStr) : null;
+        const cookieValue = CookieManager.getCookie(this.USER_KEY);
+        if (!cookieValue) {
+            return null;
         }
-        return null;
+        try {
+            return JSON.parse(cookieValue) as User;
+        } catch (_error) {
+            return null;
+        }
     }
 
     static isAuthenticated(): boolean {
@@ -312,13 +272,8 @@ export class ApiClient {
             body: JSON.stringify({ user: credentials }),
         });
 
-        if (response.success && response.user) {
-            if (response.access_token && response.refresh_token) {
-                TokenManager.setTokens(response.access_token, response.refresh_token);
-            } else if (response.token) {
-                // 後方互換性
-                TokenManager.setToken(response.token);
-            }
+        if (response.user && response.tokens) {
+            TokenManager.setTokens(response.tokens.access_token, response.tokens.refresh_token || '');
             TokenManager.setUser(response.user);
         }
 
@@ -331,13 +286,8 @@ export class ApiClient {
             body: JSON.stringify({ user: credentials }),
         });
 
-        if (response.success && response.user) {
-            if (response.access_token && response.refresh_token) {
-                TokenManager.setTokens(response.access_token, response.refresh_token);
-            } else if (response.token) {
-                // 後方互換性
-                TokenManager.setToken(response.token);
-            }
+        if (response.user && response.tokens) {
+            TokenManager.setTokens(response.tokens.access_token, response.tokens.refresh_token || '');
             TokenManager.setUser(response.user);
         }
 
@@ -367,12 +317,8 @@ export class ApiClient {
             body: JSON.stringify({ user: data }),
         });
 
-        if (response.success && response.user) {
-            if (response.access_token && response.refresh_token) {
-                TokenManager.setTokens(response.access_token, response.refresh_token);
-            } else if (response.token) {
-                TokenManager.setToken(response.token);
-            }
+        if (response.user && response.tokens) {
+            TokenManager.setTokens(response.tokens.access_token, response.tokens.refresh_token || '');
             TokenManager.setUser(response.user);
         }
 
@@ -384,7 +330,7 @@ export class ApiClient {
             method: 'POST',
         });
 
-        if (response.success && response.user) {
+        if (response.user) {
             TokenManager.setUser(response.user);
         }
 
@@ -446,10 +392,7 @@ export class ApiClient {
             body: JSON.stringify({ user: { password } }),
         });
 
-        if (response.success) {
-            TokenManager.removeToken();
-        }
-
+        TokenManager.removeToken();
         return response;
     }
 }

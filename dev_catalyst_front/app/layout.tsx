@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -21,11 +21,31 @@ export const metadata: Metadata = {
   description: "Webエンジニア向けソロプレナー支援アプリケーション。AI伴走機能、自動競合分析、MVPロードマップ生成で事業アイデアの検証と収益化をサポート。",
   keywords: ["ソロプレナー", "Webエンジニア", "事業検証", "AI", "競合分析", "MVP"],
   authors: [{ name: "devCatalyst Team" }],
+  applicationName: "devCatalyst",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+    other: [
+      { rel: "mask-icon", url: "/favicon.svg", color: "#b78032" },
+    ],
+  },
+  manifest: "/site.webmanifest",
 };
 
-export const viewport = {
-  width: 'device-width',
+export const viewport: Viewport = {
+  width: "device-width",
   initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f0e8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a1e" },
+  ],
 };
 
 export default function RootLayout({

@@ -28,20 +28,30 @@ export function Header() {
     }
   };
 
+  const handleClickHome = () => {
+    router.push('/');
+  };
+
   return (
     <header className="p-4 bg-white text-gray-900 border-b border-gray-200 shadow-sm dark:bg-slate-900 dark:text-foreground dark:border-gold/30">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br from-gold via-gold-light to-bronze shadow-lg">
-            <Brain className="w-6 h-6 text-navy-deepest" />
+        <div
+          className="flex items-center space-x-2 cursor-pointer transition-transform duration-200 hover:scale-[1.02]"
+          onClick={handleClickHome}
+          aria-label="トップページへ戻る"
+        >
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center gold-soft-gradient shadow-lg">
+            <Brain className="w-6 h-6 text-aria-dark-soft" />
           </div>
-          <h1 className="text-lg font-bold font-serif text-gray-900 dark:text-white">devCatalyst</h1>
+          <h1 className="text-lg font-bold font-serif gold-soft-text transition-colors">
+            devCatalyst
+          </h1>
         </div>
         <nav className="flex space-x-4 items-center">
           <ul className="flex space-x-4">
-            <li><a href="#" className="hover:underline text-gray-700 dark:text-gray-300 hover:text-gold">Home</a></li>
-            <li><a href="#" className="hover:underline text-gray-700 dark:text-gray-300 hover:text-gold">About</a></li>
-            <li><a href="#" className="hover:underline text-gray-700 dark:text-gray-300 hover:text-gold">Contact</a></li>
+            <li><a href="#" className="hover:underline text-gray-700 dark:text-gray-300 hover:gold-soft-text">Home</a></li>
+            <li><a href="#" className="hover:underline text-gray-700 dark:text-gray-300 hover:gold-soft-text">About</a></li>
+            <li><a href="#" className="hover:underline text-gray-700 dark:text-gray-300 hover:gold-soft-text">Contact</a></li>
           </ul>
           <div className="flex items-center gap-3">
             <div className="sm:hidden">
@@ -55,7 +65,7 @@ export function Header() {
               <div className="ml-2">
                 <Button
                   onClick={handleGetStarted}
-                  className="bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light"
+                  className="aria-gold-surface text-aria-dark-soft hover:shadow-[0_18px_36px_-20px_rgba(15,23,42,0.55)] transition-all duration-300"
                 >
                   {isClient && authenticated ? 'ダッシュボード' : '始める'}
                 </Button>

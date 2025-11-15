@@ -27,7 +27,7 @@ export function ThemeToggle() {
     return (
       <div className="relative inline-flex h-10 w-20 items-center rounded-full bg-slate-200 dark:bg-slate-700 transition-colors duration-300">
         <div className="absolute left-1 h-8 w-8 rounded-full bg-white shadow-md transition-transform duration-300">
-          <Sun className="h-4 w-4 m-2 text-amber-500" />
+          <Sun className="h-4 w-4 m-2 gold-soft-text" />
         </div>
       </div>
     )
@@ -36,11 +36,11 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative inline-flex h-10 w-20 items-center rounded-full bg-slate-200 dark:bg-slate-700 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-amber-500/25 dark:hover:shadow-slate-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 active:scale-105"
+      className="relative inline-flex h-10 w-20 items-center rounded-full bg-slate-200 dark:bg-slate-700 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[0_0_20px_rgba(243,200,106,0.35)] dark:hover:shadow-slate-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 active:scale-105"
       title={`${isDark ? 'ライト' : 'ダーク'}モードに切り替え`}
     >
       {/* トグルスイッチの背景 */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-200 to-amber-300 dark:from-slate-600 dark:to-slate-800 transition-all duration-300" />
+      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-gold/30 to-gold/40 dark:from-slate-600 dark:to-slate-800 transition-all duration-300" />
 
       {/* スライドするボール */}
       <div
@@ -50,13 +50,13 @@ export function ThemeToggle() {
         {isDark ? (
           <Moon className="h-4 w-4 text-slate-700" />
         ) : (
-          <Sun className="h-4 w-4 text-amber-500" />
+          <Sun className="h-4 w-4 gold-soft-text" />
         )}
       </div>
 
       {/* 背景のアイコン */}
       <div className="absolute inset-0 flex items-center justify-between px-2">
-        <Sun className={`h-4 w-4 transition-opacity duration-300 ${!isDark ? 'opacity-0' : 'opacity-60 text-amber-300'}`} />
+        <Sun className={`h-4 w-4 transition-opacity duration-300 ${!isDark ? 'opacity-0' : 'opacity-60 gold-soft-text-light'}`} />
         <Moon className={`h-4 w-4 transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-60 text-slate-500'}`} />
       </div>
     </button>

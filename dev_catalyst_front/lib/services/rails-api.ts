@@ -33,6 +33,71 @@ export interface AuthResponse {
     message: string;
 }
 
+export type IdeaConfidenceLevel = 'high' | 'low';
+
+export interface AiChatMessage {
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+}
+
+export interface AiChatRequest {
+    idea_confidence: IdeaConfidenceLevel;
+    messages: AiChatMessage[];
+    metadata?: Record<string, unknown>;
+    session_id?: number;
+}
+
+export interface AiChatResponsePayload {
+    assistant_message: string;
+    suggestions?: string[];
+    summary?: string;
+    next_steps?: string[];
+    provider?: string;
+    model?: string;
+    usage?: any;
+    session_id?: number;
+    cache_hit?: boolean;
+    raw_response?: any;
+}
+
+export interface ChatSessionSummary {
+    id: number;
+    title: string;
+    last_message_preview?: string;
+    last_interacted_at: string;
+    created_at: string;
+    messages_count: number;
+    archived: boolean;
+}
+
+export interface ChatSessionMessage {
+    id: number;
+    sender_role: 'user' | 'aria';
+    content: string;
+    metadata: Record<string, unknown>;
+    token_count?: number | null;
+    cached_response: boolean;
+    responded_at?: string | null;
+    created_at: string;
+}
+
+export interface ChatSessionMessagesPayload {
+    session: {
+        id: number;
+        title: string;
+        archived: boolean;
+        last_interacted_at: string;
+        created_at: string;
+    };
+    messages: ChatSessionMessage[];
+    pagination: {
+        page: number;
+        per_page: number;
+        total: number;
+        total_pages: number;
+    };
+}
+
 // Rails API Service Class
 export class RailsApiService {
     // Authentication Methods
@@ -120,5 +185,65 @@ export class RailsApiService {
         return railsApiClient.post<any>(API_ENDPOINTS.RAILS.SUBSCRIPTIONS, {
             plan_id: planId,
         });
+    }
+
+    // AI Conversation
+    static async sendAiChatMessage(payload: AiChatRequest): Promise<ApiResponse<AiChatResponsePayload>> {
+        const response = await railsApiClient.post<{ success: boolean; data: AiChatResponsePayload }>(API_ENDPOINTS.RAILS.AI_CHAT, payload);
+
+        if (response.data && (response.data as { data?: AiChatResponsePayload }).data) {
+            const envelope = response.data as { success: boolean; data: AiChatResponsePayload };
+            return {
+                status: response.status,
+                data: envelope.data,
+                message: response.message,
+                error: response.error,
+            };
+        }
+
+        return response as unknown as ApiResponse<AiChatResponsePayload>;
+    }
+
+    static async getChatSessions(limit?: number): Promise<ApiResponse<ChatSessionSummary[]>> {
+        const response = await railsApiClient.get<{ success: boolean; data: ChatSessionSummary[] }>(
+            `${API_ENDPOINTS.RAILS.AI_CHAT_SESSIONS}${limit ? `?limit=${limit}` : ''}`,
+        );
+
+        if (response.data && (response.data as { data?: ChatSessionSummary[] }).data) {
+            const envelope = response.data as { success: boolean; data: ChatSessionSummary[] };
+            return {
+                status: response.status,
+                data: envelope.data,
+            };
+        }
+
+        return response as unknown as ApiResponse<ChatSessionSummary[]>;
+    }
+
+    static async getChatSessionMessages(
+        sessionId: number,
+        params?: { page?: number; per_page?: number },
+    ): Promise<ApiResponse<ChatSessionMessagesPayload>> {
+        const query = new URLSearchParams();
+        if (params?.page) {
+            query.set('page', String(params.page));
+        }
+        if (params?.per_page) {
+            query.set('per_page', String(params.per_page));
+        }
+
+        const url = `${API_ENDPOINTS.RAILS.AI_CHAT_SESSIONS}/${sessionId}/messages${query.toString() ? `?${query.toString()}` : ''}`;
+
+        const response = await railsApiClient.get<{ success: boolean; data: ChatSessionMessagesPayload }>(url);
+
+        if (response.data && (response.data as { data?: ChatSessionMessagesPayload }).data) {
+            const envelope = response.data as { success: boolean; data: ChatSessionMessagesPayload };
+            return {
+                status: response.status,
+                data: envelope.data,
+            };
+        }
+
+        return response as unknown as ApiResponse<ChatSessionMessagesPayload>;
     }
 }

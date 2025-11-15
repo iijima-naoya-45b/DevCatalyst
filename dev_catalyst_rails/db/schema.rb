@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_01_000001) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_01_010100) do
+  create_table "chat_messages", force: :cascade do |t|
+    t.integer "chat_session_id", null: false
+    t.string "sender_role", null: false
+    t.text "content", null: false
+    t.json "metadata", default: {}, null: false
+    t.integer "token_count"
+    t.boolean "cached_response", default: false, null: false
+    t.datetime "responded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_session_id", "created_at"], name: "index_chat_messages_on_session_and_created_at"
+    t.index ["chat_session_id"], name: "index_chat_messages_on_chat_session_id"
+    t.index ["sender_role"], name: "index_chat_messages_on_sender_role"
+  end
+
+  create_table "chat_sessions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "title"
+    t.json "metadata", default: {}, null: false
+    t.boolean "archived", default: false, null: false
+    t.datetime "last_interacted_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["archived"], name: "index_chat_sessions_on_archived"
+    t.index ["user_id", "last_interacted_at"], name: "index_chat_sessions_on_user_and_last_interacted"
+    t.index ["user_id"], name: "index_chat_sessions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -33,4 +61,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_000001) do
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "chat_messages", "chat_sessions"
+  add_foreign_key "chat_sessions", "users"
 end

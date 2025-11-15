@@ -7,6 +7,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2, :github]
 
+  has_many :chat_sessions, dependent: :destroy
+  has_many :chat_messages, through: :chat_sessions
+
   # Validations
   validates :email, presence: true, uniqueness: true
   validates :name, presence: true
@@ -42,25 +45,7 @@ class User < ApplicationRecord
 
   # JWT token generation
   def generate_jwt_tokens
-    access_token_payload = {
-      user_id: id,
-      email: email,
-      type: 'access',
-      exp: access_token_expiration_time.to_i
-    }
-    
-    refresh_token_payload = {
-      user_id: id,
-      email: email,
-      type: 'refresh',
-      exp: refresh_token_expiration_time.to_i
-    }
-    
-    {
-      access_token: JWT.encode(access_token_payload, jwt_secret_key),
-      refresh_token: JWT.encode(refresh_token_payload, jwt_secret_key),
-      expires_in: ENV['JWT_ACCESS_TOKEN_EXPIRATION']&.to_i || 15.minutes.to_i
-    }
+    JwtService.generate_tokens(self)
   end
 
   # 後方互換性のため
@@ -70,30 +55,24 @@ class User < ApplicationRecord
 
   # JWT token verification
   def self.from_jwt_token(token, token_type: 'access')
-    begin
-      decoded_token = JWT.decode(token, jwt_secret_key)
-      payload = decoded_token[0]
-      
-      # トークンタイプの検証
-      if payload['type'] != token_type
-        Rails.logger.error "Invalid token type: expected #{token_type}, got #{payload['type']}"
-        return nil
-      end
-      
-      user_id = payload['user_id']
-      find(user_id)
-    rescue JWT::DecodeError, JWT::ExpiredSignature, ActiveRecord::RecordNotFound => e
-      Rails.logger.error "JWT decode error: #{e.message}"
-      nil
-    end
+    payload = JwtService.decode(token, token_type: token_type)
+    return nil unless payload
+    
+    find_by(id: payload['user_id'])
+  rescue ActiveRecord::RecordNotFound => e
+    Rails.logger.error "User not found: #{e.message}"
+    nil
   end
 
   # リフレッシュトークンからアクセストークンを再生成
   def self.refresh_access_token(refresh_token)
     user = from_jwt_token(refresh_token, token_type: 'refresh')
-    return nil unless user
+    return [nil, nil, nil] unless user
     
-    user.generate_jwt_tokens
+    tokens = user.generate_jwt_tokens
+    remaining_seconds = token_remaining_seconds(refresh_token)
+    
+    [tokens, user, remaining_seconds]
   end
 
   # User info for API response
@@ -102,6 +81,18 @@ class User < ApplicationRecord
       only: [:id, :email, :name, :plan, :created_at, :updated_at],
       methods: [:avatar_url]
     ))
+  end
+
+  def self.token_remaining_seconds(token)
+    payload = JWT.decode(token, jwt_secret_key).first
+    expiration = payload['exp'].to_i
+    [expiration - Time.current.to_i, 0].max
+  rescue JWT::DecodeError, JWT::ExpiredSignature
+    0
+  end
+
+  def remaining_refresh_lifetime_in_seconds(refresh_token)
+    self.class.token_remaining_seconds(refresh_token)
   end
 
   def avatar_url
@@ -187,7 +178,7 @@ class User < ApplicationRecord
   end
 
   def access_token_expiration_time
-    expiration_minutes = ENV['JWT_ACCESS_TOKEN_EXPIRATION']&.to_i || 15
+    expiration_minutes = ENV['JWT_ACCESS_TOKEN_EXPIRATION']&.to_i || 10
     expiration_minutes.minutes.from_now
   end
 

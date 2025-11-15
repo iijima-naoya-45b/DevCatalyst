@@ -1,151 +1,182 @@
-import { aiServiceClient, ApiResponse } from '../api-client';
-import { API_ENDPOINTS } from '../config';
+import { aiServiceClient } from '../api-client';
+import type { ChatRequest, ChatResponse, AvailableModels } from '../types/ai';
 
-// Type definitions for AI Service
-export interface ChatMessage {
-    role: 'user' | 'assistant' | 'system';
-    content: string;
-    timestamp?: string;
-}
+class AIService {
+    private baseURL = process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000';
 
-export interface ChatRequest {
-    message: string;
-    context?: {
-        project_id?: number;
-        user_id?: number;
-        conversation_history?: ChatMessage[];
-    };
-}
-
-export interface ChatResponse {
-    response: string;
-    psychological_insights?: {
-        cognitive_load_level?: number;
-        bias_mitigation?: string;
-        recommended_framing?: string;
-    };
-    suggestions?: string[];
-}
-
-export interface ValidationQuestion {
-    id: string;
-    question: string;
-    type: 'problem_validation' | 'market_size' | 'customer_acquisition' | 'pricing';
-    cognitive_complexity: number;
-}
-
-export interface ValidationRequest {
-    idea: string;
-    user_context?: {
-        experience_level?: string;
-        technical_skills?: string[];
-        previous_projects?: number;
-    };
-}
-
-export interface ValidationResponse {
-    questions: ValidationQuestion[];
-    psychological_analysis: {
-        cognitive_load_optimization: string;
-        bias_awareness: string[];
-    };
-}
-
-export interface AnalysisRequest {
-    responses: Array<{
-        question_id: string;
-        answer: string;
-        confidence_score: number;
-    }>;
-    project_context: {
-        idea: string;
-        target_market?: string;
-    };
-}
-
-export interface AnalysisResponse {
-    revenue_models: Array<{
-        model: string;
-        description: string;
-        feasibility_score: number;
-        psychological_framing: string;
-    }>;
-    validation_steps: Array<{
-        step: string;
-        description: string;
-        priority: number;
-        estimated_effort: string;
-    }>;
-    behavioral_insights: {
-        change_readiness: number;
-        commitment_level: string;
-        recommended_approach: string;
-    };
-}
-
-export interface RecommendationRequest {
-    project_id: number;
-    current_progress?: {
-        completed_steps: string[];
-        current_challenges: string[];
-    };
-}
-
-export interface RecommendationResponse {
-    next_steps: Array<{
-        action: string;
-        rationale: string;
-        psychological_benefit: string;
-    }>;
-    motivation_boosters: string[];
-    risk_mitigation: string[];
-}
-
-// AI Service Class
-export class AiService {
-    // Chat Methods
-    static async sendMessage(request: ChatRequest): Promise<ApiResponse<ChatResponse>> {
-        return aiServiceClient.post<ChatResponse>(API_ENDPOINTS.AI.CHAT, request);
+    async chatCompletion(request: ChatRequest): Promise<ChatResponse> {
+        try {
+            const response = await aiServiceClient.post<ChatResponse>('/api/ai/chat', request);
+            if (!response.data) {
+                throw new Error('No data received from API');
+            }
+            return response.data;
+        } catch (error: any) {
+            this.handleError(error);
+            throw error;
+        }
     }
 
-    // Validation Methods
-    static async generateValidationQuestions(request: ValidationRequest): Promise<ApiResponse<ValidationResponse>> {
-        return aiServiceClient.post<ValidationResponse>(API_ENDPOINTS.AI.VALIDATION, request);
+    async chatCompletionStream(
+        request: ChatRequest,
+        onChunk: (chunk: string) => void,
+        onError?: (error: string) => void,
+        onComplete?: () => void
+    ): Promise<void> {
+        try {
+            const response = await fetch(`${this.baseURL}/api/ai/chat/stream`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.getAccessToken()}`,
+                },
+                body: JSON.stringify(request),
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                await this.handleFetchError(response);
+            }
+
+            await this.processStream(response, onChunk, onError, onComplete);
+        } catch (error: any) {
+            onError?.(error.message || 'ストリーミング中にエラーが発生しました。');
+        }
     }
 
-    static async analyzeValidationResponses(request: AnalysisRequest): Promise<ApiResponse<AnalysisResponse>> {
-        return aiServiceClient.post<AnalysisResponse>(API_ENDPOINTS.AI.ANALYSIS, request);
+    async getAvailableModels(): Promise<AvailableModels> {
+        try {
+            const response = await aiServiceClient.get<AvailableModels>('/api/ai/models');
+            if (!response.data) {
+                throw new Error('No data received from API');
+            }
+            return response.data;
+        } catch (error: any) {
+            this.handleError(error);
+            throw error;
+        }
     }
 
-    // Recommendation Methods
-    static async getRecommendations(request: RecommendationRequest): Promise<ApiResponse<RecommendationResponse>> {
-        return aiServiceClient.post<RecommendationResponse>(API_ENDPOINTS.AI.RECOMMENDATIONS, request);
+    async checkAuthStatus(): Promise<{
+        authenticated: boolean;
+        user: any;
+        expires_in: number | null;
+    }> {
+        try {
+            const response = await aiServiceClient.get<{
+                authenticated: boolean;
+                user: any;
+                expires_in: number | null;
+            }>('/api/auth/check');
+            return response.data || {
+                authenticated: false,
+                user: null,
+                expires_in: null,
+            };
+        } catch (error) {
+            return {
+                authenticated: false,
+                user: null,
+                expires_in: null,
+            };
+        }
     }
 
-    // Utility Methods
-    static async healthCheck(): Promise<ApiResponse<{ status: string; timestamp: string }>> {
-        return aiServiceClient.get<{ status: string; timestamp: string }>('/health');
+    async refreshToken(): Promise<boolean> {
+        try {
+            await aiServiceClient.post('/api/auth/refresh', {});
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
-    // Psychology-focused methods
-    static async optimizeCognitiveLoad(content: string, userProfile: any): Promise<ApiResponse<any>> {
-        return aiServiceClient.post<any>('/ai/psychology/cognitive-load', {
-            content,
-            user_profile: userProfile,
-        });
+    private getAccessToken(): string | null {
+        if (typeof document === 'undefined') return null;
+
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'access_token') {
+                return decodeURIComponent(value);
+            }
+        }
+        return null;
     }
 
-    static async applyBehavioralFraming(content: string, framingType: string): Promise<ApiResponse<any>> {
-        return aiServiceClient.post<any>('/ai/psychology/framing', {
-            content,
-            framing_type: framingType,
-        });
+    private handleError(error: any): void {
+        if (error.status === 401) {
+            if (typeof window !== 'undefined') {
+                window.location.href = '/login';
+            }
+            throw new Error('認証が必要です。ログインしてください。');
+        }
+        if (error.status === 403) {
+            throw new Error(error.message || 'このAIプロバイダーを使用する権限がありません。');
+        }
+        throw new Error(error.message || 'AI APIの呼び出しに失敗しました。');
     }
 
-    static async generateMotivationalContent(userProgress: any, goals: any): Promise<ApiResponse<any>> {
-        return aiServiceClient.post<any>('/ai/psychology/motivation', {
-            user_progress: userProgress,
-            goals,
-        });
+    private async handleFetchError(response: Response): Promise<void> {
+        if (response.status === 401) {
+            if (typeof window !== 'undefined') {
+                window.location.href = '/login';
+            }
+            throw new Error('認証が必要です。ログインしてください。');
+        }
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'AI APIの呼び出しに失敗しました。');
+    }
+
+    private async processStream(
+        response: Response,
+        onChunk: (chunk: string) => void,
+        onError?: (error: string) => void,
+        onComplete?: () => void
+    ): Promise<void> {
+        const reader = response.body?.getReader();
+        if (!reader) {
+            throw new Error('ストリーミングレスポンスの読み取りに失敗しました。');
+        }
+
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    try {
+                        const data = JSON.parse(line.slice(6));
+
+                        if (data.error) {
+                            onError?.(data.message);
+                            return;
+                        }
+
+                        if (data.done) {
+                            onComplete?.();
+                            return;
+                        }
+
+                        if (data.content) {
+                            onChunk(data.content);
+                        }
+                    } catch (e) {
+                        console.error('Failed to parse SSE data:', e);
+                    }
+                }
+            }
+        }
     }
 }
+
+export const aiService = new AIService();
+export type { ChatRequest, ChatResponse, AvailableModels } from '../types/ai';

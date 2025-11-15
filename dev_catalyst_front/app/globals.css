@@ -125,18 +125,29 @@
 }
 
 :root {
-    --color-gold: #f59e0b;
-    --color-gold-light: #fbbf24;
-    --color-bronze: #d97706;
-    --color-gold-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-    --color-gold-light-gradient: linear-gradient(135deg, #fbbf24 0%, #fde047 100%);
-    --color-bronze-gradient: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    --color-gold: #cfa24c;
+    --color-gold-light: #f0d6a5;
+    --color-bronze: #c29a57;
+    --color-gold-gradient: linear-gradient(135deg, #f5d9ae 0%, #e2bc75 50%, #c28f45 100%);
+    --color-gold-light-gradient: linear-gradient(135deg, #f6deb7 0%, #e8c48a 50%, #cfa05a 100%);
+    --color-bronze-gradient: linear-gradient(135deg, #f3debf 0%, #e3c48f 50%, #cba062 100%);
+    --gold-soft-start: #ebcd93;
+    --gold-soft-mid: #d6ab5d;
+    --gold-soft-end: #b48336;
+    --text-soft-gold: #b78032;
+    --gold-soft-start-dark: #f2d7a8;
+    --gold-soft-mid-dark: #dcba7c;
+    --gold-soft-end-dark: #b78a4e;
 }
 
 .dark {
-    --color-gold: #d4af37;
-    --color-gold-light: #f4e4a6;
-    --color-bronze: #b8860b;
+    --color-gold: #d8b66d;
+    --color-gold-light: #e9cc99;
+    --color-bronze: #ab864a;
+    --color-gold-gradient: linear-gradient(135deg, #f2d7a8 0%, #dcba7c 50%, #b78a4e 100%);
+    --color-gold-light-gradient: linear-gradient(135deg, #f7e4b9 0%, #e4c68a 50%, #c59958 100%);
+    --color-bronze-gradient: linear-gradient(135deg, #e9d1aa 0%, #cda165 50%, #a97a3e 100%);
+    --text-soft-gold: #dcba7c;
 }
 
 html {
@@ -233,11 +244,11 @@ body {
 }
 
 /* ダークモードでのゴールドカラー調整 */
-.dark .text-gold {
+.dark .gold-soft-text {
     color: #fbbf24 !important;
 }
 
-.dark .text-gold-light {
+.dark .gold-soft-text-light {
     color: #fde047 !important;
 }
 
@@ -370,7 +381,7 @@ h6,
     font-weight: 600;
 }
 
-.text-gold-enhanced {
+.gold-soft-text-enhanced {
     color: #f59e0b;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     font-weight: 700;
@@ -383,7 +394,7 @@ h6,
 }
 
 /* ダークモード専用テキストスタイル */
-.dark .text-gold-enhanced {
+.dark .gold-soft-text-enhanced {
     color: #d4af37;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     font-weight: 700;
@@ -445,4 +456,363 @@ html.dark {
     body {
         @apply bg-background text-foreground;
     }
+}
+
+@layer utilities {
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .text-aria-dark-soft {
+        color: #0f172a !important;
+    }
+
+    .dark .text-aria-dark-soft {
+        color: #0f172a !important;
+    }
+
+    .aria-gold-surface {
+        background-image: linear-gradient(135deg, var(--gold-soft-start), var(--gold-soft-mid), var(--gold-soft-end));
+        color: #0f172a !important;
+        box-shadow: 0 20px 45px -25px rgba(15, 23, 42, 0.45);
+    }
+
+    .aria-gold-surface *,
+    .aria-gold-surface > *,
+    .aria-gold-surface button,
+    .aria-gold-surface span,
+    .aria-gold-surface p {
+        color: #0f172a !important;
+    }
+
+    .dark .aria-gold-surface {
+        background-image: linear-gradient(135deg, var(--gold-soft-start-dark), var(--gold-soft-mid-dark), var(--gold-soft-end-dark));
+        color: #0f172a !important;
+        box-shadow: 0 20px 45px -25px rgba(15, 23, 42, 0.45);
+    }
+
+    .dark .aria-gold-surface *,
+    .dark .aria-gold-surface > *,
+    .dark .aria-gold-surface button,
+    .dark .aria-gold-surface span,
+    .dark .aria-gold-surface p {
+        color: #0f172a !important;
+    }
+
+    .gold-soft-gradient {
+        background-image: linear-gradient(135deg, var(--gold-soft-start), var(--gold-soft-mid), var(--gold-soft-end));
+    }
+
+    .dark .gold-soft-gradient {
+        background-image: linear-gradient(135deg, var(--gold-soft-start-dark), var(--gold-soft-mid-dark), var(--gold-soft-end-dark));
+    }
+
+    .gold-soft-outline {
+        border: 1px solid rgba(217, 178, 116, 0.45);
+    }
+
+    .dark .gold-soft-outline {
+        border: 1px solid rgba(183, 138, 78, 0.45);
+    }
+
+    .gold-soft-text {
+        background-image: linear-gradient(135deg, var(--gold-soft-start), var(--gold-soft-mid), var(--gold-soft-end));
+        -webkit-background-clip: text;
+        color: transparent !important;
+    }
+
+    .dark .gold-soft-text {
+        background-image: linear-gradient(135deg, var(--gold-soft-start-dark), var(--gold-soft-mid-dark), var(--gold-soft-end-dark));
+        -webkit-background-clip: text;
+        color: transparent !important;
+    }
+
+    .gold-soft-tint {
+        background: rgba(234, 204, 143, 0.18);
+    }
+
+    .dark .gold-soft-tint {
+        background: rgba(177, 136, 82, 0.22);
+    }
+
+    .gold-soft-icon {
+        background-image: linear-gradient(135deg, var(--gold-soft-start), var(--gold-soft-mid));
+        box-shadow: 0 20px 40px -25px rgba(15, 23, 42, 0.5);
+    }
+
+    .dark .gold-soft-icon {
+        background-image: linear-gradient(135deg, var(--gold-soft-start-dark), var(--gold-soft-mid-dark));
+        box-shadow: 0 20px 40px -25px rgba(15, 23, 42, 0.5);
+    }
+
+    .aria-gold-border {
+        @apply border border-gold/40;
+    }
+
+    .text-soft-gold {
+        color: var(--text-soft-gold) !important;
+    }
+}
+
+/* HowToUseSection用のアニメーション */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatBubble {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.feature-bubble {
+    animation: floatBubble 3s ease-in-out infinite;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.feature-bubble {
+    animation: floatBubble 3s ease-in-out infinite, fadeIn 0.6s ease-out forwards;
+}
+
+/* ProductEvolution用のアニメーション */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-slideInLeft {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.animate-slideInRight {
+    animation: slideInRight 0.6s ease-out;
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-scaleIn {
+    animation: scaleIn 0.8s ease-out;
+}
+
+/* ボタン用のスライドインアニメーション */
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in-bottom {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.slide-in-bottom.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* スクロールアニメーション用のクラス */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-up.in-view,
+.fade-in-up.no-animation {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-in-up.no-animation {
+    transition: none;
+}
+
+.fade-in-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-left.in-view {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.fade-in-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-right.in-view {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.scale-in {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scale-in.in-view,
+.scale-in.no-animation {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.scale-in.no-animation {
+    transition: none;
+}
+
+/* 遅延アニメーション */
+.delay-100 {
+    transition-delay: 0.1s;
+}
+
+.delay-200 {
+    transition-delay: 0.2s;
+}
+
+.delay-300 {
+    transition-delay: 0.3s;
+}
+
+.delay-400 {
+    transition-delay: 0.4s;
+}
+
+.delay-500 {
+    transition-delay: 0.5s;
+}
+
+.delay-600 {
+    transition-delay: 0.6s;
+}
+
+.delay-800 {
+    transition-delay: 0.8s;
+}
+
+.delay-1000 {
+    transition-delay: 1s;
+}
+
+/* 軌道アニメーション */
+@keyframes orbit {
+    from {
+        transform: rotate(0deg) translateY(-80px);
+    }
+
+    to {
+        transform: rotate(360deg) translateY(-80px);
+    }
+}
+
+/* 行動経済学用アニメーション */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
 }

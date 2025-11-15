@@ -29,7 +29,7 @@ export const mainFeatures = [
         subtitle: 'Core Extraction',
         description: '未だ言語化されていない思考を、強制的に形ある戦略へと昇華させる。対話のたび、あなたの軸は鋭利な輪郭を得る。',
         icon: Brain,
-        color: 'from-gold to-bronze',
+        color: 'gold-soft-gradient',
         demo: '「こんなサービス、どうかな...」\n→「いいですね。誰のための、どんな課題を？」\n→「なるほど。では、もう少し掘り下げてみましょう」',
         benefits: ['本質的な洞察の獲得', '市場に響く独自の回答', '実行プロセスの確定']
     },
@@ -39,7 +39,7 @@ export const mainFeatures = [
         subtitle: 'Vertex Analysis',
         description: '市場の闇をデータで貫き、次に打つべき一手を明確に断言する。迷いを断ち、勝利への最短ルートを可視化する。',
         icon: Target,
-        color: 'from-bronze to-copper',
+        color: 'gold-soft-gradient',
         demo: '「競合が気になって...」\n→「では、まず現状を整理してみましょう」\n→「あなたらしい強みは、ここにありますね」',
         benefits: ['競争優位性の絶対確立', '市場を獲る一点突破戦略', 'リスクを排除した最良の選択']
     },
@@ -49,7 +49,7 @@ export const mainFeatures = [
         subtitle: 'Decisive Action Plan',
         description: '限られた夜の時を、勝利のための集中時間に変える。曖昧な目標を、迷うことなく実行可能な、最初の「一歩」へ強制的に転換する。',
         icon: TrendingUp,
-        color: 'from-copper to-gold',
+        color: 'gold-soft-gradient',
         demo: '「計画、どう立てよう...」\n→「まず、理想の形から話してみませんか？」\n→「そこから、できることを一緒に考えましょう」',
         benefits: ['成果を約束する確実な計画', '行動を妨げる不安の完全排除', '止まらない推進力の獲得']
     }

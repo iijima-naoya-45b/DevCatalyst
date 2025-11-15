@@ -1,6 +1,6 @@
 // API設定
 export const API_CONFIG = {
-    RAILS_API_URL: process.env.NEXT_PUBLIC_RAILS_API_URL || 'http://localhost:3000',
+    RAILS_API_URL: process.env.NEXT_PUBLIC_RAILS_API_URL || 'http://localhost:3001',
     AI_SERVICE_URL: process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://localhost:8000',
     TIMEOUT: 30000, // 30秒
 } as const;
@@ -20,6 +20,9 @@ export const API_ENDPOINTS = {
         ROADMAPS: '/roadmaps',
         PAYMENTS: '/payments',
         SUBSCRIPTIONS: '/subscriptions',
+        AI_CHAT: '/api/v1/ai/chat',
+        AI_CHAT_STREAM: '/api/v1/ai/chat/stream',
+        AI_CHAT_SESSIONS: '/api/v1/ai/chat_sessions',
     },
     // FastAPI AIサービスエンドポイント
     AI: {
@@ -36,5 +39,5 @@ export const REQUEST_CONFIG = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     },
-    CREDENTIALS: 'include' as RequestCredentials, // HTTP-onlyクッキー用
+    credentials: 'include' as RequestCredentials, // HTTP-onlyクッキー用
 } as const;

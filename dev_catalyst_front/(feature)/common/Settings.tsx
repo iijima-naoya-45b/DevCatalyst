@@ -23,14 +23,43 @@ import {
   MapPin,
   Briefcase,
   Crown,
-  ArrowRight
+  ArrowRight,
+  MessageSquare,
+  Sparkles
 } from "lucide-react";
-
-interface SettingsProps {
-  onShowPlanManagement?: () => void;
-}
+import { SettingsProps } from "./types";
 
 export function Settings({ onShowPlanManagement }: SettingsProps) {
+  const aiAssistants = [
+    {
+      id: "aria-celestia",
+      name: "Aria Celestia",
+      role: "静謐な戦略パートナー",
+      description: "落ち着いた洞察と緻密な提案で、深夜の意思決定を支える。",
+      strengths: ["静かな共感", "構造的な思考整理", "長期戦略の視座"],
+      palette: "from-gold/20 via-gold/10 to-transparent",
+      image: "/aria-celestia.png"
+    },
+    {
+      id: "aria-nocturne",
+      name: "Aria Nocturne",
+      role: "夜型の実行支援ナビゲーター",
+      description: "夜間のタスク管理と実行計画づくりにフォーカスしたアシスト。",
+      strengths: ["意思決定の迅速化", "実行ロードマップ", "感情の整理"],
+      palette: "from-navy-medium/80 via-navy-medium/40 to-transparent",
+      image: "/aria-nocturne.png"
+    },
+    {
+      id: "aria-orbit",
+      name: "Aria Orbit",
+      role: "市場感覚に敏感な参謀",
+      description: "トレンド捕捉と競合動向の可視化で、次の打ち手を導く。",
+      strengths: ["市場洞察", "ポジショニング分析", "リスク評価"],
+      palette: "from-cyan/30 via-gold/10 to-transparent",
+      image: "/aria-orbit.png"
+    }
+  ];
+
   const [profile, setProfile] = useState({
     name: "田中 太郎",
     email: "tanaka@example.com",
@@ -38,8 +67,11 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
     location: "東京都渋谷区",
     company: "DevCatalist株式会社",
     bio: "テクノロジーを活用したソロプレナー。AI・SaaS分野で事業展開中。",
-    website: "https://example.com"
+    website: "https://example.com",
+    assistantId: aiAssistants[0]?.id ?? "aria-celestia"
   });
+
+  const activeAssistant = aiAssistants.find((assistant) => assistant.id === profile.assistantId) ?? aiAssistants[0];
 
   const [notifications, setNotifications] = useState({
     emailUpdates: true,
@@ -95,8 +127,8 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
             <CardContent className="space-y-6">
               <div className="flex items-center space-x-6">
                 <Avatar className="w-20 h-20">
-                  <AvatarImage src="/api/placeholder/80/80" />
-                  <AvatarFallback>TT</AvatarFallback>
+                  <AvatarImage src={activeAssistant?.image ?? "/api/placeholder/80/80"} alt={activeAssistant?.name ?? "AI Assistant"} />
+                  <AvatarFallback>AI</AvatarFallback>
                 </Avatar>
                 <div>
                   <Button size="sm" className="mb-2">
@@ -105,6 +137,9 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   </Button>
                   <p className="text-sm text-muted-foreground">
                     JPG、PNG形式。最大5MB。
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    現在の担当AI：{activeAssistant?.name}
                   </p>
                 </div>
               </div>
@@ -185,6 +220,101 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <Button>
                   <Save className="w-4 h-4 mr-2" />
                   変更を保存
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <MessageSquare className="w-5 h-5" />
+                <span>担当AIを選択</span>
+              </CardTitle>
+              <CardDescription>
+                あなたの思考スタイルに寄り添うAIパートナーを選び、Ariaとの対話を最適化
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {aiAssistants.map((assistant) => {
+                  const isActive = assistant.id === profile.assistantId;
+                  return (
+                    <button
+                      key={assistant.id}
+                      type="button"
+                      onClick={() => setProfile((prev) => ({ ...prev, assistantId: assistant.id }))}
+                      className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 text-left focus:outline-none ${
+                        isActive
+                          ? "border-gold/60 shadow-[0_18px_40px_-18px_rgba(217,178,116,0.65)]"
+                          : "border-transparent hover:border-gold/30 hover:shadow-[0_18px_36px_-20px_rgba(15,23,42,0.35)]"
+                      }`}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-br ${assistant.palette} opacity-80`} />
+                      <div className="relative flex flex-col h-full p-5 space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <Avatar className={`w-16 h-16 ring-2 ${isActive ? "ring-gold/80" : "ring-transparent"} transition`}>
+                            <AvatarImage src={assistant.image} alt={assistant.name} />
+                            <AvatarFallback>{assistant.name.slice(0, 2)}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <div className="flex items-center space-x-2">
+                              <h3 className="font-semibold text-base">{assistant.name}</h3>
+                              {isActive && (
+                                <Badge className="bg-gold/20 text-aria-dark-soft border-gold/40 flex items-center space-x-1">
+                                  <Sparkles className="w-3 h-3" />
+                                  <span>選択中</span>
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-xs text-muted-foreground">{assistant.role}</p>
+                          </div>
+                        </div>
+
+                        <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-200">
+                          {assistant.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-2 mt-auto">
+                          {assistant.strengths.map((strength) => (
+                            <Badge
+                              key={strength}
+                              variant="outline"
+                              className={`backdrop-blur-sm ${isActive ? "border-gold/50 text-aria-dark-soft bg-gold/15" : "border-white/30 text-white/80 bg-white/10"}`}
+                            >
+                              {strength}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Sparkles className="w-5 h-5" />
+                <span>AIパートナーとの関係を整える</span>
+              </CardTitle>
+              <CardDescription>
+                選択したAIと対話を始める前に、簡単なウォームアップを設定できます
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="border border-dashed border-gold/30 rounded-xl p-5 bg-gold/5 text-sm text-muted-foreground">
+                選択したAIに今の状況や目標を共有すると、提案の精度が向上します。準備ができたら、
+                <span className="gold-soft-text font-medium">「最初の対話を始める」</span>をクリックしてください。
+              </div>
+
+              <div className="flex justify-end space-x-4">
+                <Button variant="outline">準備メモを書く</Button>
+                <Button className="aria-gold-surface text-aria-dark-soft">
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  最初の対話を始める
                 </Button>
               </div>
             </CardContent>

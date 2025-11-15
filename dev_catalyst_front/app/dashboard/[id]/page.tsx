@@ -34,7 +34,7 @@ import {
     DollarSign
 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
-import type { User as UserType } from '@/lib/auth';
+import type { User as UserType } from '@/lib/types';
 import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Radar, Bar } from 'react-chartjs-2';
 
@@ -166,7 +166,7 @@ export default function ProjectDetailPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-gold" />
+                <Loader2 className="h-8 w-8 animate-spin gold-soft-text" />
             </div>
         );
     }
@@ -205,7 +205,7 @@ export default function ProjectDetailPage() {
                 {/* プロジェクトヘッダー */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                        <Folder className="h-10 w-10 text-gold" />
+                        <Folder className="h-10 w-10 gold-soft-text" />
                         <div>
                             <h1 className="text-3xl font-serif font-bold text-gray-900 dark:text-white">
                                 {project.name}
@@ -216,7 +216,7 @@ export default function ProjectDetailPage() {
                         </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                        <Badge variant="outline" className="bg-gold/10 text-gold border-gold">MVP範囲</Badge>
+                        <Badge variant="outline" className="bg-gold/10 gold-soft-text border-gold">MVP範囲</Badge>
                         <Button variant="outline" size="sm">
                             <Settings className="h-4 w-4 mr-2" />
                             設定
@@ -229,7 +229,7 @@ export default function ProjectDetailPage() {
                     <CardHeader>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                                <Target className="h-5 w-5 text-gold" />
+                                <Target className="h-5 w-5 gold-soft-text" />
                                 <CardTitle className="text-xl font-serif text-gray-900 dark:text-white">
                                     MVP (最小実用製品) スコープ
                                 </CardTitle>
@@ -271,24 +271,24 @@ export default function ProjectDetailPage() {
                 </Card>
 
                 {/* Welcome Card */}
-                <Card className="bg-gradient-to-br from-amber-50/95 via-orange-50/90 to-yellow-50/95 dark:bg-gradient-to-br dark:from-slate-900/90 dark:via-slate-800/90 dark:to-slate-900/90 border-gold/30">
+                <Card className="gold-soft-gradient border-gold/30 dark:bg-slate-900/90 dark:border-gold/25">
                     <CardContent className="pt-6">
                         <div className="flex items-start justify-between">
                             <div className="flex-1">
                                 <h3 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-2 flex items-center">
-                                    <Lightbulb className="h-6 w-6 text-gold mr-2" />
+                                    <Lightbulb className="h-6 w-6 gold-soft-text mr-2" />
                                     ようこそ、devCatalystへ！
                                 </h3>
                                 <p className="text-gray-700 dark:text-gray-300 mb-4">
                                     あなたの事業戦略の方向性と、今すぐやるべきことが一目でわかります。<br />
                                     まずはAIアリアと対話して、あなたのビジネスについて教えてください。
                                 </p>
-                                <Button className="bg-gradient-to-r from-gold via-gold-light to-bronze hover:from-gold-light hover:via-gold hover:to-gold text-navy-deepest font-medium shadow-md hover:shadow-lg transition-all duration-300">
+                                <Button className="aria-gold-surface font-medium shadow-md transition-all duration-300">
                                     <Brain className="mr-2 h-4 w-4" />
                                     アリアと対話を始める
                                 </Button>
                             </div>
-                            <Brain className="h-16 w-16 text-gold opacity-20" />
+                            <Brain className="h-16 w-16 gold-soft-text opacity-20" />
                         </div>
                     </CardContent>
                 </Card>
@@ -299,7 +299,7 @@ export default function ProjectDetailPage() {
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">月次売上</CardTitle>
-                                <DollarSign className="h-4 w-4 text-gold" />
+                                <DollarSign className="h-4 w-4 gold-soft-text" />
                             </div>
                         </CardHeader>
                         <CardContent>
@@ -315,7 +315,7 @@ export default function ProjectDetailPage() {
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">顧客数</CardTitle>
-                                <Users className="h-4 w-4 text-gold" />
+                                <Users className="h-4 w-4 gold-soft-text" />
                             </div>
                         </CardHeader>
                         <CardContent>
@@ -328,13 +328,13 @@ export default function ProjectDetailPage() {
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">プロジェクト進捗</CardTitle>
-                                <Activity className="h-4 w-4 text-gold" />
+                                <Activity className="h-4 w-4 gold-soft-text" />
                             </div>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-gray-900 dark:text-white mb-2">67%</div>
                             <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
-                                <div className="bg-gradient-to-r from-gold via-gold-light to-bronze h-2 rounded-full" style={{ width: '67%' }} />
+                                <div className="gold-soft-gradient h-2 rounded-full" style={{ width: '67%' }} />
                             </div>
                         </CardContent>
                     </Card>
@@ -343,12 +343,12 @@ export default function ProjectDetailPage() {
                         <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">連続ログイン</CardTitle>
-                                <Clock className="h-4 w-4 text-gold" />
+                                <Clock className="h-4 w-4 gold-soft-text" />
                             </div>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">9日</div>
-                            <p className="text-sm text-gold">素晴らしい継続力！</p>
+                            <p className="text-sm gold-soft-text">素晴らしい継続力！</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -377,7 +377,7 @@ export default function ProjectDetailPage() {
                 </Card>
 
                 {/* To-Do Card */}
-                <Card className="bg-gradient-to-br from-gold/10 to-bronze/10 dark:from-gold/5 dark:to-bronze/5 border-gold/30">
+                <Card className="gold-soft-gradient border-gold/30 dark:bg-slate-900/80">
                     <CardContent className="pt-6">
                         <div className="flex items-start justify-between">
                             <div className="flex-1">
@@ -412,7 +412,7 @@ export default function ProjectDetailPage() {
                             onClick={() => setActiveTab(tab.id)}
                             className={`px-4 py-2 font-medium transition-colors whitespace-nowrap flex items-center gap-2 ${
                                 activeTab === tab.id
-                                    ? 'text-gold border-b-2 border-gold'
+                                    ? 'gold-soft-text border-b-2 border-gold'
                                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                             }`}
                         >
@@ -430,14 +430,14 @@ export default function ProjectDetailPage() {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                                 <div className="p-3 bg-gold/10 rounded-full">
-                                    <Brain className="h-8 w-8 text-gold" />
+                                    <Brain className="h-8 w-8 gold-soft-text" />
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-serif font-bold text-gray-900 dark:text-white">AI戦略アドバイザー</h3>
                                     <p className="text-gray-600 dark:text-gray-400">アリアとの対話型分析で、あなたのビジネス戦略を深化させましょう</p>
                                 </div>
                             </div>
-                            <Button className="bg-gradient-to-r from-gold via-gold-light to-bronze hover:from-gold-light hover:via-gold hover:to-gold text-navy-deepest">
+                            <Button className="aria-gold-surface">
                                 <MessageCircle className="mr-2 h-4 w-4" />
                                 アリアと対話する
                             </Button>

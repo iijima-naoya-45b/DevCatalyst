@@ -1,7 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth as useAuthHook, type User, type AuthResponse, type LoginCredentials, type RegisterCredentials, type ForgotPasswordData, ApiClient } from '@/lib/auth';
+import { useAuth as useAuthHook, ApiClient } from '@/lib/auth';
+import type { User, AuthResponse, LoginCredentials, RegisterCredentials, ForgotPasswordData } from '@/lib/types';
 import { useAuthToken } from '@/lib/hooks/use-auth-token';
 
 interface AuthContextType {
@@ -84,4 +85,8 @@ export function useAuth() {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
+}
+
+export function useOptionalAuth() {
+    return useContext(AuthContext);
 }

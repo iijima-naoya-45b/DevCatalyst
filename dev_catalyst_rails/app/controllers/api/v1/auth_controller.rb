@@ -9,6 +9,8 @@ class Api::V1::AuthController < ApplicationController
     
     if user&.valid_password?(login_params[:password])
       tokens = user.generate_jwt_tokens
+      Rails.logger.info("[Auth] Login success user_id=#{user.id} email=#{user.email}")
+      set_auth_cookies(tokens)
       
       render json: {
         success: true,
@@ -35,6 +37,8 @@ class Api::V1::AuthController < ApplicationController
     
     if user.save
       tokens = user.generate_jwt_tokens
+      Rails.logger.info("[Auth] Registration success user_id=#{user.id} email=#{user.email}")
+      set_auth_cookies(tokens)
       
       render json: {
         success: true,
@@ -143,6 +147,7 @@ class Api::V1::AuthController < ApplicationController
     refresh_token = params[:refresh_token]
     
     if refresh_token.blank?
+      Rails.logger.warn('[Auth] Refresh token request missing refresh_token parameter')
       render json: {
         success: false,
         error: 'Refresh token not provided',
@@ -151,9 +156,11 @@ class Api::V1::AuthController < ApplicationController
       return
     end
 
-    tokens = User.refresh_access_token(refresh_token)
+    tokens, user, remaining_seconds = User.refresh_access_token(refresh_token)
     
-    if tokens
+    if tokens && user
+      Rails.logger.info("[Auth] Refresh token success user_id=#{user.id} remaining_refresh_lifetime=#{remaining_seconds}s")
+      set_auth_cookies(tokens)
       render json: {
         success: true,
         message: 'Token refreshed successfully',
@@ -163,6 +170,7 @@ class Api::V1::AuthController < ApplicationController
         token_type: 'bearer'
       }
     else
+      Rails.logger.warn('[Auth] Refresh token failed: invalid or expired token provided')
       render json: {
         success: false,
         error: 'Invalid or expired refresh token',
@@ -230,6 +238,24 @@ class Api::V1::AuthController < ApplicationController
 
   def reset_password_params
     params.require(:user).permit(:reset_password_token, :password, :password_confirmation)
+  end
+
+  def set_auth_cookies(tokens)
+    cookies[:refresh_token] = {
+      value: tokens[:refresh_token],
+      httponly: true,
+      secure: Rails.env.production?,
+      same_site: :lax,
+      path: '/'
+    }
+
+    cookies[:auth_token] = {
+      value: tokens[:access_token],
+      httponly: false,
+      secure: Rails.env.production?,
+      same_site: :lax,
+      path: '/'
+    }
   end
 
   def extract_token_from_header

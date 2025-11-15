@@ -17,8 +17,8 @@ export const COMMON_ICONS = {
 export const COMMON_STYLES = {
     CTA_BUTTON: 'h-16 px-12 text-lg bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-2xl shadow-gold/25 transform hover:scale-105 transition-all duration-300',
     CTA_BUTTON_SMALL: 'h-12 px-8 text-base bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-xl shadow-gold/20 transform hover:scale-105 transition-all duration-300',
-    ICON_GOLD: 'w-6 h-6 text-gold',
-    ICON_GOLD_SMALL: 'w-4 h-4 text-gold',
+    ICON_GOLD: 'w-6 h-6 gold-soft-text',
+    ICON_GOLD_SMALL: 'w-4 h-4 gold-soft-text',
     ICON_NAVY: 'w-6 h-6 text-navy-deepest',
     ICON_NAVY_SMALL: 'w-4 h-4 text-navy-deepest'
 } as const;

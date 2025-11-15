@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { Input } from "./ui/input";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Textarea } from "./ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import {
   Send,
@@ -16,36 +16,39 @@ import {
 } from "lucide-react";
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, RadialLinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut, Bar, Radar } from 'react-chartjs-2';
+import { Message, AriaChatProps } from "./types";
+import { useOptionalAuth } from "@/contexts/auth-context";
 
 // Chart.jsの登録
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, RadialLinearScale, PointElement, LineElement, Tooltip, Legend);
 
-interface Message {
-  id: string;
-  type: 'user' | 'aria';
-  content: string;
-  timestamp: Date;
-  suggestions?: string[];
-  insights?: {
-    type: 'strategy' | 'risk' | 'opportunity';
-    title: string;
-    description: string;
-  }[];
-  isStreaming?: boolean;
-  displayedContent?: string;
-  chartData?: any; // グラフデータを追加
-}
+const deriveInitials = (name: string) => {
+  if (!name) {
+    return 'YO';
+  }
 
-interface AriaChatProps {
-  onStartAnalysis?: () => void;
-}
+  const parts = name.trim().split(/\s+/).filter(Boolean);
 
-export function AriaChat({ onStartAnalysis }: AriaChatProps) {
+  if (parts.length === 0) {
+    return 'YO';
+  }
+
+  const initials = parts.map(part => part[0]).join('');
+  return initials.slice(0, 2).toUpperCase();
+};
+
+export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
 
   const [ariaThinking, setAriaThinking] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const authContext = useOptionalAuth();
+  const currentUser = authContext?.user ?? null;
+
+  const userAvatarUrl = currentUser?.avatar_url ?? '';
+  const userDisplayName = currentUser?.name ?? 'You';
+  const userInitials = deriveInitials(userDisplayName);
 
   // ストリーミング中かチェック
   const isStreaming = messages.some(msg => msg.isStreaming);
@@ -702,11 +705,11 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
           if (part === '[CHART:MARKET_INSIGHTS]') {
             return (
               <div key={index} className="my-4">
-                <h4 className="text-sm font-semibold mb-3 text-amber-600 dark:text-gold-light flex items-center">
+                <h4 className="text-sm font-semibold mb-3 gold-soft-text dark:gold-soft-text-light flex items-center">
                   <TrendingUp className="w-4 h-4 mr-2" />
                   📈 市場インサイト
                 </h4>
-                <div className="bg-amber-100/70 dark:bg-slate-800/90 rounded-xl p-4 border border-amber-300 dark:border-gold/30">
+                <div className="bg-gold/15 dark:bg-slate-800/90 rounded-xl p-4 border border-gold/35 dark:border-gold/30">
                   <div className="max-w-xs mx-auto">
                     <Doughnut
                       data={chartData.marketInsights}
@@ -870,7 +873,12 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
     );
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const [isComposing, setIsComposing] = useState(false);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // IME入力中（変換確定前）の場合は送信しない
+    if (isComposing) return;
+    
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -878,123 +886,142 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-9xl mx-auto">
       {/* チャット履歴 */}
       <Card className="border border-gold/25 dark:border-gold/25 bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 backdrop-blur-md shadow-2xl mb-6">
         <CardContent className="p-0">
           <div
             ref={chatContainerRef}
-            className="h-96 overflow-y-auto p-6 space-y-6"
+            className="h-[600px] lg:h-[700px] overflow-y-auto p-6 space-y-6"
           >
-            {messages.map((message) => (
-              <div key={message.id} className={`flex items-start space-x-3 transition-all duration-300 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                {/* アバター */}
-                <div className="flex-shrink-0">
-                  {message.type === 'aria' ? (
-                    <div className="relative">
-                      <Avatar className="w-10 h-10 ring-2 ring-gold/40">
-                        <AvatarFallback className="bg-gradient-to-br from-gold to-bronze text-navy-deepest font-semibold">
-                          <Brain className="w-5 h-5 animate-aria-pulse" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-br from-gold to-bronze rounded-full border-2 border-navy-dark flex items-center justify-center animate-aria-float">
-                        <Sparkles className="w-2 h-2 text-navy-deepest animate-pulse" />
+            {messages.map((message) => {
+              const isAssistant = message.type === 'aria';
+              const timestamp =
+                message.timestamp instanceof Date ? message.timestamp : new Date(message.timestamp);
+
+              return (
+                <div
+                  key={message.id}
+                  className={`flex items-start space-x-3 transition-all duration-300 ${
+                    message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
+                  }`}
+                >
+                  {isAssistant && (
+                    <div className="flex-shrink-0">
+                      <div className="relative">
+                        <Avatar className={`w-10 h-10 ring-2 ring-gold/40 ${message.isStreaming ? 'animate-aria-pulse' : ''}`}>
+                          <AvatarFallback className="gold-soft-gradient text-aria-dark-soft font-semibold">
+                            <Brain className="w-5 h-5" />
+                          </AvatarFallback>
+                        </Avatar>
+                        {message.isStreaming && (
+                          <div className="absolute -bottom-1 -right-1 w-4 h-4 gold-soft-gradient rounded-full border-2 border-navy-dark flex items-center justify-center animate-aria-float">
+                            <Sparkles className="w-2 h-2 text-aria-dark-soft animate-pulse" />
+                          </div>
+                        )}
                       </div>
                     </div>
-                  ) : (
-                    <Avatar className="w-10 h-10 ring-2 ring-gold/40">
-                      <AvatarFallback className="bg-gradient-to-br from-gray-600 to-gray-700 text-white">
-                        You
-                      </AvatarFallback>
-                    </Avatar>
                   )}
-                </div>
-
-                {/* メッセージ内容 */}
-                <div className={`flex-1 transition-all duration-300 ${message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}>
-                  <div className={`rounded-2xl p-4 ${message.type === 'aria'
-                    ? 'bg-gold/5 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30'
-                    : 'bg-gradient-to-r from-gold to-bronze text-navy-deepest'
-                    } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}>
-                    {/* テキストメッセージとチャートを分離してレンダリング */}
-                    {message.type === 'aria' && message.chartData ? (
-                      <>
-                        {renderMessageWithCharts(message.displayedContent || message.content, message.chartData)}
-                      </>
-                    ) : (
-                      <p className={`whitespace-pre-wrap leading-relaxed ${message.type === 'aria' ? 'text-gray-800 dark:text-gray-100' : ''}`}>
-                        {message.type === 'aria' ? (message.displayedContent || message.content) : message.content}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* インサイトカード */}
-                  {message.insights && message.insights.length > 0 && !message.isStreaming && (
-                    <div className="mt-4 space-y-2">
-                      {message.insights.map((insight, index) => (
-                        <div key={index} className="flex items-center space-x-3 p-3 bg-amber-100/60 dark:bg-slate-700/70 border border-gold/20 dark:border-gold/30 border-amber-300 rounded-lg">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${insight.type === 'strategy' ? 'bg-gold/20' :
-                            insight.type === 'opportunity' ? 'bg-green-500/20' :
-                              'bg-orange-400/20'
-                            }`}>
-                            {insight.type === 'strategy' && <Target className="w-3 h-3 text-gold" />}
-                            {insight.type === 'opportunity' && <TrendingUp className="w-3 h-3 text-green-400" />}
-                            {insight.type === 'risk' && <Zap className="w-3 h-3 text-orange-400" />}
-                          </div>
-                          <div className="flex-1">
-                            <h5 className="font-medium text-sm text-gray-800 dark:text-gray-100">{insight.title}</h5>
-                            <p className="text-xs text-gray-600 dark:text-gray-300">{insight.description}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* 提案選択肢 */}
-                  {message.suggestions && message.suggestions.length > 0 && !message.isStreaming && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {message.suggestions.map((suggestion, index) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleSuggestionClick(suggestion)}
-                          disabled={ariaThinking || isStreaming}
-                          className="border-gold/30 dark:border-gold/30 border-amber-400 text-amber-700 dark:text-gold-light hover:bg-amber-100 dark:hover:bg-slate-700 text-xs"
+                  <div
+                    className={`flex-1 transition-all duration-300 ${
+                      message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'
+                    }`}
+                  >
+                    <div
+                      className={`rounded-2xl p-4 ${
+                        isAssistant
+                          ? 'gold-soft-tint border border-gold/20 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 dark:border-gold/30'
+                          : 'aria-gold-surface text-aria-dark-soft'
+                      } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}
+                    >
+                      {isAssistant && message.chartData ? (
+                        renderMessageWithCharts(message.displayedContent || message.content, message.chartData)
+                      ) : (
+                        <p
+                          className={`whitespace-pre-wrap leading-relaxed ${
+                            isAssistant 
+                              ? 'text-gray-800 dark:text-gray-100' 
+                              : '!text-[#0f172a] dark:!text-[#0f172a]'
+                          }`}
                         >
-                          {suggestion}
-                        </Button>
-                      ))}
+                          {isAssistant ? message.displayedContent || message.content : message.content}
+                        </p>
+                      )}
                     </div>
-                  )}
 
-                  {/* タイムスタンプ */}
-                  <div className={`mt-2 text-xs text-muted-foreground transition-all duration-200 ${message.type === 'user' ? 'text-right' : ''}`}>
-                    {message.timestamp.toLocaleTimeString('ja-JP', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                    {message.insights && message.insights.length > 0 && !message.isStreaming ? (
+                      <div className="mt-4 space-y-2">
+                        {message.insights.map((insight, index) => (
+                          <div
+                            key={`${message.id}-insight-${index}`}
+                            className="flex items-center space-x-3 p-3 gold-soft-tint dark:bg-slate-700/70 border border-gold/35 dark:border-gold/30 rounded-lg"
+                          >
+                            <div
+                              className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                                insight.type === 'strategy'
+                                  ? 'gold-soft-gradient'
+                                  : insight.type === 'opportunity'
+                                  ? 'bg-green-500/20'
+                                  : 'bg-orange-400/20'
+                              }`}
+                            >
+                              {insight.type === 'strategy' && <Target className="w-3 h-3 text-aria-dark-soft" />}
+                              {insight.type === 'opportunity' && <TrendingUp className="w-3 h-3 text-green-400" />}
+                              {insight.type === 'risk' && <Zap className="w-3 h-3 text-orange-400" />}
+                            </div>
+                            <div className="flex-1">
+                              <h5 className="font-medium text-sm text-gray-800 dark:text-gray-100">{insight.title}</h5>
+                              <p className="text-xs text-gray-600 dark:text-gray-300">{insight.description}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {message.suggestions && message.suggestions.length > 0 && !message.isStreaming ? (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {message.suggestions.slice(0, 3).map((suggestion, index) => (
+                          <Button
+                            key={`${message.id}-suggestion-${index}`}
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            disabled={ariaThinking || isStreaming}
+                            className="aria-gold-surface !text-[#0f172a] hover:shadow-lg hover:shadow-gold/30 hover:scale-105 transition-all duration-300 text-xs border-0 [&>*]:!text-[#0f172a]"
+                          >
+                            {suggestion}
+                          </Button>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    <div
+                      className={`mt-2 text-xs text-muted-foreground transition-all duration-200 ${
+                        message.type === 'user' ? 'text-right' : ''
+                      }`}
+                    >
+                      {timestamp.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-
+              );
+            })}
             {/* アリア思考中インジケーター */}
             {ariaThinking && !isStreaming && (
               <div className="flex items-start space-x-3">
                 <Avatar className="w-10 h-10 ring-2 ring-gold/40 aria-thinking">
-                  <AvatarFallback className="bg-gradient-to-br from-gold to-bronze text-navy-deepest">
+                  <AvatarFallback className="gold-soft-gradient text-aria-dark-soft">
                     <Brain className="w-5 h-5 animate-aria-pulse" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="bg-gold/5 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30 rounded-2xl p-4">
+                <div className="gold-soft-tint dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 border border-gold/20 dark:border-gold/30 rounded-2xl p-4">
                   <div className="flex items-center space-x-2">
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 gold-soft-gradient rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 gold-soft-gradient rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 gold-soft-gradient rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
-                    <span className="text-sm text-gold">アリアが静かに考えています...</span>
+                    <span className="text-sm gold-soft-text">アリアが静かに考えています...</span>
                   </div>
                 </div>
               </div>
@@ -1008,19 +1035,22 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
         <CardContent className="p-4">
           <div className="flex items-center space-x-4">
             <div className="flex-1 relative">
-              <Input
+              <Textarea
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
+                onCompositionStart={() => setIsComposing(true)}
+                onCompositionEnd={() => setIsComposing(false)}
                 placeholder="今、考えていることを話してみてください..."
                 disabled={ariaThinking || isStreaming}
-                className="pr-12 h-12 bg-amber-50/90 dark:bg-slate-800 border-gold/20 dark:border-gold/30 border-amber-300 focus:border-gold dark:focus:border-gold focus:border-amber-500 text-gray-900 dark:text-gray-100 placeholder-amber-600 dark:placeholder-gray-400"
+                rows={1}
+                className="pr-12 min-h-[3rem] max-h-32 resize-none gold-soft-tint dark:bg-slate-800 border border-gold/35 dark:border-gold/30 focus:border-gold dark:focus:border-gold text-gray-900 dark:text-gray-100 placeholder-[#b5852b] dark:placeholder-gray-400"
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || ariaThinking || isStreaming}
                 size="sm"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light hover:shadow-lg hover:shadow-gold/30 hover:scale-110 transition-all duration-300 ease-out"
+                className="absolute right-2 bottom-2 aria-gold-surface hover:shadow-lg hover:shadow-gold/30 hover:scale-110 transition-all duration-300 ease-out"
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -1029,7 +1059,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
             {onStartAnalysis && (
               <Button
                 onClick={handleAnalysis}
-                className="bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light hover:shadow-lg hover:shadow-bronze/30 hover:-translate-y-0.5 transition-all duration-300 ease-out whitespace-nowrap"
+                className="aria-gold-surface hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-0.5 transition-all duration-300 ease-out whitespace-nowrap"
               >
                 <BarChart3 className="w-4 h-4 mr-2" />
                 分析する
@@ -1041,7 +1071,7 @@ export function AriaChat({ onStartAnalysis }: AriaChatProps) {
           <div className="mt-4 flex flex-wrap gap-2">
             <Badge
               variant="outline"
-              className={`border-amber-400 dark:border-gold/30 text-amber-700 dark:text-gold-light bg-amber-100/60 dark:bg-slate-700/70 transition-all duration-300 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-amber-200/60 dark:hover:bg-slate-600/80 hover:border-amber-500 dark:hover:border-gold/50 hover:scale-105 hover:shadow-md hover:shadow-amber-400/20 dark:hover:shadow-gold/20' : 'opacity-50 cursor-not-allowed'}`}
+              className={`gold-soft-outline text-aria-dark-soft gold-soft-tint transition-all duration-300 ${!ariaThinking && !isStreaming ? 'cursor-pointer hover:bg-[rgba(249,233,201,0.2)] dark:hover:bg-slate-600/80 hover:border-gold/45 dark:hover:border-gold/40 hover:scale-105 hover:shadow-md hover:shadow-[rgba(15,23,42,0.18)] dark:hover:shadow-gold/20' : 'opacity-50 cursor-not-allowed'}`}
               onClick={() => !ariaThinking && !isStreaming && handleSuggestionClick("アイデアがあるんだけど...")}>
               <Lightbulb className="w-3 h-3 mr-1" />
               アイデアの相談

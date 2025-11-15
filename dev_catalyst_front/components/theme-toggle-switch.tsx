@@ -3,12 +3,7 @@
 import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-
-interface ThemeToggleSwitchProps {
-    size?: "sm" | "md" | "lg"
-    showLabels?: boolean
-    className?: string
-}
+import { ThemeToggleSwitchProps } from "./types/theme"
 
 export function ThemeToggleSwitch({
     size = "md",
@@ -63,7 +58,7 @@ export function ThemeToggleSwitch({
         return (
             <div className={`relative inline-flex ${currentSize.container} items-center rounded-full bg-slate-200 dark:bg-slate-700 transition-colors duration-300 ${className}`}>
                 <div className={`absolute left-1 ${currentSize.ball} rounded-full bg-white shadow-md transition-transform duration-300 flex items-center justify-center`}>
-                    <Sun className={`${currentSize.icon} text-amber-500`} />
+                    <Sun className={`${currentSize.icon} gold-soft-text`} />
                 </div>
             </div>
         )
@@ -72,7 +67,7 @@ export function ThemeToggleSwitch({
     return (
         <div className={`flex items-center gap-3 ${className}`}>
             {showLabels && (
-                <span className={`text-sm font-medium transition-colors duration-300 ${!isDark ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'}`}>
+                <span className={`text-sm font-medium transition-colors duration-300 ${!isDark ? 'gold-soft-text dark:gold-soft-text-light' : 'text-slate-400'}`}>
                     ライト
                 </span>
             )}
@@ -81,25 +76,25 @@ export function ThemeToggleSwitch({
                 onClick={toggleTheme}
                 className={`relative inline-flex ${currentSize.container} items-center rounded-full transition-all duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 ${isDark
                     ? 'bg-gradient-to-r from-slate-700 to-slate-900 shadow-inner'
-                    : 'bg-gradient-to-r from-amber-200 to-amber-300 shadow-sm'
+                    : 'bg-gradient-to-r from-gold/30 to-gold/45 shadow-sm'
                     }`}
                 title={`${isDark ? 'ライト' : 'ダーク'}モードに切り替え`}
             >
                 {/* スライドするボール */}
                 <div
-                    className={`absolute ${currentSize.ball} rounded-full bg-white shadow-lg transition-all duration-300 transform ${currentSize.translate} flex items-center justify-center ${isDark ? 'shadow-slate-900/20' : 'shadow-amber-900/20'
+                    className={`absolute ${currentSize.ball} rounded-full bg-white shadow-lg transition-all duration-300 transform ${currentSize.translate} flex items-center justify-center ${isDark ? 'shadow-slate-900/20' : 'shadow-[rgba(243,200,106,0.35)]'
                         }`}
                 >
                     {isDark ? (
                         <Moon className={`${currentSize.icon} text-slate-700`} />
                     ) : (
-                        <Sun className={`${currentSize.icon} text-amber-500`} />
+                        <Sun className={`${currentSize.icon} gold-soft-text`} />
                     )}
                 </div>
 
                 {/* 背景のアイコン（オプション） */}
                 <div className={`absolute inset-0 flex items-center justify-between ${currentSize.padding}`}>
-                    <Sun className={`${currentSize.icon} transition-opacity duration-300 ${!isDark ? 'opacity-0' : 'opacity-40 text-amber-300'}`} />
+                    <Sun className={`${currentSize.icon} transition-opacity duration-300 ${!isDark ? 'opacity-0' : 'opacity-40 gold-soft-text-light'}`} />
                     <Moon className={`${currentSize.icon} transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-40 text-slate-600'}`} />
                 </div>
             </button>

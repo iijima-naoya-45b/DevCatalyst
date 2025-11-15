@@ -3,11 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { OAUTH_PROVIDERS, type OAuthProvider } from '@/lib/auth';
 import { useAuth } from '@/contexts/auth-context';
-
-interface OAuthButtonProps {
-    provider: OAuthProvider;
-    className?: string;
-}
+import { OAuthButtonProps } from '../types/auth';
 
 export function OAuthButton({ provider, className }: OAuthButtonProps) {
     const { loginWithOAuth } = useAuth();

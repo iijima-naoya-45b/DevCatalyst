@@ -2,6 +2,7 @@
 
 class Api::V1::BaseController < ApplicationController
   protect_from_forgery with: :null_session
+  skip_before_action :verify_authenticity_token
   before_action :authenticate_user_from_token!
   
   respond_to :json
@@ -31,10 +32,33 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def extract_token_from_header
+    headerToken = extract_token_from_authorization_header
+    return headerToken if headerToken.present?
+
+    cookieToken = extract_token_from_cookies
+    return cookieToken if cookieToken.present?
+
+    paramsToken = params[:token] || params[:access_token]
+    return paramsToken if paramsToken.present?
+
+    nil
+  end
+
+  def extract_token_from_authorization_header
     auth_header = request.headers['Authorization']
     return nil unless auth_header&.start_with?('Bearer ')
-    
+
     auth_header.split(' ').last
+  end
+
+  def extract_token_from_cookies
+    cookieCandidates = [
+      request.cookies['auth_access_token'],
+      request.cookies['auth_token'],
+      request.cookies['access_token']
+    ].compact
+
+    cookieCandidates.find(&:present?)
   end
 
   def current_user

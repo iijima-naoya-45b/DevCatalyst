@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import {
+import { 
   ArrowRight,
   ArrowDown,
   Home,
@@ -18,12 +18,7 @@ import {
   Zap,
   RefreshCw
 } from "lucide-react";
-
-interface ScreenFlowDiagramProps {
-  currentView: string;
-  onViewChange: (view: string) => void;
-  onShowFlow: () => void;
-}
+import { ScreenFlowDiagramProps } from "./types";
 
 export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: ScreenFlowDiagramProps) {
   const [selectedFlow, setSelectedFlow] = useState<'basic' | 'recommended' | 'action'>('recommended');
@@ -152,13 +147,13 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
       <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
         {/* Flow Type Selector */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gold">表示フロー</label>
+          <label className="text-sm font-medium gold-soft-text">表示フロー</label>
           <div className="flex gap-2">
             <Button
               variant={selectedFlow === 'recommended' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSelectedFlow('recommended')}
-              className={`${selectedFlow === 'recommended' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold hover:bg-gold/10'} transition-all duration-200`}
+              className={`${selectedFlow === 'recommended' ? 'bg-gold text-navy-deepest' : 'border-gold/30 gold-soft-text hover:bg-gold/10'} transition-all duration-200`}
             >
               推奨フロー
             </Button>
@@ -166,7 +161,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               variant={selectedFlow === 'basic' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSelectedFlow('basic')}
-              className={`${selectedFlow === 'basic' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold hover:bg-gold/10'} transition-all duration-200`}
+              className={`${selectedFlow === 'basic' ? 'bg-gold text-navy-deepest' : 'border-gold/30 gold-soft-text hover:bg-gold/10'} transition-all duration-200`}
             >
               基本ナビ
             </Button>
@@ -174,7 +169,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
               variant={selectedFlow === 'action' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setSelectedFlow('action')}
-              className={`${selectedFlow === 'action' ? 'bg-gold text-navy-deepest' : 'border-gold/30 text-gold hover:bg-gold/10'} transition-all duration-200`}
+              className={`${selectedFlow === 'action' ? 'bg-gold text-navy-deepest' : 'border-gold/30 gold-soft-text hover:bg-gold/10'} transition-all duration-200`}
             >
               アクション
             </Button>
@@ -183,7 +178,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
 
         {/* View Mode Selector */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gold">表示モード</label>
+          <label className="text-sm font-medium gold-soft-text">表示モード</label>
           <div className="flex gap-2">
             <Button
               variant={viewMode === 'desktop' ? 'default' : 'outline'}
@@ -232,7 +227,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
         <CardHeader>
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-serif font-semibold">画面遷移フロー</h3>
-            <Badge className="bg-gold/10 text-gold border-gold/30">
+            <Badge className="bg-gold/10 gold-soft-text border-gold/30">
               {selectedFlow === 'recommended' && '推奨フロー'}
               {selectedFlow === 'basic' && '基本ナビゲーション'}
               {selectedFlow === 'action' && 'アクションベース'}
@@ -270,7 +265,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
                   bg-gradient-to-br ${screen.color} p-1
                 `}>
                   <div className="w-full h-full bg-navy-dark/90 rounded-lg p-3 flex flex-col items-center justify-center text-center">
-                    <Icon className={`w-6 h-6 mb-2 transition-colors duration-200 ${isActive ? 'text-gold' : 'text-gold/70 hover:text-gold/90'}`} />
+                    <Icon className={`w-6 h-6 mb-2 transition-colors duration-200 ${isActive ? 'gold-soft-text' : 'gold-soft-text/70 hover:gold-soft-text/90'}`} />
                     <h4 className="text-xs font-semibold text-foreground leading-tight">
                       {screen.title}
                     </h4>
@@ -295,7 +290,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
                 {/* Tooltip on Hover */}
                 <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
                   <div className="bg-navy-darker border border-gold/20 rounded-lg p-3 shadow-xl min-w-48">
-                    <h5 className="font-semibold text-gold mb-1">{screen.title}</h5>
+                    <h5 className="font-semibold gold-soft-text mb-1">{screen.title}</h5>
                     <p className="text-xs text-muted-foreground mb-2">{screen.description}</p>
                     <div className="space-y-1">
                       {screen.features.slice(0, 2).map((feature, idx) => (
@@ -372,7 +367,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="border border-gold/20 bg-navy-dark/30 backdrop-blur-sm">
           <CardHeader>
-            <h4 className="font-semibold text-gold">フロータイプ</h4>
+            <h4 className="font-semibold gold-soft-text">フロータイプ</h4>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div className="flex items-center space-x-2">
@@ -392,11 +387,11 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
 
         <Card className="border border-gold/20 bg-navy-dark/30 backdrop-blur-sm">
           <CardHeader>
-            <h4 className="font-semibold text-gold">画面ステータス</h4>
+            <h4 className="font-semibold gold-soft-text">画面ステータス</h4>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div className="flex items-center space-x-2">
-              <Zap className="w-4 h-4 text-gold" />
+              <Zap className="w-4 h-4 gold-soft-text" />
               <span>実装完了</span>
             </div>
             <div className="flex items-center space-x-2">
@@ -408,7 +403,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
 
         <Card className="border border-gold/20 bg-navy-dark/30 backdrop-blur-sm">
           <CardHeader>
-            <h4 className="font-semibold text-gold">操作方法</h4>
+            <h4 className="font-semibold gold-soft-text">操作方法</h4>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div className="flex items-center space-x-2">

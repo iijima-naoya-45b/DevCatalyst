@@ -82,13 +82,13 @@ export default function EditProjectPage() {
                             <Button
                                 variant="ghost"
                                 onClick={() => router.push(`/dashboard/${projectId}`)}
-                                className="text-slate-700 dark:text-gray-300 hover:text-gold-enhanced dark:hover:text-gold hover:bg-gold/10 -ml-2"
+                                className="text-slate-700 dark:text-gray-300 hover:gold-soft-text-enhanced dark:hover:gold-soft-text hover:bg-gold/10 -ml-2"
                             >
                                 <ArrowLeft className="h-4 w-4 mr-2" />
                                 プロジェクト詳細に戻る
                             </Button>
                             <div className="flex items-center space-x-3">
-                                <Folder className="h-8 w-8 text-gold" />
+                                <Folder className="h-8 w-8 gold-soft-text" />
                                 <h1 className="text-3xl font-serif font-bold text-slate-800 dark:text-gray-200">
                                     プロジェクトを編集
                                 </h1>
@@ -100,7 +100,7 @@ export default function EditProjectPage() {
                     <form onSubmit={handleSubmit}>
                         <Card className="glass-effect border-gold/30 bg-white/80 dark:bg-slate-800/80">
                             <CardHeader className="border-b border-gold/20">
-                                <CardTitle className="text-2xl font-serif text-amber-700 dark:text-gold-light">
+                                <CardTitle className="text-2xl font-serif gold-soft-text dark:gold-soft-text-light">
                                     プロジェクト基本情報
                                 </CardTitle>
                                 <CardDescription className="text-slate-600 dark:text-gray-200">
@@ -153,7 +153,7 @@ export default function EditProjectPage() {
                                                 value="active"
                                                 checked={formData.status === 'active'}
                                                 onChange={(e) => handleChange('status', e.target.value)}
-                                                className="w-4 h-4 text-gold border-gold/30 focus:ring-gold"
+                                                className="w-4 h-4 gold-soft-text border-gold/30 focus:ring-gold"
                                             />
                                             <Badge className="bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">
                                                 進行中
@@ -166,7 +166,7 @@ export default function EditProjectPage() {
                                                 value="completed"
                                                 checked={formData.status === 'completed'}
                                                 onChange={(e) => handleChange('status', e.target.value)}
-                                                className="w-4 h-4 text-gold border-gold/30 focus:ring-gold"
+                                                className="w-4 h-4 gold-soft-text border-gold/30 focus:ring-gold"
                                             />
                                             <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">
                                                 完了
@@ -179,9 +179,9 @@ export default function EditProjectPage() {
                                                 value="on-hold"
                                                 checked={formData.status === 'on-hold'}
                                                 onChange={(e) => handleChange('status', e.target.value)}
-                                                className="w-4 h-4 text-gold border-gold/30 focus:ring-gold"
+                                                className="w-4 h-4 gold-soft-text border-gold/30 focus:ring-gold"
                                             />
-                                            <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
+                                            <Badge className="bg-gold/15 !text-aria-dark-soft border border-gold/35 dark:bg-gold/20 dark:!text-aria-dark-soft dark:border-gold/40">
                                                 保留
                                             </Badge>
                                         </label>
@@ -202,7 +202,7 @@ export default function EditProjectPage() {
                             </Button>
                             <Button
                                 type="submit"
-                                className="bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light hover:shadow-lg hover:shadow-gold/30"
+                                className="aria-gold-surface hover:shadow-lg hover:shadow-gold/30"
                             >
                                 <Save className="h-4 w-4 mr-2" />
                                 変更を保存

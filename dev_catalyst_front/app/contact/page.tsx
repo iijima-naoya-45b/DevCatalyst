@@ -15,10 +15,8 @@ export default function ContactPage() {
       <div className="bg-navy-dark/30 border-b border-gold/20">
         <div className="max-w-7xl mx-auto px-4 py-16">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6">
-              <span className="bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
-                お問い合わせ・法的情報
-              </span>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6 gold-soft-text">
+              お問い合わせ・法的情報
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               devCatalist〈Vertex〉に関するお問い合わせ、利用規約、プライバシーポリシーについて
@@ -33,7 +31,7 @@ export default function ContactPage() {
           <div className="lg:col-span-2">
             <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md">
               <CardHeader>
-                <CardTitle className="text-2xl font-serif text-gold flex items-center">
+                <CardTitle className="text-2xl font-serif gold-soft-text flex items-center">
                   <Mail className="w-6 h-6 mr-3" />
                   お問い合わせ
                 </CardTitle>
@@ -44,7 +42,7 @@ export default function ContactPage() {
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-gold font-medium">お名前 *</Label>
+                    <Label htmlFor="name" className="gold-soft-text font-medium">お名前 *</Label>
                     <Input 
                       id="name" 
                       placeholder="山田太郎" 
@@ -52,7 +50,7 @@ export default function ContactPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gold font-medium">メールアドレス *</Label>
+                    <Label htmlFor="email" className="gold-soft-text font-medium">メールアドレス *</Label>
                     <Input 
                       id="email" 
                       type="email" 
@@ -63,7 +61,7 @@ export default function ContactPage() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="subject" className="text-gold font-medium">件名 *</Label>
+                  <Label htmlFor="subject" className="gold-soft-text font-medium">件名 *</Label>
                   <Input 
                     id="subject" 
                     placeholder="お問い合わせの件名" 
@@ -72,7 +70,7 @@ export default function ContactPage() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="message" className="text-gold font-medium">メッセージ *</Label>
+                  <Label htmlFor="message" className="gold-soft-text font-medium">メッセージ *</Label>
                   <Textarea 
                     id="message" 
                     placeholder="お問い合わせ内容を詳しくお書きください"
@@ -80,7 +78,7 @@ export default function ContactPage() {
                   />
                 </div>
                 
-                <Button className="w-full bg-gradient-to-r from-gold to-bronze hover:from-gold-light hover:to-gold text-navy-deepest font-semibold">
+                <Button className="w-full aria-gold-surface font-semibold">
                   送信する
                 </Button>
               </CardContent>
@@ -91,19 +89,19 @@ export default function ContactPage() {
           <div className="space-y-6">
             <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md">
               <CardHeader>
-                <CardTitle className="text-xl font-serif text-gold">連絡先情報</CardTitle>
+                <CardTitle className="text-xl font-serif gold-soft-text">連絡先情報</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-gold" />
+                  <Mail className="w-5 h-5 gold-soft-text" />
                   <span className="text-muted-foreground">contact@devcatalyst.com</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-gold" />
+                  <Phone className="w-5 h-5 gold-soft-text" />
                   <span className="text-muted-foreground">03-1234-5678</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-gold" />
+                  <MapPin className="w-5 h-5 gold-soft-text" />
                   <span className="text-muted-foreground">東京都渋谷区</span>
                 </div>
               </CardContent>
@@ -111,13 +109,13 @@ export default function ContactPage() {
 
             <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md">
               <CardHeader>
-                <CardTitle className="text-xl font-serif text-gold">営業時間</CardTitle>
+                <CardTitle className="text-xl font-serif gold-soft-text">営業時間</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-muted-foreground">
                   <p>平日: 9:00 - 18:00</p>
                   <p>土日祝: 休業</p>
-                  <p className="text-sm text-gold/70">※24時間AIサポートは常時稼働</p>
+                  <p className="text-sm gold-soft-text/70">※24時間AIサポートは常時稼働</p>
                 </div>
               </CardContent>
             </Card>
@@ -127,10 +125,8 @@ export default function ContactPage() {
         {/* 法的情報セクション */}
         <div className="mt-20 space-y-12">
           <div className="text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4">
-              <span className="bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
-                法的情報・規約
-              </span>
+            <h2 className="text-3xl font-serif font-bold mb-4 gold-soft-text">
+              法的情報・規約
             </h2>
             <p className="text-muted-foreground">
               devCatalist〈Vertex〉の利用規約、プライバシーポリシー、法的責任について
@@ -141,7 +137,7 @@ export default function ContactPage() {
             {/* 利用規約 */}
             <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md hover:border-gold/40 transition-all duration-300">
               <CardHeader>
-                <CardTitle className="text-xl font-serif text-gold flex items-center">
+                <CardTitle className="text-xl font-serif gold-soft-text flex items-center">
                   <FileText className="w-6 h-6 mr-3" />
                   利用規約
                 </CardTitle>
@@ -154,7 +150,7 @@ export default function ContactPage() {
                   <p>• サービス内容の変更・終了</p>
                   <p>• 知的財産権の取り扱い</p>
                 </div>
-                <Button variant="outline" className="w-full border-gold/30 text-gold hover:bg-gold/10">
+                <Button variant="outline" className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors">
                   詳細を確認
                 </Button>
               </CardContent>
@@ -163,7 +159,7 @@ export default function ContactPage() {
             {/* プライバシーポリシー */}
             <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md hover:border-gold/40 transition-all duration-300">
               <CardHeader>
-                <CardTitle className="text-xl font-serif text-gold flex items-center">
+                <CardTitle className="text-xl font-serif gold-soft-text flex items-center">
                   <Shield className="w-6 h-6 mr-3" />
                   プライバシーポリシー
                 </CardTitle>
@@ -176,7 +172,7 @@ export default function ContactPage() {
                   <p>• ユーザーの権利と選択肢</p>
                   <p>• セキュリティ対策</p>
                 </div>
-                <Button variant="outline" className="w-full border-gold/30 text-gold hover:bg-gold/10">
+                <Button variant="outline" className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors">
                   詳細を確認
                 </Button>
               </CardContent>
@@ -185,7 +181,7 @@ export default function ContactPage() {
             {/* AI利用規約 */}
             <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md hover:border-gold/40 transition-all duration-300">
               <CardHeader>
-                <CardTitle className="text-xl font-serif text-gold flex items-center">
+                <CardTitle className="text-xl font-serif gold-soft-text flex items-center">
                   <AlertTriangle className="w-6 h-6 mr-3" />
                   AI利用規約
                 </CardTitle>
@@ -198,7 +194,7 @@ export default function ContactPage() {
                   <p>• 不適切な利用の禁止</p>
                   <p>• 技術的制限と保証</p>
                 </div>
-                <Button variant="outline" className="w-full border-gold/30 text-gold hover:bg-gold/10">
+                <Button variant="outline" className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors">
                   詳細を確認
                 </Button>
               </CardContent>
@@ -208,15 +204,15 @@ export default function ContactPage() {
           {/* 重要な免責事項 */}
           <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md">
             <CardHeader>
-              <CardTitle className="text-xl font-serif text-gold flex items-center">
+              <CardTitle className="text-xl font-serif gold-soft-text flex items-center">
                 <AlertTriangle className="w-6 h-6 mr-3" />
                 重要な免責事項
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4 text-muted-foreground">
-                <div className="bg-gold/5 border border-gold/20 rounded-lg p-4">
-                  <h4 className="font-semibold text-gold mb-2">AI生成内容について</h4>
+                <div className="gold-soft-tint border border-gold/20 rounded-lg p-4">
+                  <h4 className="font-semibold gold-soft-text mb-2">AI生成内容について</h4>
                   <p className="text-sm">
                     devCatalist〈Vertex〉が生成する戦略提案、分析結果、アドバイスは参考情報であり、
                     最終的な意思決定はユーザー自身の責任で行ってください。
@@ -224,8 +220,8 @@ export default function ContactPage() {
                   </p>
                 </div>
                 
-                <div className="bg-gold/5 border border-gold/20 rounded-lg p-4">
-                  <h4 className="font-semibold text-gold mb-2">データの正確性</h4>
+                <div className="gold-soft-tint border border-gold/20 rounded-lg p-4">
+                  <h4 className="font-semibold gold-soft-text mb-2">データの正確性</h4>
                   <p className="text-sm">
                     市場データ、競合分析、予測結果等の情報は、利用可能なデータに基づく推測であり、
                     100%の正確性を保証するものではありません。
@@ -233,8 +229,8 @@ export default function ContactPage() {
                   </p>
                 </div>
                 
-                <div className="bg-gold/5 border border-gold/20 rounded-lg p-4">
-                  <h4 className="font-semibold text-gold mb-2">サービス利用の制限</h4>
+                <div className="gold-soft-tint border border-gold/20 rounded-lg p-4">
+                  <h4 className="font-semibold gold-soft-text mb-2">サービス利用の制限</h4>
                   <p className="text-sm">
                     本サービスは戦略立案支援ツールであり、投資助言、法律相談、税務相談等の
                     専門的なサービスではありません。
@@ -248,23 +244,23 @@ export default function ContactPage() {
           {/* お問い合わせ先 */}
           <Card className="border border-gold/25 bg-navy-dark/60 backdrop-blur-md">
             <CardHeader>
-              <CardTitle className="text-xl font-serif text-gold">法的お問い合わせ</CardTitle>
+              <CardTitle className="text-xl font-serif gold-soft-text">法的お問い合わせ</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-gold mb-2">一般のお問い合わせ</h4>
+                  <h4 className="font-semibold gold-soft-text mb-2">一般のお問い合わせ</h4>
                   <p className="text-sm text-muted-foreground mb-2">
                     サービス利用、技術的な問題、料金について
                   </p>
-                  <p className="text-gold">support@devcatalyst.com</p>
+                  <p className="gold-soft-text">support@devcatalyst.com</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gold mb-2">法的・コンプライアンス</h4>
+                  <h4 className="font-semibold gold-soft-text mb-2">法的・コンプライアンス</h4>
                   <p className="text-sm text-muted-foreground mb-2">
                     利用規約、プライバシー、法的責任について
                   </p>
-                  <p className="text-gold">legal@devcatalyst.com</p>
+                  <p className="gold-soft-text">legal@devcatalyst.com</p>
                 </div>
               </div>
             </CardContent>

@@ -32,9 +32,9 @@ export function ThemeToggleAnimated() {
 
     if (!mounted) {
         return (
-            <div className="relative inline-flex h-12 w-24 items-center rounded-full bg-gradient-to-r from-amber-200 to-amber-300 shadow-inner">
+            <div className="relative inline-flex h-12 w-24 items-center rounded-full bg-gradient-to-r from-gold/30 to-gold/45 shadow-inner">
                 <div className="absolute left-1 h-10 w-10 rounded-full bg-white shadow-lg flex items-center justify-center">
-                    <Sun className="h-5 w-5 text-amber-500" />
+                    <Sun className="h-5 w-5 gold-soft-text" />
                 </div>
             </div>
         )
@@ -75,19 +75,19 @@ export function ThemeToggleAnimated() {
                 className={`absolute h-10 w-10 rounded-full shadow-lg transition-all duration-500 transform ${isDark ? 'translate-x-13' : 'translate-x-1'
                     } flex items-center justify-center ${isDark
                         ? 'bg-gradient-to-br from-slate-700 to-slate-900 shadow-slate-900/30'
-                        : 'bg-gradient-to-br from-white to-yellow-50 shadow-amber-900/20'
+                        : 'bg-gradient-to-br from-white to-gold/20 shadow-[rgba(243,200,106,0.3)]'
                     } ${isAnimating ? 'scale-110 rotate-180' : ''}`}
             >
                 {isDark ? (
                     <Moon className={`h-5 w-5 text-slate-300 transition-all duration-300 ${isAnimating ? 'rotate-12' : ''}`} />
                 ) : (
-                    <Sun className={`h-5 w-5 text-amber-500 transition-all duration-300 ${isAnimating ? 'rotate-90' : ''}`} />
+                    <Sun className={`h-5 w-5 gold-soft-text transition-all duration-300 ${isAnimating ? 'rotate-90' : ''}`} />
                 )}
             </div>
 
             {/* 背景のアイコン */}
             <div className="absolute inset-0 flex items-center justify-between px-2">
-                <Sun className={`h-4 w-4 transition-all duration-500 ${!isDark ? 'opacity-0 scale-75' : 'opacity-30 text-amber-300 scale-100'}`} />
+                <Sun className={`h-4 w-4 transition-all duration-500 ${!isDark ? 'opacity-0 scale-75' : 'opacity-30 gold-soft-text-light scale-100'}`} />
                 <Moon className={`h-4 w-4 transition-all duration-500 ${isDark ? 'opacity-0 scale-75' : 'opacity-30 text-slate-600 scale-100'}`} />
             </div>
 

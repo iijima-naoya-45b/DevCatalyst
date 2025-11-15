@@ -23,11 +23,7 @@ import {
   Timer,
   PlayCircle
 } from "lucide-react";
-
-interface DashboardProps {
-  onViewChange: (view: string) => void;
-  isFirstLogin?: boolean;
-}
+import { DashboardProps } from "./types";
 
 export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps) {
   const currentProjects = [
@@ -75,14 +71,14 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
       {/* Welcome & AI Chat Prompt for First Login */}
       {isFirstLogin && (
         <div className="mb-8">
-          <Card className="border-2 border-gold bg-gradient-to-r from-gold/10 via-transparent to-bronze/10 backdrop-blur-md shadow-2xl">
+          <Card className="gold-soft-tint backdrop-blur-md shadow-2xl">
             <CardContent className="p-8">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-gold to-bronze rounded-full flex items-center justify-center animate-pulse">
-                  <Brain className="w-8 h-8 text-navy-deepest" />
+                <div className="w-16 h-16 gold-soft-icon rounded-full flex items-center justify-center animate-pulse">
+                  <Brain className="w-8 h-8 text-aria-dark-soft" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-serif font-semibold text-gold mb-2">
+                  <h3 className="text-2xl font-serif font-semibold gold-soft-text mb-2">
                     アリアがお待ちしています！
                   </h3>
                   <p className="text-muted-foreground">
@@ -94,7 +90,7 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Button 
                   onClick={() => onViewChange('advisor')}
-                  className="h-14 bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-xl"
+                  className="h-14 aria-gold-surface text-aria-dark-soft shadow-xl"
                 >
                   <MessageSquare className="w-5 h-5 mr-3" />
                   アリアと対話を始める
@@ -102,7 +98,7 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                 </Button>
                 <Button 
                   variant="outline"
-                  className="h-14 border-gold/40 text-gold hover:bg-gold/10"
+                  className="h-14 gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors"
                 >
                   <PlayCircle className="w-5 h-5 mr-3" />
                   デモを見る
@@ -115,29 +111,29 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
 
       {/* Quick AI Access Bar */}
       <div className="mb-8">
-        <Card className="border border-bronze/20 bg-bronze/5 backdrop-blur-sm">
+        <Card className="gold-soft-tint backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-gold to-bronze rounded-full flex items-center justify-center">
-                  <Brain className="w-6 h-6 text-navy-deepest" />
+                <div className="w-12 h-12 gold-soft-icon rounded-full flex items-center justify-center">
+                  <Brain className="w-6 h-6 text-aria-dark-soft" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-bronze">AIパートナー「アリア」</h4>
+                  <h4 className="font-semibold gold-soft-text">AIパートナー「アリア」</h4>
                   <p className="text-sm text-muted-foreground">いつでも戦略相談できます</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <Button 
                   onClick={() => onViewChange('advisor')}
-                  className="bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light"
+                  className="aria-gold-surface"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   対話開始
                 </Button>
                 <Button 
                   variant="outline"
-                  className="border-bronze/30 text-bronze hover:bg-bronze/10"
+                  className="gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors"
                 >
                   <Eye className="w-4 h-4 mr-2" />
                   過去のセッション
@@ -152,9 +148,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
       <div className="mb-8 md:mb-10">
         <div className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-navy-dark via-navy to-navy-medium border border-gold/20 p-6 md:p-10 text-foreground shadow-2xl">
           {/* Ambient Background Effects */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gold/8 via-transparent to-copper/5" />
-          <div className="absolute top-6 left-6 w-40 h-40 bg-gold/8 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-6 right-6 w-32 h-32 bg-bronze/10 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}} />
+          <div className="absolute inset-0 gold-soft-gradient opacity-20 pointer-events-none" />
+          <div className="absolute top-6 left-6 w-40 h-40 gold-soft-gradient opacity-35 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-6 right-6 w-32 h-32 gold-soft-gradient opacity-25 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}} />
           
           <div className="relative z-10">
             {/* Social Proof Inline */}
@@ -162,13 +158,13 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
               <div className="flex items-center space-x-3">
                 <div className="flex -space-x-2">
                   {[...Array(3)].map((_, i) => (
-                    <div key={i} className="w-8 h-8 bg-gradient-to-br from-gold to-bronze rounded-full border-2 border-navy flex items-center justify-center">
-                      <Users className="w-4 h-4 text-navy-deepest" />
+                    <div key={i} className="w-8 h-8 gold-soft-icon rounded-full border-2 border-navy flex items-center justify-center">
+                      <Users className="w-4 h-4 text-aria-dark-soft" />
                     </div>
                   ))}
                 </div>
                 <div className="text-sm">
-                  <span className="text-gold font-semibold">2,847+ 経営者</span>
+                  <span className="gold-soft-text font-semibold">2,847+ 経営者</span>
                   <span className="text-muted-foreground ml-2">が戦略を最適化</span>
                 </div>
               </div>
@@ -179,21 +175,21 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
               </div>
             </div>
             
-            <h2 className="text-2xl md:text-4xl mb-4 md:mb-6 font-serif font-semibold bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent leading-tight">
+            <h2 className="text-2xl md:text-4xl mb-4 md:mb-6 font-serif font-semibold gold-soft-text leading-tight">
               データの迷路から、確信の道筋へ
             </h2>
             
             <p className="text-muted-foreground mb-6 md:mb-8 max-w-3xl text-base md:text-lg leading-relaxed font-light">
-              <strong className="text-gold">78%の経営者</strong>が「戦略の孤独」を感じています。
+              <strong className="gold-soft-text">78%の経営者</strong>が「戦略の孤独」を感じています。
               アリアとの対話で、あなたの直感をデータで裏付けし、競合に差をつける戦略インサイトを発見しましょう。
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
               <Button 
                 onClick={() => onViewChange('advisor')}
-                className="bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light shadow-xl shadow-gold/25 px-6 md:px-8 py-3 text-sm md:text-base group transition-all duration-300 w-full sm:w-auto"
+                className="aria-gold-surface px-6 md:px-8 py-3 text-sm md:text-base group transition-all duration-300 w-full sm:w-auto"
               >
-                <Brain className="w-4 md:w-5 h-4 md:h-5 mr-2 md:mr-3 group-hover:pulse transition-transform" />
+                <Brain className="w-4 md:w-5 h-4 md:h-5 mr-2 md:mr-3 text-aria-dark-soft group-hover:pulse transition-transform" />
                 今すぐアリアと戦略セッション
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
@@ -205,34 +201,34 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-8 md:mb-12">
         <Card className="border border-gold/25 shadow-2xl bg-gradient-to-br from-navy-dark/80 to-navy-medium/60 backdrop-blur-md relative overflow-hidden group hover:shadow-gold/10 transition-all duration-500">
-          <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 gold-soft-gradient opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
           <CardHeader className="pb-3 relative z-10">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">アクティブプロジェクト</CardTitle>
-              <div className="p-2 rounded-lg bg-gold/10 group-hover:bg-gold/20 transition-colors duration-300">
-                <TrendingUp className="w-4 h-4 text-gold" />
+              <div className="p-2 rounded-lg gold-soft-tint transition-colors duration-300">
+                <TrendingUp className="w-4 h-4 gold-soft-text" />
               </div>
             </div>
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="text-3xl mb-2 text-gold font-bold tracking-tight">2</div>
-            <p className="text-xs text-gold/60 font-medium">+1 前月比</p>
+            <div className="text-3xl mb-2 gold-soft-text font-bold tracking-tight">2</div>
+            <p className="text-xs gold-soft-text/60 font-medium">+1 前月比</p>
           </CardContent>
         </Card>
 
         <Card className="border border-gold/25 shadow-2xl bg-gradient-to-br from-navy-dark/80 to-navy-medium/60 backdrop-blur-md relative overflow-hidden group hover:shadow-gold/10 transition-all duration-500">
-          <div className="absolute inset-0 bg-gradient-to-br from-bronze/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 gold-soft-gradient opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
           <CardHeader className="pb-3 relative z-10">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">AI分析完了</CardTitle>
-              <div className="p-2 rounded-lg bg-bronze/10 group-hover:bg-bronze/20 transition-colors duration-300">
-                <Zap className="w-4 h-4 text-bronze" />
+              <div className="p-2 rounded-lg gold-soft-tint transition-colors duration-300">
+                <Zap className="w-4 h-4 gold-soft-text" />
               </div>
             </div>
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="text-3xl mb-2 text-bronze font-bold tracking-tight">7</div>
-            <p className="text-xs text-bronze/60 font-medium">今月の実行数</p>
+            <div className="text-3xl mb-2 gold-soft-text font-bold tracking-tight">7</div>
+            <p className="text-xs gold-soft-text/60 font-medium">今月の実行数</p>
           </CardContent>
         </Card>
 
@@ -253,18 +249,18 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
         </Card>
 
         <Card className="border border-gold/25 shadow-2xl bg-gradient-to-br from-navy-dark/80 to-navy-medium/60 backdrop-blur-md relative overflow-hidden group hover:shadow-gold/10 transition-all duration-500">
-          <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 gold-soft-gradient opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
           <CardHeader className="pb-3 relative z-10">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">成功確率</CardTitle>
               <div className="p-2 rounded-lg bg-gold/10 group-hover:bg-gold/20 transition-colors duration-300">
-                <BarChart3 className="w-4 h-4 text-gold" />
+                <BarChart3 className="w-4 h-4 gold-soft-text" />
               </div>
             </div>
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="text-3xl mb-2 text-gold font-bold tracking-tight">78%</div>
-            <p className="text-xs text-gold/60 font-medium">AI予測スコア</p>
+            <div className="text-3xl mb-2 gold-soft-text font-bold tracking-tight">78%</div>
+            <p className="text-xs gold-soft-text/60 font-medium">AI予測スコア</p>
           </CardContent>
         </Card>
       </div>
@@ -299,8 +295,8 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
         <Card className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md shadow-2xl">
           <CardHeader className="pb-6">
             <CardTitle className="flex items-center space-x-3 text-lg md:text-xl">
-              <div className="p-2 rounded-lg bg-gold/15">
-                <Brain className="w-5 h-5 md:w-6 md:h-6 text-gold" />
+              <div className="p-2 rounded-lg gold-soft-tint">
+                <Brain className="w-5 h-5 md:w-6 md:h-6 gold-soft-text" />
               </div>
               <span className="font-serif font-semibold">戦略インサイト</span>
             </CardTitle>
@@ -311,12 +307,12 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
           <CardContent className="space-y-6">
             {/* Key Insights with CTA */}
             <div className="space-y-4">
-              <div className="p-6 bg-gradient-to-r from-gold/10 to-bronze/10 border border-gold/20 rounded-xl">
+              <div className="p-6 gold-soft-tint border border-gold/20 rounded-xl">
                 <div className="flex items-center space-x-3 mb-3">
-                  <div className="w-6 h-6 bg-gold rounded-full flex items-center justify-center">
-                    <Star className="w-4 h-4 text-navy-deepest" />
+                  <div className="w-6 h-6 gold-soft-gradient rounded-full flex items-center justify-center">
+                    <Star className="w-4 h-4 text-aria-dark-soft" />
                   </div>
-                  <span className="font-semibold text-gold">新機会発見</span>
+                  <span className="font-semibold gold-soft-text">新機会発見</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
                   あなたの業界で未開拓の市場セグメントを3つ特定しました。
@@ -325,7 +321,7 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                 <Button 
                   onClick={() => onViewChange('advisor')}
                   size="sm" 
-                  className="bg-gold text-navy-deepest hover:bg-gold-light"
+                  className="aria-gold-surface text-aria-dark-soft"
                 >
                   詳細をアリアに聞く
                   <MessageSquare className="w-4 h-4 ml-2" />
@@ -380,7 +376,7 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
               <Button 
                 onClick={() => onViewChange('advisor')}
                 variant="outline" 
-                className="border-gold/30 text-gold hover:bg-gold/10"
+                  className="gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)]"
               >
                 すべてのインサイトを見る
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -393,8 +389,8 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
         <Card className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md shadow-2xl">
           <CardHeader className="pb-6">
             <CardTitle className="flex items-center space-x-3 text-xl">
-              <div className="p-2 rounded-lg bg-gold/15">
-                <Lightbulb className="w-6 h-6 text-gold" />
+              <div className="p-2 rounded-lg gold-soft-tint">
+                <Lightbulb className="w-6 h-6 gold-soft-text" />
               </div>
               <span className="font-serif font-semibold">AI戦略インサイト</span>
             </CardTitle>
@@ -410,9 +406,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                     <h4 className="font-semibold text-lg">{insight.title}</h4>
                     <p className="text-muted-foreground leading-relaxed">{insight.description}</p>
                   </div>
-                  <Badge variant="outline" className="border-gold/40 text-gold bg-gold/5 px-3 py-1">{insight.type}</Badge>
+                  <Badge variant="outline" className="border-gold/40 gold-soft-text bg-gold/5 px-3 py-1">{insight.type}</Badge>
                 </div>
-                <Button size="sm" className="w-full bg-gradient-to-r from-gold/20 to-bronze/20 hover:from-gold/30 hover:to-bronze/30 border border-gold/30 text-gold" variant="outline">
+                <Button size="sm" className="w-full aria-gold-surface text-aria-dark-soft" variant="outline">
                   {insight.action}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
