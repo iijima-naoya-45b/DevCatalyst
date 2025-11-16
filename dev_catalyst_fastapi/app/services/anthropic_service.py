@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, Optional, Tuple, Iterable, cast
+from typing import AsyncGenerator, Iterable, Optional, Tuple, cast
 
 import anthropic
 from anthropic import NOT_GIVEN, NotGiven
