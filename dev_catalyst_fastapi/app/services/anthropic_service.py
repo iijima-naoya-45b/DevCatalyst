@@ -27,7 +27,9 @@ class AnthropicService:
 
         try:
             # mypy整合用に型を明示
-            temp: float | NotGiven = request.temperature if request.temperature is not None else NOT_GIVEN
+            temp: float | NotGiven = (
+                request.temperature if request.temperature is not None else NOT_GIVEN
+            )
             sys_param: str | NotGiven = system_message if system_message is not None else NOT_GIVEN
             msg_param: Iterable[MessageParam] = cast("Iterable[MessageParam]", messages)
 
@@ -69,7 +71,9 @@ class AnthropicService:
         system_message, messages = self._prepare_messages(request)
 
         try:
-            temp: float | NotGiven = request.temperature if request.temperature is not None else NOT_GIVEN
+            temp: float | NotGiven = (
+                request.temperature if request.temperature is not None else NOT_GIVEN
+            )
             sys_param: str | NotGiven = system_message if system_message is not None else NOT_GIVEN
             msg_param: Iterable[MessageParam] = cast("Iterable[MessageParam]", messages)
 
