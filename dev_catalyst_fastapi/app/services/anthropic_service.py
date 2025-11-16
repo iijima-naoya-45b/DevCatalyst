@@ -1,8 +1,8 @@
-from typing import AsyncGenerator, Optional, Tuple
+from typing import AsyncGenerator, Optional, Tuple, Iterable, cast
 
 import anthropic
-from anthropic import NOT_GIVEN
-from anthropic.types import Message
+from anthropic import NOT_GIVEN, NotGiven
+from anthropic.types import Message, MessageParam
 from anthropic.types.content_block import TextBlock
 
 from ..config import settings
@@ -26,12 +26,17 @@ class AnthropicService:
         system_message, messages = self._prepare_messages(request)
 
         try:
+            # mypy整合用に型を明示
+            temp: float | NotGiven = request.temperature if request.temperature is not None else NOT_GIVEN
+            sys_param: str | NotGiven = system_message if system_message is not None else NOT_GIVEN
+            msg_param: Iterable[MessageParam] = cast("Iterable[MessageParam]", messages)
+
             response: Message = await self.client.messages.create(
                 model=model,
                 max_tokens=request.max_tokens or 1000,
-                temperature=(request.temperature if request.temperature is not None else NOT_GIVEN),
-                system=(system_message if system_message is not None else NOT_GIVEN),
-                messages=messages,  # list[dict[str, str]] は MessageParam に適合
+                temperature=temp,
+                system=sys_param,
+                messages=msg_param,
             )
 
             # content[0] は TextBlock | ToolUseBlock 等のUnion
@@ -64,12 +69,16 @@ class AnthropicService:
         system_message, messages = self._prepare_messages(request)
 
         try:
+            temp: float | NotGiven = request.temperature if request.temperature is not None else NOT_GIVEN
+            sys_param: str | NotGiven = system_message if system_message is not None else NOT_GIVEN
+            msg_param: Iterable[MessageParam] = cast("Iterable[MessageParam]", messages)
+
             async with self.client.messages.stream(
                 model=model,
                 max_tokens=request.max_tokens or 1000,
-                temperature=(request.temperature if request.temperature is not None else NOT_GIVEN),
-                system=(system_message if system_message is not None else NOT_GIVEN),
-                messages=messages,
+                temperature=temp,
+                system=sys_param,
+                messages=msg_param,
             ) as stream:
                 async for text in stream.text_stream:
                     yield text
