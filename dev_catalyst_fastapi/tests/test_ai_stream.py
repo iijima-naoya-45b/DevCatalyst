@@ -3,7 +3,7 @@ import json
 from fastapi.testclient import TestClient
 
 from app.auth import get_current_user
-from app.models import AuthResponse, AuthTokens, ChatResponse, User
+from app.models import AuthResponse, AuthTokens, User
 from app.routers import ai as ai_router
 from main import app
 

@@ -60,6 +60,7 @@ Metrics/BlockLength:
     - 'config/environments/**/*'
     - 'spec/**/*'
     - 'test/**/*'
+    - 'db/**/*.rb'
 
 Metrics/ClassLength:
   Max: 200
