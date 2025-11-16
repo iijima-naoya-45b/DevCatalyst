@@ -30,7 +30,9 @@ class OpenAIService:
             }
             for msg in request.messages
         ]
-        messages: List[ChatCompletionMessageParam] = cast(List[ChatCompletionMessageParam], messages_raw)
+        messages: List[ChatCompletionMessageParam] = cast(
+            List[ChatCompletionMessageParam], messages_raw
+        )
 
         try:
             response: ChatCompletion = await self.client.chat.completions.create(
@@ -100,7 +102,9 @@ class OpenAIService:
             }
             for msg in request.messages
         ]
-        messages: List[ChatCompletionMessageParam] = cast(List[ChatCompletionMessageParam], messages_raw)
+        messages: List[ChatCompletionMessageParam] = cast(
+            List[ChatCompletionMessageParam], messages_raw
+        )
 
         candidate_models = [model] + (["gpt-3.5-turbo"] if model != "gpt-3.5-turbo" else [])
         last_error: Exception | None = None
