@@ -60,46 +60,52 @@ function NewSpecContent() {
     setTimeout(() => clearInterval(interval), 60000); // 60秒でタイムアウト
   }, []);
 
-  const handleLoadSpec = useCallback(async (id: number) => {
-    setIsGenerating(true);
-    try {
-      const loadedSpec = await specService.getSpec(id);
-      setSpec(loadedSpec);
-      setCompletionPercentage(loadedSpec.completion_percentage);
+  const handleLoadSpec = useCallback(
+    async (id: number) => {
+      setIsGenerating(true);
+      try {
+        const loadedSpec = await specService.getSpec(id);
+        setSpec(loadedSpec);
+        setCompletionPercentage(loadedSpec.completion_percentage);
 
-      // 生成中の場合はポーリングで更新
-      if (loadedSpec.status === 'generating') {
-        pollSpecStatus(id);
+        // 生成中の場合はポーリングで更新
+        if (loadedSpec.status === 'generating') {
+          pollSpecStatus(id);
+        }
+      } catch (error: any) {
+        console.error('Spec load error:', error);
+        setErrorMessage(error.message || 'Specの読み込みに失敗しました');
+      } finally {
+        setIsGenerating(false);
       }
-    } catch (error: any) {
-      console.error('Spec load error:', error);
-      setErrorMessage(error.message || 'Specの読み込みに失敗しました');
-    } finally {
-      setIsGenerating(false);
-    }
-  }, [pollSpecStatus]);
+    },
+    [pollSpecStatus]
+  );
 
-  const handleCreateFromSession = useCallback(async (sessionId: number) => {
-    setIsGenerating(true);
-    try {
-      const newSpec = await specService.createFromSession(sessionId);
-      setSpec(newSpec);
-      setCompletionPercentage(newSpec.completion_percentage);
+  const handleCreateFromSession = useCallback(
+    async (sessionId: number) => {
+      setIsGenerating(true);
+      try {
+        const newSpec = await specService.createFromSession(sessionId);
+        setSpec(newSpec);
+        setCompletionPercentage(newSpec.completion_percentage);
 
-      // 生成が完了したらSpecページに遷移
-      router.push(`/specs/new?spec_id=${newSpec.id}`);
+        // 生成が完了したらSpecページに遷移
+        router.push(`/specs/new?spec_id=${newSpec.id}`);
 
-      // セクションが生成されるまで待機して更新
-      if (newSpec.status === 'generating') {
-        pollSpecStatus(newSpec.id);
+        // セクションが生成されるまで待機して更新
+        if (newSpec.status === 'generating') {
+          pollSpecStatus(newSpec.id);
+        }
+      } catch (error: any) {
+        console.error('Spec creation from session error:', error);
+        setErrorMessage(error.message || 'Specの作成に失敗しました');
+      } finally {
+        setIsGenerating(false);
       }
-    } catch (error: any) {
-      console.error('Spec creation from session error:', error);
-      setErrorMessage(error.message || 'Specの作成に失敗しました');
-    } finally {
-      setIsGenerating(false);
-    }
-  }, [router, pollSpecStatus]);
+    },
+    [router, pollSpecStatus]
+  );
 
   useEffect(() => {
     if (!isAuthenticated) {

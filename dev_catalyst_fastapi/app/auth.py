@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any, cast, Dict
 
 import httpx
 from fastapi import Depends, HTTPException, Request
@@ -58,11 +58,13 @@ class AuthService:
             print(f"Token refresh error: {e}")
             return None
 
-    def decode_jwt_token(self, token: str) -> Optional[dict]:
+    def decode_jwt_token(self, token: str) -> Optional[dict[str, Any]]:
         """JWTトークンをデコード（ローカル検証用）"""
         try:
-            payload = jwt.decode(token, self.jwt_secret, algorithms=[self.jwt_algorithm])
-            return payload
+            decoded: Dict[str, Any] = cast(
+                Dict[str, Any], jwt.decode(token, self.jwt_secret, algorithms=[self.jwt_algorithm])
+            )
+            return decoded
         except JWTError:
             return None
 

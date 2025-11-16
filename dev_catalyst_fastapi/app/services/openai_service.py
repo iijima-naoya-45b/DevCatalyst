@@ -1,6 +1,11 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, List, cast, Optional
 
 import openai
+from openai.types.chat import (
+    ChatCompletion,
+    ChatCompletionMessageParam,
+    ChatCompletionChunk,
+)
 
 from ..config import settings
 from ..models import ChatRequest, ChatResponse
@@ -18,16 +23,17 @@ class OpenAIService:
             raise ValueError("OpenAI API key is not configured")
 
         model = request.model or "gpt-3.5-turbo"
-        messages = [
+        messages_raw = [
             {
                 "role": (msg.role.value if hasattr(msg.role, "value") else str(msg.role)),
                 "content": msg.content,
             }
             for msg in request.messages
         ]
+        messages: List[ChatCompletionMessageParam] = cast(List[ChatCompletionMessageParam], messages_raw)
 
         try:
-            response = await self.client.chat.completions.create(
+            response: ChatCompletion = await self.client.chat.completions.create(
                 model=model,
                 messages=messages,
                 temperature=request.temperature,
@@ -35,37 +41,47 @@ class OpenAIService:
                 stream=False,
             )
 
+            usage = response.usage
             return ChatResponse(
-                message=response.choices[0].message.content,
+                message=str(response.choices[0].message.content or ""),
                 provider="openai",
                 model=model,
-                usage={
-                    "prompt_tokens": response.usage.prompt_tokens,
-                    "completion_tokens": response.usage.completion_tokens,
-                    "total_tokens": response.usage.total_tokens,
-                },
+                usage=(
+                    {
+                        "prompt_tokens": usage.prompt_tokens,
+                        "completion_tokens": usage.completion_tokens,
+                        "total_tokens": usage.total_tokens,
+                    }
+                    if usage is not None
+                    else None
+                ),
             )
         except Exception as e:
             # モデル関連エラー時のフォールバック（以前の互換用）
             if model != "gpt-3.5-turbo":
                 try:
                     fallback_model = "gpt-3.5-turbo"
-                    response = await self.client.chat.completions.create(
+                    response: ChatCompletion = await self.client.chat.completions.create(
                         model=fallback_model,
                         messages=messages,
                         temperature=request.temperature,
                         max_tokens=request.max_tokens,
                         stream=False,
                     )
+                    usage = response.usage
                     return ChatResponse(
-                        message=response.choices[0].message.content,
+                        message=str(response.choices[0].message.content or ""),
                         provider="openai",
                         model=fallback_model,
-                        usage={
-                            "prompt_tokens": response.usage.prompt_tokens,
-                            "completion_tokens": response.usage.completion_tokens,
-                            "total_tokens": response.usage.total_tokens,
-                        },
+                        usage=(
+                            {
+                                "prompt_tokens": usage.prompt_tokens,
+                                "completion_tokens": usage.completion_tokens,
+                                "total_tokens": usage.total_tokens,
+                            }
+                            if usage is not None
+                            else None
+                        ),
                     )
                 except Exception:
                     pass
@@ -77,13 +93,14 @@ class OpenAIService:
             raise ValueError("OpenAI API key is not configured")
 
         model = request.model or "gpt-3.5-turbo"
-        messages = [
+        messages_raw = [
             {
                 "role": (msg.role.value if hasattr(msg.role, "value") else str(msg.role)),
                 "content": msg.content,
             }
             for msg in request.messages
         ]
+        messages: List[ChatCompletionMessageParam] = cast(List[ChatCompletionMessageParam], messages_raw)
 
         candidate_models = [model] + (["gpt-3.5-turbo"] if model != "gpt-3.5-turbo" else [])
         last_error: Exception | None = None
@@ -97,9 +114,12 @@ class OpenAIService:
                     max_tokens=request.max_tokens,
                     stream=True,
                 )
-                async for chunk in stream:
-                    if chunk.choices[0].delta.content:
-                        yield chunk.choices[0].delta.content
+                # stream は AsyncStream[ChatCompletionChunk]
+                async for chunk in stream:  # type: ignore[union-attr]
+                    # chunk は ChatCompletionChunk を想定
+                    content_piece = getattr(chunk.choices[0].delta, "content", None)
+                    if content_piece:
+                        yield str(content_piece)
                 return
             except Exception as e:
                 last_error = e
