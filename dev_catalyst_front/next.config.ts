@@ -1,8 +1,12 @@
 import type { NextConfig } from 'next';
+import path from 'path';
 
 const nextConfig: NextConfig = {
   // External packages configuration
   serverExternalPackages: [],
+
+  // Silence monorepo lockfile root inference warning
+  outputFileTracingRoot: path.join(__dirname, '..'),
 
   // API rewrites for development
   async rewrites() {

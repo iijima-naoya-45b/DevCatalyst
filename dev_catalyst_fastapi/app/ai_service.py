@@ -12,7 +12,9 @@ class AIService:
 
     async def chat_completion(self, request: ChatRequest) -> ChatResponse:
         """AI チャット補完"""
-        provider_key = request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        provider_key = (
+            request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        )
         if provider_key == AIProvider.OPENAI.value:
             return await self.openai_service.chat_completion(request)
         elif provider_key == AIProvider.ANTHROPIC.value:
@@ -22,7 +24,9 @@ class AIService:
 
     async def chat_completion_stream(self, request: ChatRequest) -> AsyncGenerator[str, None]:
         """AI チャット補完（ストリーミング）"""
-        provider_key = request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        provider_key = (
+            request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        )
         if provider_key == AIProvider.OPENAI.value:
             async for chunk in self.openai_service.chat_completion_stream(request):
                 yield chunk

@@ -56,7 +56,7 @@ function NewSpecContent() {
     else if (sessionId && !spec) {
       handleCreateFromSession(Number(sessionId));
     }
-  }, [isAuthenticated, router, sessionId, specId]);
+  }, [isAuthenticated, router, sessionId, specId, handleCreateFromSession, handleLoadSpec, spec]);
 
   const handleLoadSpec = async (id: number) => {
     setIsGenerating(true);

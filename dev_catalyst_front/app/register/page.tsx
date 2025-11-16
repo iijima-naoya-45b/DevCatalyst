@@ -47,7 +47,7 @@ export default function RegisterPage() {
     return () => {
       document.body.classList.remove('register-page-light');
     };
-  }, [router]);
+  }, [router, isAuthenticated]);
 
   const validateForm = (): boolean => {
     const validationErrors: {

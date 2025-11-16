@@ -30,6 +30,7 @@ class ChatMessage(BaseModel):
         anystr_strip_whitespace = True
         extra = "ignore"
 
+
 class ChatRequest(BaseModel):
     messages: List[ChatMessage] = Field(..., min_items=1, max_items=100)
     provider: AIProvider = AIProvider.OPENAI

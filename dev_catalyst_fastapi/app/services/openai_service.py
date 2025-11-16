@@ -19,7 +19,10 @@ class OpenAIService:
 
         model = request.model or "gpt-3.5-turbo"
         messages = [
-            {"role": (msg.role.value if hasattr(msg.role, "value") else str(msg.role)), "content": msg.content}
+            {
+                "role": (msg.role.value if hasattr(msg.role, "value") else str(msg.role)),
+                "content": msg.content,
+            }
             for msg in request.messages
         ]
 
@@ -75,7 +78,10 @@ class OpenAIService:
 
         model = request.model or "gpt-3.5-turbo"
         messages = [
-            {"role": (msg.role.value if hasattr(msg.role, "value") else str(msg.role)), "content": msg.content}
+            {
+                "role": (msg.role.value if hasattr(msg.role, "value") else str(msg.role)),
+                "content": msg.content,
+            }
             for msg in request.messages
         ]
 

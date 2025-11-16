@@ -56,7 +56,7 @@ export function ApiStatusIndicator() {
     const interval = setInterval(checkAllServices, 30000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [services]);
 
   if (process.env.NODE_ENV === 'production') {
     return null; // Don't show in production

@@ -41,7 +41,9 @@ async def chat_completion(
     try:
         normalized = _normalize_chat_payload(payload)
         request = ChatRequest(**normalized)
-        provider_key = request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        provider_key = (
+            request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        )
         if not check_ai_access(current_user.user.plan, provider_key):
             raise HTTPException(
                 status_code=403,
@@ -66,7 +68,9 @@ async def chat_completion_stream(
     try:
         normalized = _normalize_chat_payload(payload)
         request = ChatRequest(**normalized)
-        provider_key = request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        provider_key = (
+            request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        )
         if not check_ai_access(current_user.user.plan, provider_key):
             raise HTTPException(
                 status_code=403,
