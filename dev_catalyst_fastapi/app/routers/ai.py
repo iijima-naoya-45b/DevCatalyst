@@ -53,6 +53,9 @@ async def chat_completion(
         response = await ai_service.chat_completion(request)
         return response
 
+    except HTTPException as e:
+        # 403 などはそのまま返す
+        raise e
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -99,6 +102,8 @@ async def chat_completion_stream(
             },
         )
 
+    except HTTPException as e:
+        raise e
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
