@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 set -e
 
-# Frontend: 型チェック（高速で失敗を早期検出）
 if [ -d "dev_catalyst_front" ]; then
   (
     cd dev_catalyst_front
@@ -9,7 +8,6 @@ if [ -d "dev_catalyst_front" ]; then
   )
 fi
 
-# Rails: RuboCop 検査（自動修正はしない）
 if [ -d "dev_catalyst_rails" ]; then
   (
     cd dev_catalyst_rails

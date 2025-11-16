@@ -1,36 +1,56 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { OTPInput, OTPInputContext } from "input-otp";
-import { MinusIcon } from "lucide-react";
+import * as React from 'react';
+import { MinusIcon } from 'lucide-react';
 
-import cn  from "./utils";
+import cn from './utils';
+
+const OTPContext = React.createContext<{
+  slots: Array<{ char: string; isActive: boolean; hasFakeCaret: boolean }>;
+} | null>(null);
 
 function InputOTP({
   className,
   containerClassName,
   ...props
-}: React.ComponentProps<typeof OTPInput> & {
+}: React.ComponentProps<'input'> & {
   containerClassName?: string;
 }) {
+  const [value, setValue] = React.useState('');
+  const slots = Array.from({ length: Number(props.maxLength) || 6 }).map((_, i) => ({
+    char: value[i] ?? '',
+    isActive: i === value.length,
+    hasFakeCaret: i === value.length,
+  }));
+
   return (
-    <OTPInput
-      data-slot="input-otp"
-      containerClassName={cn(
-        "flex items-center gap-2 has-disabled:opacity-50",
-        containerClassName,
-      )}
-      className={cn("disabled:cursor-not-allowed", className)}
-      {...props}
-    />
+    <OTPContext.Provider value={{ slots }}>
+      <input
+        data-slot="input-otp"
+        value={value}
+        onChange={(e) =>
+          setValue(e.target.value.replace(/\D/g, '').slice(0, Number(props.maxLength) || 6))
+        }
+        className={cn('disabled:cursor-not-allowed sr-only', className)}
+        {...props}
+      />
+      <div
+        className={cn('flex items-center gap-2 has-disabled:opacity-50', containerClassName)}
+        aria-hidden
+      >
+        {slots.map((_, idx) => (
+          <InputOTPSlot key={idx} index={idx} />
+        ))}
+      </div>
+    </OTPContext.Provider>
   );
 }
 
-function InputOTPGroup({ className, ...props }: React.ComponentProps<"div">) {
+function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="input-otp-group"
-      className={cn("flex items-center gap-1", className)}
+      className={cn('flex items-center gap-1', className)}
       {...props}
     />
   );
@@ -40,10 +60,10 @@ function InputOTPSlot({
   index,
   className,
   ...props
-}: React.ComponentProps<"div"> & {
+}: React.ComponentProps<'div'> & {
   index: number;
 }) {
-  const inputOTPContext = React.useContext(OTPInputContext);
+  const inputOTPContext = React.useContext(OTPContext);
   const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
 
   return (
@@ -51,8 +71,8 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive dark:bg-input/30 border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm bg-input-background transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md data-[active=true]:z-10 data-[active=true]:ring-[3px]",
-        className,
+        'data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive dark:bg-input/30 border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm bg-input-background transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md data-[active=true]:z-10 data-[active=true]:ring-[3px]',
+        className
       )}
       {...props}
     >
@@ -66,7 +86,7 @@ function InputOTPSlot({
   );
 }
 
-function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
+function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
   return (
     <div data-slot="input-otp-separator" role="separator" {...props}>
       <MinusIcon />

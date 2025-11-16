@@ -2,7 +2,13 @@
 
 import { useState } from 'react';
 import { Button } from '../(feature)/common/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../(feature)/common/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../(feature)/common/ui/card';
 import { aiService } from '../lib/services';
 import { useApi } from '../lib/hooks/use-api';
 
@@ -11,8 +17,8 @@ export function ApiTestComponent() {
 
   // Test Rails API connection (via AI Service)
   const railsHealthCheck = useApi(async () => {
-    // Simple health check - try to get sessions
-    return aiService.getSessions(5);
+    const data = await aiService.getSessions(5);
+    return { data, status: 200, message: undefined, error: undefined };
   });
 
   // Test AI Service connection
@@ -26,7 +32,7 @@ export function ApiTestComponent() {
 
   const testRailsConnection = async () => {
     const result = await railsHealthCheck.execute();
-    setTestResults(prev => ({
+    setTestResults((prev) => ({
       ...prev,
       rails: {
         success: result !== null,
@@ -38,7 +44,7 @@ export function ApiTestComponent() {
 
   const testAiConnection = async () => {
     const result = await aiHealthCheck.execute();
-    setTestResults(prev => ({
+    setTestResults((prev) => ({
       ...prev,
       ai: {
         success: result !== null,
@@ -59,7 +65,7 @@ export function ApiTestComponent() {
         temperature: 0.3,
       });
 
-      setTestResults(prev => ({
+      setTestResults((prev) => ({
         ...prev,
         chat: {
           success: true,
@@ -68,7 +74,7 @@ export function ApiTestComponent() {
         },
       }));
     } catch (error) {
-      setTestResults(prev => ({
+      setTestResults((prev) => ({
         ...prev,
         chat: {
           success: false,
@@ -84,9 +90,7 @@ export function ApiTestComponent() {
       <Card>
         <CardHeader>
           <CardTitle>API Integration Test</CardTitle>
-          <CardDescription>
-            Test connections to Rails API and FastAPI AI Service
-          </CardDescription>
+          <CardDescription>Test connections to Rails API and FastAPI AI Service</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -98,18 +102,11 @@ export function ApiTestComponent() {
               {railsHealthCheck.loading ? 'Testing...' : 'Test Rails API'}
             </Button>
 
-            <Button
-              onClick={testAiConnection}
-              disabled={aiHealthCheck.loading}
-              variant="outline"
-            >
+            <Button onClick={testAiConnection} disabled={aiHealthCheck.loading} variant="outline">
               {aiHealthCheck.loading ? 'Testing...' : 'Test AI Service'}
             </Button>
 
-            <Button
-              onClick={testChatMessage}
-              variant="outline"
-            >
+            <Button onClick={testChatMessage} variant="outline">
               Test AI Chat
             </Button>
           </div>
@@ -125,10 +122,11 @@ export function ApiTestComponent() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${result.success
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                      }`}>
+                    <div
+                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        result.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}
+                    >
                       {result.success ? '✓ Success' : '✗ Failed'}
                     </div>
 
