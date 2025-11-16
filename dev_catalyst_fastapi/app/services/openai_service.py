@@ -59,16 +59,16 @@ class OpenAIService:
             if model != "gpt-3.5-turbo":
                 try:
                     fallback_model = "gpt-3.5-turbo"
-                    response: ChatCompletion = await self.client.chat.completions.create(
+                    fallback_response: ChatCompletion = await self.client.chat.completions.create(
                         model=fallback_model,
                         messages=messages,
                         temperature=request.temperature,
                         max_tokens=request.max_tokens,
                         stream=False,
                     )
-                    usage = response.usage
+                    usage = fallback_response.usage
                     return ChatResponse(
-                        message=str(response.choices[0].message.content or ""),
+                        message=str(fallback_response.choices[0].message.content or ""),
                         provider="openai",
                         model=fallback_model,
                         usage=(
@@ -115,7 +115,7 @@ class OpenAIService:
                     stream=True,
                 )
                 # stream は AsyncStream[ChatCompletionChunk]
-                async for chunk in stream:  # type: ignore[union-attr]
+                async for chunk in stream:
                     # chunk は ChatCompletionChunk を想定
                     content_piece = getattr(chunk.choices[0].delta, "content", None)
                     if content_piece:

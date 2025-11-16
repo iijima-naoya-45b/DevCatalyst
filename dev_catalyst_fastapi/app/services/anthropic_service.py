@@ -30,8 +30,8 @@ class AnthropicService:
                 model=model,
                 max_tokens=request.max_tokens or 1000,
                 temperature=(request.temperature if request.temperature is not None else NOT_GIVEN),
-                system=system_message,
-                messages=messages,
+                system=(system_message if system_message is not None else NOT_GIVEN),
+                messages=messages,  # list[dict[str, str]] は MessageParam に適合
             )
 
             # content[0] は TextBlock | ToolUseBlock 等のUnion
@@ -68,7 +68,7 @@ class AnthropicService:
                 model=model,
                 max_tokens=request.max_tokens or 1000,
                 temperature=(request.temperature if request.temperature is not None else NOT_GIVEN),
-                system=system_message,
+                system=(system_message if system_message is not None else NOT_GIVEN),
                 messages=messages,
             ) as stream:
                 async for text in stream.text_stream:
