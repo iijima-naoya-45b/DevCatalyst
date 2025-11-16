@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 # セキュリティ設定
 
 # BCryptのコスト設定（セキュリティと性能のバランス）
 # 開発環境では低く、本番環境では高く設定
-if Rails.env.production?
-  BCrypt::Engine.cost = 12  # 本番環境：高セキュリティ
-else
-  BCrypt::Engine.cost = 4   # 開発・テスト環境：高速処理
-end
+BCrypt::Engine.cost = if Rails.env.production?
+                        12 # 本番環境：高セキュリティ
+                      else
+                        4 # 開発・テスト環境：高速処理
+                      end
 
 # セキュリティヘッダーの設定
 Rails.application.config.force_ssl = true if Rails.env.production?
@@ -34,16 +36,16 @@ Rails.application.configure do
     policy.script_src  :self
     policy.style_src   :self, :https, :unsafe_inline
     policy.connect_src :self, :https
-    
+
     # 開発環境での設定
     if Rails.env.development?
-      frontend_url = ENV['FRONTEND_URL'] || 'http://localhost:3000'
-      frontend_ws_url = frontend_url.gsub(/^http/, 'ws')
+      frontend_url = ENV["FRONTEND_URL"] || "http://localhost:3000"
+      frontend_ws_url = frontend_url.gsub(/^http/, "ws")
       policy.connect_src :self, :https, frontend_url, frontend_ws_url
     end
   end
-  
+
   # CSPレポートの設定
   config.content_security_policy_report_only = false
-  config.content_security_policy_nonce_generator = ->(request) { SecureRandom.base64(16) }
+  config.content_security_policy_nonce_generator = ->(_request) { SecureRandom.base64(16) }
 end

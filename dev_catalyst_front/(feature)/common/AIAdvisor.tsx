@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Label } from "./ui/label";
-import { Badge } from "./ui/badge";
-import { AriaChat } from "./AriaChat";
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
+import { Label } from './ui/label';
+import { Badge } from './ui/badge';
+import { AriaChat } from './AriaChat';
 import {
   Lightbulb,
   Zap,
@@ -20,65 +20,53 @@ import {
   Plus,
   ThumbsUp,
   ThumbsDown,
-  Brain
-} from "lucide-react";
+  Brain,
+} from 'lucide-react';
 
 export function AIAdvisor() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [showAriaChat, setShowAriaChat] = useState(false);
   const [businessInfo, setBusinessInfo] = useState({
-    idea: "",
-    currentStage: "",
-    resources: "",
-    timeline: ""
+    idea: '',
+    currentStage: '',
+    resources: '',
+    timeline: '',
   });
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
     // Simulate AI analysis
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     setIsAnalyzing(false);
     setShowResults(true);
   };
 
   const analysisResults = {
     score: 85,
-    strengths: [
-      "市場の成長性が高い",
-      "競合優位性がある",
-      "実現可能性が高い"
-    ],
-    risks: [
-      "初期投資が大きい",
-      "市場教育が必要",
-      "技術的難易度が高い"
-    ],
+    strengths: ['市場の成長性が高い', '競合優位性がある', '実現可能性が高い'],
+    risks: ['初期投資が大きい', '市場教育が必要', '技術的難易度が高い'],
     recommendations: [
       {
-        priority: "高",
-        action: "MVP（最小実行可能製品）の開発を優先",
-        reason: "市場検証を早期に実施するため",
-        timeline: "3ヶ月"
+        priority: '高',
+        action: 'MVP（最小実行可能製品）の開発を優先',
+        reason: '市場検証を早期に実施するため',
+        timeline: '3ヶ月',
       },
       {
-        priority: "中",
-        action: "パートナーシップの構築",
-        reason: "リソース不足を補完するため",
-        timeline: "6ヶ月"
+        priority: '中',
+        action: 'パートナーシップの構築',
+        reason: 'リソース不足を補完するため',
+        timeline: '6ヶ月',
       },
       {
-        priority: "低",
-        action: "資金調達の準備",
-        reason: "スケールアップのため",
-        timeline: "9ヶ月"
-      }
+        priority: '低',
+        action: '資金調達の準備',
+        reason: 'スケールアップのため',
+        timeline: '9ヶ月',
+      },
     ],
-    nextSteps: [
-      "競合分析の深掘り",
-      "ターゲット顧客の具体化",
-      "技術要件の詳細設計"
-    ]
+    nextSteps: ['競合分析の深掘り', 'ターゲット顧客の具体化', '技術要件の詳細設計'],
   };
 
   return (
@@ -109,9 +97,7 @@ export function AIAdvisor() {
                 <Brain className="w-5 h-5 gold-soft-text" />
                 <span>アリアとの戦略セッション</span>
               </CardTitle>
-              <CardDescription>
-                対話を通じてより深い戦略インサイトを発見しましょう
-              </CardDescription>
+              <CardDescription>対話を通じてより深い戦略インサイトを発見しましょう</CardDescription>
             </CardHeader>
             <CardContent>
               <AriaChat />
@@ -151,7 +137,9 @@ export function AIAdvisor() {
                   id="stage"
                   placeholder="アイデア段階、MVP開発中、既にローンチ済みなど"
                   value={businessInfo.currentStage}
-                  onChange={(e) => setBusinessInfo({ ...businessInfo, currentStage: e.target.value })}
+                  onChange={(e) =>
+                    setBusinessInfo({ ...businessInfo, currentStage: e.target.value })
+                  }
                 />
               </div>
 
@@ -200,9 +188,7 @@ export function AIAdvisor() {
           <Card className="border border-bronze/20 bg-card/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>効果的な分析のために</CardTitle>
-              <CardDescription>
-                より正確な分析結果を得るためのコツ
-              </CardDescription>
+              <CardDescription>より正確な分析結果を得るためのコツ</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-4">
@@ -264,7 +250,9 @@ export function AIAdvisor() {
             <CardContent>
               <div className="flex items-center space-x-6">
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-bronze-light mb-2">{analysisResults.score}</div>
+                  <div className="text-4xl font-bold text-bronze-light mb-2">
+                    {analysisResults.score}
+                  </div>
                   <div className="text-sm text-muted-foreground">成功予測スコア</div>
                 </div>
                 <div className="flex-1">
@@ -327,9 +315,7 @@ export function AIAdvisor() {
                 <Target className="w-5 h-5 text-bronze" />
                 <span>推奨アクション</span>
               </CardTitle>
-              <CardDescription>
-                優先度順に整理された具体的なアクションプラン
-              </CardDescription>
+              <CardDescription>優先度順に整理された具体的なアクションプラン</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -337,7 +323,15 @@ export function AIAdvisor() {
                   <div key={index} className="border rounded-lg p-4">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-2">
-                        <Badge variant={rec.priority === '高' ? 'destructive' : rec.priority === '中' ? 'default' : 'secondary'}>
+                        <Badge
+                          variant={
+                            rec.priority === '高'
+                              ? 'destructive'
+                              : rec.priority === '中'
+                                ? 'default'
+                                : 'secondary'
+                          }
+                        >
                           優先度: {rec.priority}
                         </Badge>
                         <span className="text-sm text-muted-foreground">{rec.timeline}</span>
@@ -362,9 +356,7 @@ export function AIAdvisor() {
                 <MessageSquare className="w-5 h-5 gold-soft-text" />
                 <span>フィードバック・追加分析</span>
               </CardTitle>
-              <CardDescription>
-                分析結果の改善や追加質問をお聞かせください
-              </CardDescription>
+              <CardDescription>分析結果の改善や追加質問をお聞かせください</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -395,7 +387,11 @@ export function AIAdvisor() {
                     <ThumbsUp className="w-4 h-4 mr-2" />
                     この分析は役立った
                   </Button>
-                  <Button size="sm" variant="outline" className="border-orange-400/30 text-orange-400">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-orange-400/30 text-orange-400"
+                  >
                     <ThumbsDown className="w-4 h-4 mr-2" />
                     改善が必要
                   </Button>
@@ -408,14 +404,15 @@ export function AIAdvisor() {
           <Card className="border border-bronze/20 bg-card/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>次のステップ</CardTitle>
-              <CardDescription>
-                AI分析を活用してさらに戦略を深化させましょう
-              </CardDescription>
+              <CardDescription>AI分析を活用してさらに戦略を深化させましょう</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {analysisResults.nextSteps.map((step, index) => (
-                  <div key={index} className="text-center p-4 border border-bronze/20 rounded-lg hover:bg-bronze/5 cursor-pointer transition-all">
+                  <div
+                    key={index}
+                    className="text-center p-4 border border-bronze/20 rounded-lg hover:bg-bronze/5 cursor-pointer transition-all"
+                  >
                     <div className="w-8 h-8 bg-bronze/20 rounded-full flex items-center justify-center mx-auto mb-2">
                       <span className="text-bronze font-medium">{index + 1}</span>
                     </div>

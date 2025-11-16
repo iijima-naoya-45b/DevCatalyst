@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Button } from "./ui/button";
-import { Card, CardHeader, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { 
+import { useState } from 'react';
+import { Button } from './ui/button';
+import { Card, CardHeader, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
+import {
   ArrowRight,
   ArrowDown,
   Home,
@@ -16,12 +16,18 @@ import {
   MousePointer,
   Eye,
   Zap,
-  RefreshCw
-} from "lucide-react";
-import { ScreenFlowDiagramProps } from "./types";
+  RefreshCw,
+} from 'lucide-react';
+import { ScreenFlowDiagramProps } from './types';
 
-export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: ScreenFlowDiagramProps) {
-  const [selectedFlow, setSelectedFlow] = useState<'basic' | 'recommended' | 'action'>('recommended');
+export function ScreenFlowDiagram({
+  currentView,
+  onViewChange,
+  onShowFlow,
+}: ScreenFlowDiagramProps) {
+  const [selectedFlow, setSelectedFlow] = useState<'basic' | 'recommended' | 'action'>(
+    'recommended'
+  );
   const [viewMode, setViewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
 
   const screens = [
@@ -33,7 +39,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
       description: '全体統括ビュー・KPI表示',
       color: 'from-gold to-bronze',
       features: ['統計カード', 'プロジェクト一覧', 'AIインサイト', 'クイックアクション'],
-      status: 'active'
+      status: 'active',
     },
     {
       id: 'advisor',
@@ -43,7 +49,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
       description: 'ビジネスアイデア分析・戦略提案',
       color: 'from-bronze to-copper',
       features: ['アイデア入力', 'AI分析', '成功予測', '推奨アクション'],
-      status: 'development'
+      status: 'development',
     },
     {
       id: 'target',
@@ -53,7 +59,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
       description: '市場規模・競合・顧客セグメント',
       color: 'from-copper to-bronze',
       features: ['市場規模算出', '競合分析', 'ペルソナ作成', 'ポジショニング'],
-      status: 'development'
+      status: 'development',
     },
     {
       id: 'strategy',
@@ -63,7 +69,7 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
       description: 'ビジネスモデル・ロードマップ',
       color: 'from-gold to-gold-light',
       features: ['BMキャンバス', 'バリューチェーン', 'ロードマップ', 'アクションプラン'],
-      status: 'development'
+      status: 'development',
     },
     {
       id: 'settings',
@@ -73,26 +79,30 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
       description: 'プロファイル・データ管理',
       color: 'from-silver to-silver-light',
       features: ['プロファイル', '通知設定', 'データ出力', 'アカウント管理'],
-      status: 'development'
-    }
+      status: 'development',
+    },
   ];
 
   const flows = {
     basic: [
-      { from: 'dashboard', to: ['advisor', 'target', 'strategy', 'settings'], type: 'bidirectional' }
+      {
+        from: 'dashboard',
+        to: ['advisor', 'target', 'strategy', 'settings'],
+        type: 'bidirectional',
+      },
     ],
     recommended: [
       { from: 'dashboard', to: ['advisor'], type: 'primary', label: 'AI戦略分析を開始' },
       { from: 'advisor', to: ['target'], type: 'primary', label: 'ターゲット分析に進む' },
       { from: 'target', to: ['strategy'], type: 'primary', label: '戦略マップを作成' },
-      { from: 'strategy', to: ['dashboard'], type: 'secondary', label: '結果を確認' }
+      { from: 'strategy', to: ['dashboard'], type: 'secondary', label: '結果を確認' },
     ],
     action: [
       { from: 'dashboard', to: ['advisor'], type: 'action', label: 'クイック分析' },
       { from: 'advisor', to: ['dashboard'], type: 'result', label: '結果確認' },
       { from: 'dashboard', to: ['target'], type: 'action', label: '市場分析' },
-      { from: 'target', to: ['strategy'], type: 'planning', label: '戦略策定' }
-    ]
+      { from: 'target', to: ['strategy'], type: 'planning', label: '戦略策定' },
+    ],
   };
 
   const handleScreenClick = (screenId: string) => {
@@ -103,26 +113,26 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
   const getScreenPosition = (index: number) => {
     const positions = {
       desktop: [
-        { x: '10%', y: '20%' },  // dashboard
-        { x: '30%', y: '10%' },  // advisor
-        { x: '50%', y: '20%' },  // target
-        { x: '70%', y: '10%' },  // strategy
-        { x: '85%', y: '30%' }   // settings
+        { x: '10%', y: '20%' }, // dashboard
+        { x: '30%', y: '10%' }, // advisor
+        { x: '50%', y: '20%' }, // target
+        { x: '70%', y: '10%' }, // strategy
+        { x: '85%', y: '30%' }, // settings
       ],
       tablet: [
         { x: '20%', y: '15%' },
         { x: '20%', y: '35%' },
         { x: '20%', y: '55%' },
         { x: '60%', y: '25%' },
-        { x: '60%', y: '45%' }
+        { x: '60%', y: '45%' },
       ],
       mobile: [
         { x: '50%', y: '10%' },
         { x: '50%', y: '25%' },
         { x: '50%', y: '40%' },
         { x: '50%', y: '55%' },
-        { x: '50%', y: '70%' }
-      ]
+        { x: '50%', y: '70%' },
+      ],
     };
     return positions[viewMode][index];
   };
@@ -136,7 +146,10 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
           <h1 className="text-3xl md:text-4xl font-serif font-semibold bg-gradient-to-r from-gold-light via-gold to-bronze bg-clip-text text-transparent">
             devCatalist 画面遷移図
           </h1>
-          <div className="w-3 h-3 bg-gold rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+          <div
+            className="w-3 h-3 bg-gold rounded-full animate-pulse"
+            style={{ animationDelay: '1s' }}
+          />
         </div>
         <p className="text-muted-foreground text-lg">
           インタラクティブな画面フロー・ビジュアライゼーション
@@ -237,11 +250,13 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
 
         <CardContent className="relative h-[500px]">
           {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5"
+          <div
+            className="absolute inset-0 opacity-5"
             style={{
               backgroundImage: `radial-gradient(circle at 25% 25%, #d4af37 0%, transparent 50%),
-                                  radial-gradient(circle at 75% 75%, #b8860b 0%, transparent 50%)`
-            }} />
+                                  radial-gradient(circle at 75% 75%, #b8860b 0%, transparent 50%)`,
+            }}
+          />
 
           {/* Screen Nodes */}
           {screens.map((screen, index) => {
@@ -256,29 +271,34 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
                 style={{ left: position.x, top: position.y }}
                 onClick={() => handleScreenClick(screen.id)}
               >
-                <div className={`
+                <div
+                  className={`
                   relative w-32 h-24 md:w-40 md:h-28 rounded-xl border-2 transition-all duration-300
-                  ${isActive
-                    ? 'border-gold shadow-lg shadow-gold/25 scale-110'
-                    : 'border-gold/30 hover:border-gold/60 hover:scale-105'
+                  ${
+                    isActive
+                      ? 'border-gold shadow-lg shadow-gold/25 scale-110'
+                      : 'border-gold/30 hover:border-gold/60 hover:scale-105'
                   }
                   bg-gradient-to-br ${screen.color} p-1
-                `}>
+                `}
+                >
                   <div className="w-full h-full bg-navy-dark/90 rounded-lg p-3 flex flex-col items-center justify-center text-center">
-                    <Icon className={`w-6 h-6 mb-2 transition-colors duration-200 ${isActive ? 'gold-soft-text' : 'gold-soft-text/70 hover:gold-soft-text/90'}`} />
+                    <Icon
+                      className={`w-6 h-6 mb-2 transition-colors duration-200 ${isActive ? 'gold-soft-text' : 'gold-soft-text/70 hover:gold-soft-text/90'}`}
+                    />
                     <h4 className="text-xs font-semibold text-foreground leading-tight">
                       {screen.title}
                     </h4>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {screen.subtitle}
-                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">{screen.subtitle}</p>
                   </div>
 
                   {/* Status Indicator */}
-                  <div className={`
+                  <div
+                    className={`
                     absolute -top-2 -right-2 w-6 h-6 rounded-full border-2 border-navy-dark flex items-center justify-center
                     ${screen.status === 'active' ? 'bg-gold' : 'bg-bronze/60'}
-                  `}>
+                  `}
+                  >
                     {screen.status === 'active' ? (
                       <Zap className="w-3 h-3 text-navy-dark" />
                     ) : (
@@ -294,7 +314,9 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
                     <p className="text-xs text-muted-foreground mb-2">{screen.description}</p>
                     <div className="space-y-1">
                       {screen.features.slice(0, 2).map((feature, idx) => (
-                        <div key={idx} className="text-xs text-foreground/80">• {feature}</div>
+                        <div key={idx} className="text-xs text-foreground/80">
+                          • {feature}
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -305,11 +327,11 @@ export function ScreenFlowDiagram({ currentView, onViewChange, onShowFlow }: Scr
 
           {/* Flow Arrows */}
           {flows[selectedFlow]?.map((flow, index) => {
-            const fromIndex = screens.findIndex(s => s.id === flow.from);
+            const fromIndex = screens.findIndex((s) => s.id === flow.from);
             const fromPos = getScreenPosition(fromIndex);
 
             return flow.to.map((toId, toIndex) => {
-              const toScreenIndex = screens.findIndex(s => s.id === toId);
+              const toScreenIndex = screens.findIndex((s) => s.id === toId);
               const toPos = getScreenPosition(toScreenIndex);
 
               return (

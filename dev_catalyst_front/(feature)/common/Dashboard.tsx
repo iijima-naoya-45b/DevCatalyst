@@ -1,12 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { SocialProof, Authority, FreshStart } from "./BehavioralUX";
-import { 
-  TrendingUp, 
-  Target, 
-  Lightbulb, 
-  Calendar, 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { SocialProof, Authority, FreshStart } from './BehavioralUX';
+import {
+  TrendingUp,
+  Target,
+  Lightbulb,
+  Calendar,
   ArrowRight,
   Zap,
   BarChart3,
@@ -21,49 +21,49 @@ import {
   AlertTriangle,
   CheckCircle,
   Timer,
-  PlayCircle
-} from "lucide-react";
-import { DashboardProps } from "./types";
+  PlayCircle,
+} from 'lucide-react';
+import { DashboardProps } from './types';
 
 export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps) {
   const currentProjects = [
     {
       id: 1,
-      name: "SaaS プロダクト開発",
+      name: 'SaaS プロダクト開発',
       progress: 65,
-      status: "進行中",
-      nextAction: "ターゲット分析完了",
-      deadline: "2024年12月末"
+      status: '進行中',
+      nextAction: 'ターゲット分析完了',
+      deadline: '2024年12月末',
     },
     {
       id: 2,
-      name: "コンサルティング事業",
+      name: 'コンサルティング事業',
       progress: 30,
-      status: "計画中",
-      nextAction: "市場調査開始",
-      deadline: "2025年2月"
-    }
+      status: '計画中',
+      nextAction: '市場調査開始',
+      deadline: '2025年2月',
+    },
   ];
 
   const insights = [
     {
-      title: "市場機会",
-      description: "AIツール市場で300%の成長機会を発見",
-      type: "opportunity",
-      action: "詳細分析"
+      title: '市場機会',
+      description: 'AIツール市場で300%の成長機会を発見',
+      type: 'opportunity',
+      action: '詳細分析',
     },
     {
-      title: "競合分析",
-      description: "3つの主要競合の弱点を特定",
-      type: "competitive",
-      action: "戦略策定"
+      title: '競合分析',
+      description: '3つの主要競合の弱点を特定',
+      type: 'competitive',
+      action: '戦略策定',
     },
     {
-      title: "リソース最適化",
-      description: "開発リソースの20%効率化が可能",
-      type: "optimization",
-      action: "実行計画"
-    }
+      title: 'リソース最適化',
+      description: '開発リソースの20%効率化が可能',
+      type: 'optimization',
+      action: '実行計画',
+    },
   ];
 
   return (
@@ -86,9 +86,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                   </p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button 
+                <Button
                   onClick={() => onViewChange('advisor')}
                   className="h-14 aria-gold-surface text-aria-dark-soft shadow-xl"
                 >
@@ -96,7 +96,7 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                   アリアと対話を始める
                   <ArrowRight className="w-4 h-4 ml-3" />
                 </Button>
-                <Button 
+                <Button
                   variant="outline"
                   className="h-14 gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors"
                 >
@@ -124,14 +124,11 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                 </div>
               </div>
               <div className="flex gap-3">
-                <Button 
-                  onClick={() => onViewChange('advisor')}
-                  className="aria-gold-surface"
-                >
+                <Button onClick={() => onViewChange('advisor')} className="aria-gold-surface">
                   <MessageSquare className="w-4 h-4 mr-2" />
                   対話開始
                 </Button>
-                <Button 
+                <Button
                   variant="outline"
                   className="gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors"
                 >
@@ -150,15 +147,21 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
           {/* Ambient Background Effects */}
           <div className="absolute inset-0 gold-soft-gradient opacity-20 pointer-events-none" />
           <div className="absolute top-6 left-6 w-40 h-40 gold-soft-gradient opacity-35 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-6 right-6 w-32 h-32 gold-soft-gradient opacity-25 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}} />
-          
+          <div
+            className="absolute bottom-6 right-6 w-32 h-32 gold-soft-gradient opacity-25 rounded-full blur-2xl animate-pulse"
+            style={{ animationDelay: '2s' }}
+          />
+
           <div className="relative z-10">
             {/* Social Proof Inline */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
                 <div className="flex -space-x-2">
                   {[...Array(3)].map((_, i) => (
-                    <div key={i} className="w-8 h-8 gold-soft-icon rounded-full border-2 border-navy flex items-center justify-center">
+                    <div
+                      key={i}
+                      className="w-8 h-8 gold-soft-icon rounded-full border-2 border-navy flex items-center justify-center"
+                    >
                       <Users className="w-4 h-4 text-aria-dark-soft" />
                     </div>
                   ))}
@@ -168,24 +171,25 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                   <span className="text-muted-foreground ml-2">が戦略を最適化</span>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 <span className="text-xs text-green-400">リアルタイム分析中</span>
               </div>
             </div>
-            
+
             <h2 className="text-2xl md:text-4xl mb-4 md:mb-6 font-serif font-semibold gold-soft-text leading-tight">
               データの迷路から、確信の道筋へ
             </h2>
-            
+
             <p className="text-muted-foreground mb-6 md:mb-8 max-w-3xl text-base md:text-lg leading-relaxed font-light">
-              <strong className="gold-soft-text">78%の経営者</strong>が「戦略の孤独」を感じています。
+              <strong className="gold-soft-text">78%の経営者</strong>
+              が「戦略の孤独」を感じています。
               アリアとの対話で、あなたの直感をデータで裏付けし、競合に差をつける戦略インサイトを発見しましょう。
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
-              <Button 
+              <Button
                 onClick={() => onViewChange('advisor')}
                 className="aria-gold-surface px-6 md:px-8 py-3 text-sm md:text-base group transition-all duration-300 w-full sm:w-auto"
               >
@@ -204,7 +208,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
           <div className="absolute inset-0 gold-soft-gradient opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
           <CardHeader className="pb-3 relative z-10">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">アクティブプロジェクト</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">
+                アクティブプロジェクト
+              </CardTitle>
               <div className="p-2 rounded-lg gold-soft-tint transition-colors duration-300">
                 <TrendingUp className="w-4 h-4 gold-soft-text" />
               </div>
@@ -220,7 +226,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
           <div className="absolute inset-0 gold-soft-gradient opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
           <CardHeader className="pb-3 relative z-10">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">AI分析完了</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">
+                AI分析完了
+              </CardTitle>
               <div className="p-2 rounded-lg gold-soft-tint transition-colors duration-300">
                 <Zap className="w-4 h-4 gold-soft-text" />
               </div>
@@ -236,7 +244,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
           <div className="absolute inset-0 bg-gradient-to-br from-copper/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <CardHeader className="pb-3 relative z-10">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">ターゲット市場</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">
+                ターゲット市場
+              </CardTitle>
               <div className="p-2 rounded-lg bg-copper/10 group-hover:bg-copper/20 transition-colors duration-300">
                 <Users className="w-4 h-4 text-copper" />
               </div>
@@ -252,7 +262,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
           <div className="absolute inset-0 gold-soft-gradient opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
           <CardHeader className="pb-3 relative z-10">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">成功確率</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground font-medium tracking-wide">
+                成功確率
+              </CardTitle>
               <div className="p-2 rounded-lg bg-gold/10 group-hover:bg-gold/20 transition-colors duration-300">
                 <BarChart3 className="w-4 h-4 gold-soft-text" />
               </div>
@@ -267,24 +279,24 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
 
       {/* Behavioral UX Components */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
-        <SocialProof 
+        <SocialProof
           userCount={2847}
           recentActions={[
-            "田中さんが競合分析を完了",
-            "佐藤さんが新戦略を策定",
-            "山田さんがマーケット参入を決定"
+            '田中さんが競合分析を完了',
+            '佐藤さんが新戦略を策定',
+            '山田さんがマーケット参入を決定',
           ]}
         />
-        
+
         <FreshStart
           opportunity="AI戦略分析で競合に差をつける"
           timeframe="48時間"
           onStart={() => onViewChange('advisor')}
         />
-        
+
         <Authority
           expertName="戦略コンサルタント 鈴木氏"
-          credentials={["Harvard MBA", "McKinsey出身", "上場3社の戦略責任者"]}
+          credentials={['Harvard MBA', 'McKinsey出身', '上場3社の戦略責任者']}
           recommendation="アリアの分析精度は、人間のコンサルタントに匹敵します。特に初期戦略の方向性確認には最適です。"
         />
       </div>
@@ -318,9 +330,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                   あなたの業界で未開拓の市場セグメントを3つ特定しました。
                   競合が見落としている領域への参入チャンスです。
                 </p>
-                <Button 
+                <Button
                   onClick={() => onViewChange('advisor')}
-                  size="sm" 
+                  size="sm"
                   className="aria-gold-surface text-aria-dark-soft"
                 >
                   詳細をアリアに聞く
@@ -336,12 +348,11 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                   <span className="font-semibold text-orange-400">リスク警告</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  現在の戦略には2つの潜在的リスクがあります。
-                  早期対策で競争優位を維持できます。
+                  現在の戦略には2つの潜在的リスクがあります。 早期対策で競争優位を維持できます。
                 </p>
-                <Button 
+                <Button
                   onClick={() => onViewChange('advisor')}
-                  size="sm" 
+                  size="sm"
                   variant="outline"
                   className="border-orange-400/30 text-orange-400 hover:bg-orange-400/10"
                 >
@@ -361,9 +372,9 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
                   現在のトレンドを活用すれば、6ヶ月で売上30%向上が見込めます。
                   実行プランを一緒に立てましょう。
                 </p>
-                <Button 
+                <Button
                   onClick={() => onViewChange('advisor')}
-                  size="sm" 
+                  size="sm"
                   className="bg-green-400 text-white hover:bg-green-500"
                 >
                   プランを作成
@@ -373,10 +384,10 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
             </div>
 
             <div className="text-center">
-              <Button 
+              <Button
                 onClick={() => onViewChange('advisor')}
-                variant="outline" 
-                  className="gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)]"
+                variant="outline"
+                className="gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)]"
               >
                 すべてのインサイトを見る
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -400,15 +411,27 @@ export function Dashboard({ onViewChange, isFirstLogin = false }: DashboardProps
           </CardHeader>
           <CardContent className="space-y-4">
             {insights.map((insight, index) => (
-              <div key={index} className="border border-gold/20 rounded-xl p-6 space-y-4 bg-navy-medium/50 backdrop-blur-sm hover:bg-navy-medium/70 transition-all duration-300">
+              <div
+                key={index}
+                className="border border-gold/20 rounded-xl p-6 space-y-4 bg-navy-medium/50 backdrop-blur-sm hover:bg-navy-medium/70 transition-all duration-300"
+              >
                 <div className="flex items-start justify-between">
                   <div className="space-y-2">
                     <h4 className="font-semibold text-lg">{insight.title}</h4>
                     <p className="text-muted-foreground leading-relaxed">{insight.description}</p>
                   </div>
-                  <Badge variant="outline" className="border-gold/40 gold-soft-text bg-gold/5 px-3 py-1">{insight.type}</Badge>
+                  <Badge
+                    variant="outline"
+                    className="border-gold/40 gold-soft-text bg-gold/5 px-3 py-1"
+                  >
+                    {insight.type}
+                  </Badge>
                 </div>
-                <Button size="sm" className="w-full aria-gold-surface text-aria-dark-soft" variant="outline">
+                <Button
+                  size="sm"
+                  className="w-full aria-gold-surface text-aria-dark-soft"
+                  variant="outline"
+                >
                   {insight.action}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>

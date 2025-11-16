@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 心理学的サポート機能を提供するConcern
 module PsychologicalSupport
   extend ActiveSupport::Concern
@@ -37,12 +39,12 @@ module PsychologicalSupport
   end
 
   # インスタンスメソッド
-  
+
   # 心理学的配慮のエラーメッセージ取得
   def get_psychological_error_message(field, error_type)
     PSYCHOLOGICAL_ERROR_MESSAGES.dig(field.to_sym, error_type.to_sym) ||
-    PSYCHOLOGICAL_ERROR_MESSAGES.dig(:general, error_type.to_sym) ||
-    "入力内容を確認してください。"
+      PSYCHOLOGICAL_ERROR_MESSAGES.dig(:general, error_type.to_sym) ||
+      "入力内容を確認してください。"
   end
 
   # ユーザーフレンドリーなエラーメッセージの生成
@@ -50,25 +52,25 @@ module PsychologicalSupport
     return {} if errors.empty?
 
     friendly_messages = {}
-    
+
     errors.each do |error|
       field = error.attribute
       error_type = case error.type
-                  when :blank, :empty
-                    :blank
-                  when :invalid
-                    :invalid
-                  when :taken
-                    :taken
-                  when :too_short
-                    :too_short
-                  else
-                    :invalid_format
-                  end
-      
+                   when :blank, :empty
+                     :blank
+                   when :invalid
+                     :invalid
+                   when :taken
+                     :taken
+                   when :too_short
+                     :too_short
+                   else
+                     :invalid_format
+                   end
+
       friendly_messages[field] = get_psychological_error_message(field, error_type)
     end
-    
+
     friendly_messages
   end
 
@@ -94,7 +96,7 @@ module PsychologicalSupport
       "着実に成長しています。小さな積み重ねが大きな成果につながります。",
       "よくできています！継続することで必ず結果が出ます。"
     ]
-    
+
     messages.sample
   end
 

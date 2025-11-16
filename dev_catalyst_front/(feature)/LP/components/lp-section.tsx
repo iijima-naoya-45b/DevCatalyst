@@ -7,12 +7,16 @@ export function LpSection({ id, children, className, containerClassName }: LpSec
   return (
     <section
       id={id}
-      className={cn('relative py-24 md:py-32 overflow-hidden', className)}
+      className={cn('relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden', className)}
     >
-      <div className={cn('max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10', containerClassName)}>
+      <div
+        className={cn(
+          'max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10',
+          containerClassName
+        )}
+      >
         {children}
       </div>
     </section>
   );
 }
-

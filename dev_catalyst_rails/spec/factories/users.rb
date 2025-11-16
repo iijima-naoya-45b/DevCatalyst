@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
     sequence(:email) { |n| "user#{n}@example.com" }
+    name { "Test User" }
     password { "ValidPass123" }
     password_confirmation { "ValidPass123" }
 
@@ -12,13 +15,13 @@ FactoryBot.define do
 
     trait :admin do
       email { "admin@devcatalyst.com" }
-      
+
       after(:create) do |user|
         user.psychological_profile.update!(
           cognitive_load_level: 3,
           self_efficacy_score: 85,
           risk_tolerance: 8,
-          learning_style: 'multimodal'
+          learning_style: "multimodal"
         )
       end
     end
@@ -29,7 +32,7 @@ FactoryBot.define do
           cognitive_load_level: 7,
           self_efficacy_score: 35,
           risk_tolerance: 3,
-          learning_style: 'visual'
+          learning_style: "visual"
         )
       end
     end
@@ -40,7 +43,7 @@ FactoryBot.define do
           cognitive_load_level: 5,
           self_efficacy_score: 65,
           risk_tolerance: 6,
-          learning_style: 'kinesthetic'
+          learning_style: "kinesthetic"
         )
       end
     end
@@ -51,7 +54,7 @@ FactoryBot.define do
           cognitive_load_level: 3,
           self_efficacy_score: 90,
           risk_tolerance: 9,
-          learning_style: 'reading_writing'
+          learning_style: "reading_writing"
         )
       end
     end

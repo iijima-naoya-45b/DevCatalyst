@@ -1,27 +1,27 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { Moon, Sun, Monitor } from "lucide-react"
-import { useTheme } from "next-themes"
+import * as React from 'react';
+import { Moon, Sun, Monitor } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 export function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     // シンプルなライト/ダークのトグル
-    if (resolvedTheme === "dark") {
-      setTheme("light")
+    if (resolvedTheme === 'dark') {
+      setTheme('light');
     } else {
-      setTheme("dark")
+      setTheme('dark');
     }
-  }
+  };
 
-  const isDark = resolvedTheme === "dark"
+  const isDark = resolvedTheme === 'dark';
 
   if (!mounted) {
     return (
@@ -30,7 +30,7 @@ export function ThemeToggle() {
           <Sun className="h-4 w-4 m-2 gold-soft-text" />
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -44,8 +44,9 @@ export function ThemeToggle() {
 
       {/* スライドするボール */}
       <div
-        className={`absolute h-8 w-8 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform ${isDark ? 'translate-x-11' : 'translate-x-1'
-          } flex items-center justify-center hover:scale-110`}
+        className={`absolute h-8 w-8 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform ${
+          isDark ? 'translate-x-11' : 'translate-x-1'
+        } flex items-center justify-center hover:scale-110`}
       >
         {isDark ? (
           <Moon className="h-4 w-4 text-slate-700" />
@@ -56,9 +57,13 @@ export function ThemeToggle() {
 
       {/* 背景のアイコン */}
       <div className="absolute inset-0 flex items-center justify-between px-2">
-        <Sun className={`h-4 w-4 transition-opacity duration-300 ${!isDark ? 'opacity-0' : 'opacity-60 gold-soft-text-light'}`} />
-        <Moon className={`h-4 w-4 transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-60 text-slate-500'}`} />
+        <Sun
+          className={`h-4 w-4 transition-opacity duration-300 ${!isDark ? 'opacity-0' : 'opacity-60 gold-soft-text-light'}`}
+        />
+        <Moon
+          className={`h-4 w-4 transition-opacity duration-300 ${isDark ? 'opacity-0' : 'opacity-60 text-slate-500'}`}
+        />
       </div>
     </button>
-  )
+  );
 }

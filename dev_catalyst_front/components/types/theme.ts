@@ -1,6 +1,5 @@
 export interface ThemeToggleSwitchProps {
-    size?: 'sm' | 'md' | 'lg';
-    showLabels?: boolean;
-    className?: string;
+  size?: 'sm' | 'md' | 'lg';
+  showLabels?: boolean;
+  className?: string;
 }
-

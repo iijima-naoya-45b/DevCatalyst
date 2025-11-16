@@ -1,8 +1,7 @@
 'use client';
 
-import { Footer } from "@/(feature)/layouts/Footer";
+import { Footer } from '@/(feature)/layouts/Footer';
 
 export function DashboardFooter() {
-    return <Footer />;
+  return <Footer />;
 }
-

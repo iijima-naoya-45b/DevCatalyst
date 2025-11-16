@@ -1,0 +1,11 @@
+# Sidekiq-Cron Schedule Configuration
+# https://github.com/sidekiq-cron/sidekiq-cron
+
+# GDPR Data Retention Job
+# 毎日午前3時に実行
+gdpr_data_retention:
+  cron: "0 3 * * *"
+  class: "Gdpr::DataRetentionJob"
+  queue: default
+  description: "GDPR data retention and cleanup job"
+  active_job: true

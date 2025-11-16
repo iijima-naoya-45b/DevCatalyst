@@ -1,0 +1,75 @@
+#!/usr/bin/env sh
+set -e
+
+# セクション見出しを出力するヘルパー
+section() {
+  echo ""
+  echo "=== $1 ==="
+}
+
+# -------- フロントエンド (Next.js) --------
+# - lint-staged でステージ済みファイルのみを整形（ESLint/Prettier）
+# - その後、保険として lint:fix を軽く実行（失敗しても継続）
+run_frontend() {
+  [ -f "dev_catalyst_front/package.json" ] || return 0
+  section "フロント: lint-staged + lint:fix を実行"
+  (
+    cd dev_catalyst_front
+    npx --yes lint-staged
+    # 任意の全体チェック（非ブロッキング）
+    if npm run -s >/dev/null 2>&1; then
+      echo "npm run lint:fix を実行（非ブロッキング）"
+      npm run -s lint:fix || true
+    fi
+  )
+}
+
+# -------- FastAPI (Python) --------
+# - ステージ済みの .py に対して black / isort を適用し、再ステージ
+run_fastapi() {
+  [ -d "dev_catalyst_fastapi" ] || return 0
+  STAGED_PY_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '^dev_catalyst_fastapi/.*\.py$' || true)
+  [ -n "$STAGED_PY_FILES" ] || return 0
+
+  section "FastAPI: ステージ済み .py に black + isort を適用"
+  (
+    cd dev_catalyst_fastapi
+    if command -v black >/dev/null 2>&1; then
+      echo "$STAGED_PY_FILES" | xargs black --quiet
+    else
+      echo "black が見つかりません。スキップします。"
+    fi
+    if command -v isort >/dev/null 2>&1; then
+      echo "$STAGED_PY_FILES" | xargs isort --quiet
+    else
+      echo "isort が見つかりません。スキップします。"
+    fi
+  )
+  echo "$STAGED_PY_FILES" | xargs git add
+}
+
+# -------- Rails (Ruby) --------
+# - ステージ済み .rb に対して rubocop -a（安全な自動修正）を実行
+# - その後、エラーレベル以上でのみ失敗とする検査を実行
+run_rails() {
+  [ -f "dev_catalyst_rails/Gemfile" ] || return 0
+  STAGED_RB_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '^dev_catalyst_rails/.*\.rb$' || true)
+  [ -n "$STAGED_RB_FILES" ] || return 0
+
+  section "Rails: ステージ済み .rb に rubocop を適用"
+  (
+    cd dev_catalyst_rails
+    # リポジトリルート基準のパスを、現在ディレクトリ基準に変換
+    REL_RB_FILES=$(echo "$STAGED_RB_FILES" | sed -e 's#^dev_catalyst_rails/##')
+    # まず安全な自動修正
+    echo "$REL_RB_FILES" | xargs bundle exec rubocop -a --force-exclusion -- || true
+    # 検査（Error レベル以上でフックを失敗にする）
+    echo "$REL_RB_FILES" | xargs bundle exec rubocop --force-exclusion --fail-level E
+  )
+  echo "$STAGED_RB_FILES" | xargs git add
+}
+
+# すべてのセクションを実行
+run_frontend
+run_fastapi
+run_rails

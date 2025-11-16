@@ -53,7 +53,9 @@ function LogoutContent() {
           <div className="mb-6 flex items-center justify-center">
             <Loader2 className="h-10 w-10 animate-spin gold-soft-text" />
           </div>
-          <h1 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-3">ログアウト処理中...</h1>
+          <h1 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-3">
+            ログアウト処理中...
+          </h1>
           <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
             Ariaがセッションを終了しています。完了までこのままお待ちください。
           </p>
@@ -90,4 +92,3 @@ export default function LogoutPage() {
     </div>
   );
 }
-

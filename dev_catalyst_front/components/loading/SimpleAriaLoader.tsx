@@ -101,8 +101,14 @@ export function SimpleAriaLoader({ onComplete }: SimpleAriaLoaderProps) {
 
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="absolute w-32 h-32 rounded-full border-2 border-gold/30 animate-ping" />
-            <div className="absolute w-40 h-40 rounded-full border-2 border-gold/20 animate-ping" style={{ animationDelay: '0.3s' }} />
-            <div className="absolute w-48 h-48 rounded-full border-2 border-gold/10 animate-ping" style={{ animationDelay: '0.6s' }} />
+            <div
+              className="absolute w-40 h-40 rounded-full border-2 border-gold/20 animate-ping"
+              style={{ animationDelay: '0.3s' }}
+            />
+            <div
+              className="absolute w-48 h-48 rounded-full border-2 border-gold/10 animate-ping"
+              style={{ animationDelay: '0.6s' }}
+            />
           </div>
 
           {SPARKLE_ANGLES.map((angle, i) => (
@@ -121,9 +127,7 @@ export function SimpleAriaLoader({ onComplete }: SimpleAriaLoaderProps) {
         </div>
 
         <div className="text-center space-y-6 px-4">
-          <h2 className="text-2xl md:text-3xl font-serif font-bold gold-soft-text">
-            Aria
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-serif font-bold gold-soft-text">Aria</h2>
 
           <div className="space-y-4">
             <div className="flex items-center justify-center gap-2 h-8">
@@ -142,7 +146,9 @@ export function SimpleAriaLoader({ onComplete }: SimpleAriaLoaderProps) {
               思考を整理しています...
             </p>
 
-            <div className={`w-64 h-2 rounded-full mx-auto overflow-hidden ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
+            <div
+              className={`w-64 h-2 rounded-full mx-auto overflow-hidden ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}
+            >
               <div
                 className="h-full gold-soft-gradient transition-all duration-300 ease-out"
                 style={{ width: `${progress}%` }}
@@ -155,8 +161,7 @@ export function SimpleAriaLoader({ onComplete }: SimpleAriaLoaderProps) {
           </div>
         </div>
       </div>
-    </div>
-  , portalContainer);
+    </div>,
+    portalContainer
+  );
 }
-
-

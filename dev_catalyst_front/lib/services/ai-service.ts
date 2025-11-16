@@ -1,182 +1,177 @@
-import { aiServiceClient } from '../api-client';
-import type { ChatRequest, ChatResponse, AvailableModels } from '../types/ai';
+import { aiApi } from '../api/rails/ai';
+import type { ChatRequest, ChatResponse, ChatSession } from '../api/rails/ai';
+import type { AvailableModels } from '../types/ai';
 
 class AIService {
-    private baseURL = process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000';
+  /**
+   * チャット送信（通常）
+   */
+  async chatCompletion(request: ChatRequest, sessionId?: number): Promise<ChatResponse> {
+    try {
+      const response = await aiApi.chat(request, sessionId);
+      return response;
+    } catch (error: any) {
+      this.handleError(error);
+      throw error;
+    }
+  }
 
-    async chatCompletion(request: ChatRequest): Promise<ChatResponse> {
-        try {
-            const response = await aiServiceClient.post<ChatResponse>('/api/ai/chat', request);
-            if (!response.data) {
-                throw new Error('No data received from API');
-            }
-            return response.data;
-        } catch (error: any) {
-            this.handleError(error);
-            throw error;
-        }
+  /**
+   * チャット送信（ストリーミング）
+   */
+  // オーバーロード宣言
+  async chatCompletionStream(
+    request: ChatRequest,
+    sessionId: number | undefined,
+    callbacks: {
+      onChunk: (chunk: string) => void;
+      onError?: (error: string) => void;
+      onComplete?: (sessionId: number) => void;
+    }
+  ): Promise<void>;
+  async chatCompletionStream(
+    request: ChatRequest,
+    onChunk: (chunk: string) => void,
+    onError?: (error: string) => void,
+    onComplete?: () => void
+  ): Promise<void>;
+  // 実装
+  async chatCompletionStream(
+    request: ChatRequest,
+    arg2: any,
+    arg3?: any,
+    arg4?: any
+  ): Promise<void> {
+    let sessionId: number | undefined;
+    let callbacks: {
+      onChunk: (chunk: string) => void;
+      onError?: (error: string) => void;
+      onComplete?: (sessionId: number) => void;
+    };
+
+    if (typeof arg2 === 'number' || arg2 === undefined) {
+      sessionId = arg2 as number | undefined;
+      callbacks = arg3 as any;
+    } else {
+      // 旧シグネチャ
+      callbacks = {
+        onChunk: arg2,
+        onError: arg3,
+        onComplete: arg4 ? () => arg4() : undefined,
+      };
     }
 
-    async chatCompletionStream(
-        request: ChatRequest,
-        onChunk: (chunk: string) => void,
-        onError?: (error: string) => void,
-        onComplete?: () => void
-    ): Promise<void> {
-        try {
-            const response = await fetch(`${this.baseURL}/api/ai/chat/stream`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.getAccessToken()}`,
-                },
-                body: JSON.stringify(request),
-                credentials: 'include',
-            });
+    try {
+      await aiApi.chatStream(request, sessionId, callbacks);
+    } catch (error: any) {
+      callbacks.onError?.(error.message || 'ストリーミング中にエラーが発生しました。');
+      throw error;
+    }
+  }
 
-            if (!response.ok) {
-                await this.handleFetchError(response);
-            }
+  /**
+   * セッション一覧取得
+   */
+  async getSessions(limit: number = 20): Promise<ChatSession[]> {
+    try {
+      const response = await aiApi.getSessions(limit);
+      return response.data || [];
+    } catch (error: any) {
+      this.handleError(error);
+      throw error;
+    }
+  }
 
-            await this.processStream(response, onChunk, onError, onComplete);
-        } catch (error: any) {
-            onError?.(error.message || 'ストリーミング中にエラーが発生しました。');
-        }
+  /**
+   * セッション詳細取得
+   */
+  async getSession(sessionId: number): Promise<any> {
+    try {
+      const response = await aiApi.getSession(sessionId);
+      return response.data;
+    } catch (error: any) {
+      this.handleError(error);
+      throw error;
+    }
+  }
+
+  /**
+   * セッション削除
+   */
+  async deleteSession(sessionId: number): Promise<void> {
+    try {
+      await aiApi.deleteSession(sessionId);
+    } catch (error: any) {
+      this.handleError(error);
+      throw error;
+    }
+  }
+
+  /**
+   * セッションアーカイブ
+   */
+  async archiveSession(sessionId: number): Promise<void> {
+    try {
+      await aiApi.archiveSession(sessionId);
+    } catch (error: any) {
+      this.handleError(error);
+      throw error;
+    }
+  }
+
+  // 認証状態チェック（簡易実装）
+  async checkAuthStatus(): Promise<{ authenticated: boolean }> {
+    try {
+      // 必要に応じてRailsのセッション確認APIに差し替え
+      return { authenticated: true };
+    } catch {
+      return { authenticated: false };
+    }
+  }
+
+  // トークン更新（簡易実装）
+  async refreshToken(): Promise<boolean> {
+    try {
+      // 必要に応じてリフレッシュエンドポイントへ差し替え
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // 利用可能モデル（簡易実装）
+  async getAvailableModels(): Promise<AvailableModels> {
+    return {
+      user_plan: 'free',
+      models: {
+        openai: [{ id: 'gpt-4o-mini', name: 'GPT-4o mini', plan_required: 'free' }],
+        anthropic: [{ id: 'claude-3-haiku', name: 'Claude 3 Haiku', plan_required: 'pro' }],
+      },
+    };
+  }
+
+  /**
+   * エラーハンドリング
+   */
+  private handleError(error: any): void {
+    if (error.status === 401) {
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
+      throw new Error('認証が必要です。ログインしてください。');
     }
 
-    async getAvailableModels(): Promise<AvailableModels> {
-        try {
-            const response = await aiServiceClient.get<AvailableModels>('/api/ai/models');
-            if (!response.data) {
-                throw new Error('No data received from API');
-            }
-            return response.data;
-        } catch (error: any) {
-            this.handleError(error);
-            throw error;
-        }
+    if (error.status === 403) {
+      throw new Error(error.message || 'このAIプロバイダーを使用する権限がありません。');
     }
 
-    async checkAuthStatus(): Promise<{
-        authenticated: boolean;
-        user: any;
-        expires_in: number | null;
-    }> {
-        try {
-            const response = await aiServiceClient.get<{
-                authenticated: boolean;
-                user: any;
-                expires_in: number | null;
-            }>('/api/auth/check');
-            return response.data || {
-                authenticated: false,
-                user: null,
-                expires_in: null,
-            };
-        } catch (error) {
-            return {
-                authenticated: false,
-                user: null,
-                expires_in: null,
-            };
-        }
+    if (error.status === 429) {
+      throw new Error('リクエスト制限に達しました。しばらく待ってから再試行してください。');
     }
 
-    async refreshToken(): Promise<boolean> {
-        try {
-            await aiServiceClient.post('/api/auth/refresh', {});
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    private getAccessToken(): string | null {
-        if (typeof document === 'undefined') return null;
-
-        const cookies = document.cookie.split(';');
-        for (const cookie of cookies) {
-            const [name, value] = cookie.trim().split('=');
-            if (name === 'access_token') {
-                return decodeURIComponent(value);
-            }
-        }
-        return null;
-    }
-
-    private handleError(error: any): void {
-        if (error.status === 401) {
-            if (typeof window !== 'undefined') {
-                window.location.href = '/login';
-            }
-            throw new Error('認証が必要です。ログインしてください。');
-        }
-        if (error.status === 403) {
-            throw new Error(error.message || 'このAIプロバイダーを使用する権限がありません。');
-        }
-        throw new Error(error.message || 'AI APIの呼び出しに失敗しました。');
-    }
-
-    private async handleFetchError(response: Response): Promise<void> {
-        if (response.status === 401) {
-            if (typeof window !== 'undefined') {
-                window.location.href = '/login';
-            }
-            throw new Error('認証が必要です。ログインしてください。');
-        }
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'AI APIの呼び出しに失敗しました。');
-    }
-
-    private async processStream(
-        response: Response,
-        onChunk: (chunk: string) => void,
-        onError?: (error: string) => void,
-        onComplete?: () => void
-    ): Promise<void> {
-        const reader = response.body?.getReader();
-        if (!reader) {
-            throw new Error('ストリーミングレスポンスの読み取りに失敗しました。');
-        }
-
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        while (true) {
-            const { done, value } = await reader.read();
-
-            if (done) break;
-
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
-
-            for (const line of lines) {
-                if (line.startsWith('data: ')) {
-                    try {
-                        const data = JSON.parse(line.slice(6));
-
-                        if (data.error) {
-                            onError?.(data.message);
-                            return;
-                        }
-
-                        if (data.done) {
-                            onComplete?.();
-                            return;
-                        }
-
-                        if (data.content) {
-                            onChunk(data.content);
-                        }
-                    } catch (e) {
-                        console.error('Failed to parse SSE data:', e);
-                    }
-                }
-            }
-        }
-    }
+    throw new Error(error.message || 'AI APIの呼び出しに失敗しました。');
+  }
 }
 
 export const aiService = new AIService();
-export type { ChatRequest, ChatResponse, AvailableModels } from '../types/ai';
+export type { ChatRequest, ChatResponse, ChatSession } from '../api/rails/ai';

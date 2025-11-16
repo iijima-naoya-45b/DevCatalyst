@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { AriaChat } from "./AriaChat";
-import { 
+import { useState } from 'react';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import { AriaChat } from './AriaChat';
+import {
   Sparkles,
   TrendingUp,
   Target,
@@ -26,9 +26,9 @@ import {
   LineChart,
   Activity,
   Briefcase,
-  Timer
-} from "lucide-react";
-import { LandingPageProps } from "./types";
+  Timer,
+} from 'lucide-react';
+import { LandingPageProps } from './types';
 
 export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
   const [showAriaDemo, setShowAriaDemo] = useState(false);
@@ -36,10 +36,10 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
 
   // ヒーローセクションの統計
   const heroStats = [
-    { value: "30%", label: "意思決定速度向上", icon: Clock },
-    { value: "2ヶ月", label: "事業立ち上げ期間短縮", icon: TrendingUp },
-    { value: "89%", label: "戦略成功確率", icon: Target },
-    { value: "24/7", label: "AIパートナー稼働", icon: Brain }
+    { value: '30%', label: '意思決定速度向上', icon: Clock },
+    { value: '2ヶ月', label: '事業立ち上げ期間短縮', icon: TrendingUp },
+    { value: '89%', label: '戦略成功確率', icon: Target },
+    { value: '24/7', label: 'AIパートナー稼働', icon: Brain },
   ];
 
   // 主要機能
@@ -48,21 +48,23 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
       id: 'ideation',
       title: 'アイデア壁打ち',
       subtitle: 'Interactive Brainstorming',
-      description: 'アリアとの対話を通じて、あなたのビジネスアイデアを体系化。マインドマップ自動生成で思考を可視化します。',
+      description:
+        'アリアとの対話を通じて、あなたのビジネスアイデアを体系化。マインドマップ自動生成で思考を可視化します。',
       icon: Lightbulb,
       color: 'gold-soft-gradient',
       demo: '「新しいSaaSアイデアがあるんですが...」\n→「市場性はいかがでしょうか？具体的な課題は？」\n→「では競合状況を分析しましょう」',
-      benefits: ['思考の整理', 'アイデア深掘り', '盲点の発見', '実現性評価']
+      benefits: ['思考の整理', 'アイデア深掘り', '盲点の発見', '実現性評価'],
     },
     {
       id: 'competitive',
       title: '競合分析',
       subtitle: 'AI-Powered Analysis',
-      description: '自動データ収集と分析により、詳細な競合レーダーチャートとレポートを生成。差別化ポイントを明確化します。',
+      description:
+        '自動データ収集と分析により、詳細な競合レーダーチャートとレポートを生成。差別化ポイントを明確化します。',
       icon: Target,
       color: 'from-bronze to-copper',
       demo: '「競合他社の動向が気になります」\n→「主要3社の詳細分析をお見せします」\n→「あなたの優位性はここです」',
-      benefits: ['市場ポジション把握', '差別化戦略', '価格戦略立案', '参入タイミング']
+      benefits: ['市場ポジション把握', '差別化戦略', '価格戦略立案', '参入タイミング'],
     },
     {
       id: 'planning',
@@ -72,8 +74,8 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
       icon: BarChart3,
       color: 'gold-soft-gradient',
       demo: '「事業計画を立てたいのですが」\n→「収益モデルから始めましょうか」\n→「3年後の予測をお見せします」',
-      benefits: ['収益予測', 'リスク分析', '資金計画', 'KPI設定']
-    }
+      benefits: ['収益予測', 'リスク分析', '資金計画', 'KPI設定'],
+    },
   ];
 
   // 導入ステップ
@@ -83,29 +85,29 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
       title: 'アカウント作成',
       description: 'メールまたはSNS認証で最短30秒',
       icon: Users,
-      time: '30秒'
+      time: '30秒',
     },
     {
       step: 2,
       title: 'プロフィール設定',
       description: 'あなたの事業領域をアリアに教える',
       icon: Briefcase,
-      time: '2分'
+      time: '2分',
     },
     {
       step: 3,
       title: 'アリアとの初回対話',
       description: '現在の課題や目標をヒアリング',
       icon: MessageSquare,
-      time: '3分'
+      time: '3分',
     },
     {
       step: 4,
       title: '戦略セッション開始',
       description: 'パーソナライズされた分析を体験',
       icon: Brain,
-      time: '即座に'
-    }
+      time: '即座に',
+    },
   ];
 
   // プラン
@@ -121,10 +123,10 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
         '基本的な競合分析（月3回まで）',
         'アイデア壁打ち（月3回まで）',
         '事業計画テンプレート',
-        'メールサポート'
+        'メールサポート',
       ],
       cta: '無料で始める',
-      popular: false
+      popular: false,
     },
     {
       id: 'pro',
@@ -138,11 +140,11 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
         '事業計画自動生成（無制限）',
         '財務シミュレーション',
         '優先サポート',
-        'データエクスポート'
+        'データエクスポート',
       ],
       cta: '14日間無料トライアル',
-      popular: true
-    }
+      popular: true,
+    },
   ];
 
   // 顧客事例
@@ -151,26 +153,29 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
       name: '田中 健一',
       title: 'スタートアップCEO',
       company: 'TechVenture Inc.',
-      content: '孤独な意思決定から解放されました。アリアとの対話で、データに基づく確信を持って戦略を進められるようになりました。',
+      content:
+        '孤独な意思決定から解放されました。アリアとの対話で、データに基づく確信を持って戦略を進められるようになりました。',
       result: '事業立ち上げ期間 2ヶ月短縮',
-      avatar: '/api/placeholder/64/64'
+      avatar: '/api/placeholder/64/64',
     },
     {
       name: '佐藤 美香',
       title: '事業責任者',
       company: 'Global Solutions Ltd.',
-      content: '複雑な市場分析が、アリアとの対話でこんなにシンプルに。競合への対策も明確になり、チーム全体の方向性が統一されました。',
+      content:
+        '複雑な市場分析が、アリアとの対話でこんなにシンプルに。競合への対策も明確になり、チーム全体の方向性が統一されました。',
       result: '意思決定速度 40%向上',
-      avatar: '/api/placeholder/64/64'
+      avatar: '/api/placeholder/64/64',
     },
     {
       name: '山田 一郎',
       title: '戦略コンサルタント',
       company: 'Strategy Partners',
-      content: 'クライアントへの提案品質が格段に向上。アリアの分析力は人間のコンサルタントの強力なパートナーです。',
+      content:
+        'クライアントへの提案品質が格段に向上。アリアの分析力は人間のコンサルタントの強力なパートナーです。',
       result: '提案成約率 35%向上',
-      avatar: '/api/placeholder/64/64'
-    }
+      avatar: '/api/placeholder/64/64',
+    },
   ];
 
   return (
@@ -180,7 +185,10 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
         {/* Background Effects */}
         <div className="absolute inset-0 gold-soft-gradient opacity-20 pointer-events-none" />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-bronze/4 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
+        <div
+          className="absolute bottom-0 right-1/4 w-64 h-64 bg-bronze/4 rounded-full blur-2xl animate-pulse"
+          style={{ animationDelay: '2s' }}
+        />
 
         <div className="container mx-auto text-center relative z-10">
           {/* Service Logo & Name */}
@@ -192,35 +200,29 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
               <h1 className="text-4xl md:text-5xl font-serif font-bold gold-soft-text">
                 devCatalist
               </h1>
-              <p className="gold-soft-text/70 text-sm tracking-wide">Powered by AI Strategy Partner "Aria"</p>
+              <p className="gold-soft-text/70 text-sm tracking-wide">
+                Powered by AI Strategy Partner &quot;Aria&quot;
+              </p>
             </div>
           </div>
 
           {/* Main Headline */}
           <div className="max-w-5xl mx-auto mb-12">
             <h2 className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight">
-              <span className="text-foreground">
-                戦略の
-              </span>
-              <span className="gold-soft-text">
-                孤独
-              </span>
-              <span className="text-foreground">
-                から、
-              </span>
+              <span className="text-foreground">戦略の</span>
+              <span className="gold-soft-text">孤独</span>
+              <span className="text-foreground">から、</span>
               <br />
-              <span className="gold-soft-text">
-                確信の対話
-              </span>
-              <span className="text-foreground">
-                へ。
-              </span>
+              <span className="gold-soft-text">確信の対話</span>
+              <span className="text-foreground">へ。</span>
             </h2>
 
             <div className="space-y-6">
               <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light">
-                78%の経営者が感じる「戦略立案の孤独」を解決。<br />
-                AIパートナー「<strong className="gold-soft-text">アリア</strong>」との対話で、データに基づく確信ある意思決定を実現。
+                78%の経営者が感じる「戦略立案の孤独」を解決。
+                <br />
+                AIパートナー「<strong className="gold-soft-text">アリア</strong>
+                」との対話で、データに基づく確信ある意思決定を実現。
               </p>
 
               <div className="flex items-center justify-center space-x-8 text-sm text-muted-foreground">
@@ -281,7 +283,9 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                   <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Icon className="w-6 h-6 gold-soft-text" />
                   </div>
-                  <div className="text-2xl md:text-3xl font-bold gold-soft-text mb-1">{stat.value}</div>
+                  <div className="text-2xl md:text-3xl font-bold gold-soft-text mb-1">
+                    {stat.value}
+                  </div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </div>
               );
@@ -295,9 +299,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
         <section className="py-20 px-4 border-t border-gold/20">
           <div className="container mx-auto">
             <div className="text-center mb-12">
-              <Badge className="bg-gold/10 gold-soft-text border-gold/30 mb-4">
-                LIVE DEMO
-              </Badge>
+              <Badge className="bg-gold/10 gold-soft-text border-gold/30 mb-4">LIVE DEMO</Badge>
               <h3 className="text-3xl md:text-4xl font-serif font-semibold mb-4">
                 パートナーAI「アリア」との戦略セッション
               </h3>
@@ -386,11 +388,16 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
             {mainFeatures.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div key={feature.id} className={`flex flex-col transition-all duration-500 ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 hover:scale-[1.02]`}>
+                <div
+                  key={feature.id}
+                  className={`flex flex-col transition-all duration-500 ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 hover:scale-[1.02]`}
+                >
                   {/* Feature Content */}
                   <div className="flex-1 space-y-6">
                     <div className="flex items-center space-x-4">
-                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center`}>
+                      <div
+                        className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center`}
+                      >
                         <Icon className="w-8 h-8 text-navy-deepest" />
                       </div>
                       <div>
@@ -422,7 +429,9 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                             <div className="w-6 h-6 bg-gold rounded-full flex items-center justify-center">
                               <Brain className="w-4 h-4 text-navy-deepest" />
                             </div>
-                            <span className="text-sm font-medium gold-soft-text">アリアとの対話例</span>
+                            <span className="text-sm font-medium gold-soft-text">
+                              アリアとの対話例
+                            </span>
                           </div>
                           <div className="text-sm whitespace-pre-line text-muted-foreground leading-relaxed font-mono">
                             {feature.demo}
@@ -485,9 +494,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
       <section className="py-20 px-4 bg-navy-dark/30">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-serif font-semibold mb-6">
-              あなたに最適なプランを選択
-            </h3>
+            <h3 className="text-4xl font-serif font-semibold mb-6">あなたに最適なプランを選択</h3>
             <p className="text-xl text-muted-foreground">
               無料プランで試して、本格的な戦略立案はプロフェッショナルプランで
             </p>
@@ -495,14 +502,18 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {plans.map((plan) => (
-              <Card key={plan.id} className={`
+              <Card
+                key={plan.id}
+                className={`
                 relative border transition-all duration-300 hover:shadow-2xl
-                ${plan.popular
-                  ? 'gold-soft-outline aria-gold-surface/40 scale-105'
-                  : 'border-gold/25 bg-navy-dark/40 hover:border-gold/40'
+                ${
+                  plan.popular
+                    ? 'gold-soft-outline aria-gold-surface/40 scale-105'
+                    : 'border-gold/25 bg-navy-dark/40 hover:border-gold/40'
                 }
                 backdrop-blur-md
-              `}>
+              `}
+              >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <Badge className="gold-soft-gradient text-aria-dark-soft px-6 py-2 shadow-sm">
@@ -533,10 +544,11 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
 
                   <Button
                     onClick={onStartTrial}
-                    className={`w-full h-12 ${plan.popular
+                    className={`w-full h-12 ${
+                      plan.popular
                         ? 'aria-gold-surface'
                         : 'bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light'
-                      }`}
+                    }`}
                   >
                     {plan.cta}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -562,7 +574,10 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md hover:shadow-xl hover:shadow-gold/10 transition-all duration-300">
+              <Card
+                key={index}
+                className="border border-gold/25 bg-navy-dark/40 backdrop-blur-md hover:shadow-xl hover:shadow-gold/10 transition-all duration-300"
+              >
                 <CardContent className="p-6 space-y-4">
                   <div className="flex items-center space-x-1 mb-4">
                     {[...Array(5)].map((_, i) => (
@@ -571,7 +586,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                   </div>
 
                   <p className="text-muted-foreground leading-relaxed">
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </p>
 
                   <div className="bg-gold/5 border border-gold/20 rounded-lg p-3">
@@ -604,9 +619,7 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
             <h3 className="text-4xl md:text-5xl font-serif font-bold">
               あなたの戦略パートナー「アリア」が
               <br />
-              <span className="gold-soft-text">
-                待っています
-              </span>
+              <span className="gold-soft-text">待っています</span>
             </h3>
 
             <p className="text-xl text-muted-foreground leading-relaxed">

@@ -1,12 +1,12 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "../../(feature)/common/ui/card";
-import { Button } from "../../(feature)/common/ui/button";
-import { Input } from "../../(feature)/common/ui/input";
-import { Textarea } from "../../(feature)/common/ui/textarea";
-import { Label } from "../../(feature)/common/ui/label";
-import { Separator } from "../../(feature)/common/ui/separator";
-import { Mail, Phone, MapPin, Shield, FileText, AlertTriangle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from '../../(feature)/common/ui/card';
+import { Button } from '../../(feature)/common/ui/button';
+import { Input } from '../../(feature)/common/ui/input';
+import { Textarea } from '../../(feature)/common/ui/textarea';
+import { Label } from '../../(feature)/common/ui/label';
+import { Separator } from '../../(feature)/common/ui/separator';
+import { Mail, Phone, MapPin, Shield, FileText, AlertTriangle } from 'lucide-react';
 
 export default function ContactPage() {
   return (
@@ -42,45 +42,51 @@ export default function ContactPage() {
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="gold-soft-text font-medium">お名前 *</Label>
-                    <Input 
-                      id="name" 
-                      placeholder="山田太郎" 
+                    <Label htmlFor="name" className="gold-soft-text font-medium">
+                      お名前 *
+                    </Label>
+                    <Input
+                      id="name"
+                      placeholder="山田太郎"
                       className="bg-navy-dark/80 border-gold/20 focus:border-gold/40"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="gold-soft-text font-medium">メールアドレス *</Label>
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      placeholder="example@email.com" 
+                    <Label htmlFor="email" className="gold-soft-text font-medium">
+                      メールアドレス *
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="example@email.com"
                       className="bg-navy-dark/80 border-gold/20 focus:border-gold/40"
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Label htmlFor="subject" className="gold-soft-text font-medium">件名 *</Label>
-                  <Input 
-                    id="subject" 
-                    placeholder="お問い合わせの件名" 
+                  <Label htmlFor="subject" className="gold-soft-text font-medium">
+                    件名 *
+                  </Label>
+                  <Input
+                    id="subject"
+                    placeholder="お問い合わせの件名"
                     className="bg-navy-dark/80 border-gold/20 focus:border-gold/40"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Label htmlFor="message" className="gold-soft-text font-medium">メッセージ *</Label>
-                  <Textarea 
-                    id="message" 
+                  <Label htmlFor="message" className="gold-soft-text font-medium">
+                    メッセージ *
+                  </Label>
+                  <Textarea
+                    id="message"
                     placeholder="お問い合わせ内容を詳しくお書きください"
                     className="min-h-[200px] bg-navy-dark/80 border-gold/20 focus:border-gold/40"
                   />
                 </div>
-                
-                <Button className="w-full aria-gold-surface font-semibold">
-                  送信する
-                </Button>
+
+                <Button className="w-full aria-gold-surface font-semibold">送信する</Button>
               </CardContent>
             </Card>
           </div>
@@ -125,9 +131,7 @@ export default function ContactPage() {
         {/* 法的情報セクション */}
         <div className="mt-20 space-y-12">
           <div className="text-center">
-            <h2 className="text-3xl font-serif font-bold mb-4 gold-soft-text">
-              法的情報・規約
-            </h2>
+            <h2 className="text-3xl font-serif font-bold mb-4 gold-soft-text">法的情報・規約</h2>
             <p className="text-muted-foreground">
               devCatalist〈Vertex〉の利用規約、プライバシーポリシー、法的責任について
             </p>
@@ -150,7 +154,10 @@ export default function ContactPage() {
                   <p>• サービス内容の変更・終了</p>
                   <p>• 知的財産権の取り扱い</p>
                 </div>
-                <Button variant="outline" className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors">
+                <Button
+                  variant="outline"
+                  className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors"
+                >
                   詳細を確認
                 </Button>
               </CardContent>
@@ -172,7 +179,10 @@ export default function ContactPage() {
                   <p>• ユーザーの権利と選択肢</p>
                   <p>• セキュリティ対策</p>
                 </div>
-                <Button variant="outline" className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors">
+                <Button
+                  variant="outline"
+                  className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors"
+                >
                   詳細を確認
                 </Button>
               </CardContent>
@@ -194,7 +204,10 @@ export default function ContactPage() {
                   <p>• 不適切な利用の禁止</p>
                   <p>• 技術的制限と保証</p>
                 </div>
-                <Button variant="outline" className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors">
+                <Button
+                  variant="outline"
+                  className="w-full gold-soft-outline text-aria-dark-soft hover:bg-[rgba(249,233,201,0.12)] transition-colors"
+                >
                   詳細を確認
                 </Button>
               </CardContent>
@@ -219,7 +232,7 @@ export default function ContactPage() {
                     AIの判断をそのまま採用することによる損失について、当社は一切の責任を負いません。
                   </p>
                 </div>
-                
+
                 <div className="gold-soft-tint border border-gold/20 rounded-lg p-4">
                   <h4 className="font-semibold gold-soft-text mb-2">データの正確性</h4>
                   <p className="text-sm">
@@ -228,7 +241,7 @@ export default function ContactPage() {
                     重要な意思決定の前には、必ず追加の調査・検証を行ってください。
                   </p>
                 </div>
-                
+
                 <div className="gold-soft-tint border border-gold/20 rounded-lg p-4">
                   <h4 className="font-semibold gold-soft-text mb-2">サービス利用の制限</h4>
                   <p className="text-sm">

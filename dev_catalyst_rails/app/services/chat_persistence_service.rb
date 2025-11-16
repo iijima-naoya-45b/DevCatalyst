@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChatPersistenceService
   def initialize(user:)
     @user = user
@@ -11,36 +13,36 @@ class ChatPersistenceService
   end
 
   def recordUserMessage(session:, messagePayload:, fullRequestPayload:)
-    return unless messagePayload.present?
+    return if messagePayload.blank?
 
     session.chat_messages.create!(
-      sender_role: 'user',
+      sender_role: "user",
       content: messagePayload[:content],
       metadata: buildUserMetadata(messagePayload, fullRequestPayload)
     )
-    session.touchLastInteracted!
+    session.touch_last_interacted!
   end
 
   def recordAiMessage(session:, responsePayload:, cacheHit:)
-    aiContent = responsePayload.fetch('message', nil) || responsePayload[:message]
+    aiContent = responsePayload.fetch("message", nil) || responsePayload[:message]
 
     if aiContent.blank?
       raise AiChatService::RequestError.new(
-        'ChatPersistenceService#recordAiMessage: AI response payload does not include message content.',
+        "ChatPersistenceService#recordAiMessage: AI response payload does not include message content.",
         httpStatus: :bad_gateway,
         details: responsePayload
       )
     end
 
     session.chat_messages.create!(
-      sender_role: 'aria',
+      sender_role: "aria",
       content: aiContent,
       metadata: buildAiMetadata(responsePayload, cacheHit),
       token_count: extractTokenCount(responsePayload),
       cached_response: cacheHit,
       responded_at: Time.current
     )
-    session.touchLastInteracted!
+    session.touch_last_interacted!
   end
 
   private
@@ -61,7 +63,7 @@ class ChatPersistenceService
         model: requestMetadata[:model],
         temperature: requestMetadata[:temperature],
         max_tokens: requestMetadata[:max_tokens],
-        created_via: 'chat_endpoint'
+        created_via: "chat_endpoint"
       }.compact,
       last_interacted_at: Time.current
     )
@@ -72,11 +74,9 @@ class ChatPersistenceService
     return metadataTitle if metadataTitle.present?
 
     fallbackTitle = requestMetadata[:messages]&.last&.dig(:content)
-    if fallbackTitle.present?
-      return fallbackTitle.to_s.truncate(80)
-    end
+    return fallbackTitle.to_s.truncate(80) if fallbackTitle.present?
 
-    '新しいチャット'
+    "新しいチャット"
   end
 
   def buildUserMetadata(messagePayload, fullRequestPayload)
@@ -90,19 +90,18 @@ class ChatPersistenceService
 
   def buildAiMetadata(responsePayload, cacheHit)
     {
-      provider: responsePayload.fetch('provider', nil) || responsePayload[:provider],
-      model: responsePayload.fetch('model', nil) || responsePayload[:model],
-      usage: responsePayload.fetch('usage', nil) || responsePayload[:usage],
+      provider: responsePayload.fetch("provider", nil) || responsePayload[:provider],
+      model: responsePayload.fetch("model", nil) || responsePayload[:model],
+      usage: responsePayload.fetch("usage", nil) || responsePayload[:usage],
       cache_hit: cacheHit,
       received_at: Time.current
     }.compact
   end
 
   def extractTokenCount(responsePayload)
-    usage = responsePayload.fetch('usage', nil) || responsePayload[:usage]
+    usage = responsePayload.fetch("usage", nil) || responsePayload[:usage]
     return nil unless usage.is_a?(Hash)
 
-    usage['total_tokens'] || usage[:total_tokens]
+    usage["total_tokens"] || usage[:total_tokens]
   end
 end
-

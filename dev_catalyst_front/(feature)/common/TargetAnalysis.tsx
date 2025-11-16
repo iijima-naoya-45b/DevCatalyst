@@ -1,150 +1,125 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { Progress } from "./ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { 
-  Target, 
-  Users, 
-  TrendingUp, 
-  MapPin, 
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { Progress } from './ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import {
+  Target,
+  Users,
+  TrendingUp,
+  MapPin,
   DollarSign,
   Smartphone,
   Laptop,
   ShoppingCart,
   Heart,
   Star,
-  ArrowRight
-} from "lucide-react";
+  ArrowRight,
+} from 'lucide-react';
 
 export function TargetAnalysis() {
   const [selectedSegment, setSelectedSegment] = useState<string | null>(null);
 
   const marketSegments = [
     {
-      id: "tech-entrepreneurs",
-      name: "テック起業家",
-      size: "2.3M人",
-      growth: "+15%",
+      id: 'tech-entrepreneurs',
+      name: 'テック起業家',
+      size: '2.3M人',
+      growth: '+15%',
       accessibility: 85,
       profitability: 90,
       competition: 70,
-      description: "技術系スタートアップを運営する起業家",
+      description: '技術系スタートアップを運営する起業家',
       demographics: {
-        age: "25-45歳",
-        income: "500万円-2000万円",
-        location: "東京、大阪、福岡",
-        devices: ["Laptop", "Smartphone", "Tablet"]
+        age: '25-45歳',
+        income: '500万円-2000万円',
+        location: '東京、大阪、福岡',
+        devices: ['Laptop', 'Smartphone', 'Tablet'],
       },
-      painPoints: [
-        "技術選定の悩み",
-        "市場検証の困難さ",
-        "リソース不足",
-        "競合分析の手間"
-      ],
-      channels: [
-        "LinkedIn",
-        "Twitter",
-        "技術系イベント",
-        "オンラインコミュニティ"
-      ]
+      painPoints: ['技術選定の悩み', '市場検証の困難さ', 'リソース不足', '競合分析の手間'],
+      channels: ['LinkedIn', 'Twitter', '技術系イベント', 'オンラインコミュニティ'],
     },
     {
-      id: "freelancers",
-      name: "フリーランサー",
-      size: "4.1M人",
-      growth: "+22%",
+      id: 'freelancers',
+      name: 'フリーランサー',
+      size: '4.1M人',
+      growth: '+22%',
       accessibility: 75,
       profitability: 60,
       competition: 85,
-      description: "独立して働くクリエイター・エンジニア",
+      description: '独立して働くクリエイター・エンジニア',
       demographics: {
-        age: "22-40歳",
-        income: "300万円-800万円",
-        location: "全国（リモート中心）",
-        devices: ["Laptop", "Smartphone"]
+        age: '22-40歳',
+        income: '300万円-800万円',
+        location: '全国（リモート中心）',
+        devices: ['Laptop', 'Smartphone'],
       },
       painPoints: [
-        "案件獲得の困難さ",
-        "価格設定の悩み",
-        "クライアント管理",
-        "スキルアップの時間不足"
+        '案件獲得の困難さ',
+        '価格設定の悩み',
+        'クライアント管理',
+        'スキルアップの時間不足',
       ],
-      channels: [
-        "クラウドソーシング",
-        "SNS",
-        "コワーキングスペース",
-        "オンラインセミナー"
-      ]
+      channels: ['クラウドソーシング', 'SNS', 'コワーキングスペース', 'オンラインセミナー'],
     },
     {
-      id: "small-business",
-      name: "中小企業経営者",
-      size: "1.8M人",
-      growth: "+8%",
+      id: 'small-business',
+      name: '中小企業経営者',
+      size: '1.8M人',
+      growth: '+8%',
       accessibility: 60,
       profitability: 95,
       competition: 50,
-      description: "従業員10-50名の中小企業を経営",
+      description: '従業員10-50名の中小企業を経営',
       demographics: {
-        age: "35-60歳",
-        income: "800万円-3000万円",
-        location: "全国の主要都市",
-        devices: ["Laptop", "Smartphone"]
+        age: '35-60歳',
+        income: '800万円-3000万円',
+        location: '全国の主要都市',
+        devices: ['Laptop', 'Smartphone'],
       },
-      painPoints: [
-        "デジタル化の遅れ",
-        "人材確保の困難",
-        "業務効率化の課題",
-        "新規顧客獲得"
-      ],
-      channels: [
-        "業界誌",
-        "商工会議所",
-        "展示会",
-        "紹介・口コミ"
-      ]
-    }
+      painPoints: ['デジタル化の遅れ', '人材確保の困難', '業務効率化の課題', '新規顧客獲得'],
+      channels: ['業界誌', '商工会議所', '展示会', '紹介・口コミ'],
+    },
   ];
 
   const targetingStrategies = [
     {
-      segment: "tech-entrepreneurs",
-      strategy: "テクノロジー特化戦略",
-      approach: "最新のAI技術を活用した高度な分析機能をアピール",
-      messaging: "「AIがあなたの技術的判断をサポート」",
-      timeline: "3ヶ月",
-      budget: "200万円"
+      segment: 'tech-entrepreneurs',
+      strategy: 'テクノロジー特化戦略',
+      approach: '最新のAI技術を活用した高度な分析機能をアピール',
+      messaging: '「AIがあなたの技術的判断をサポート」',
+      timeline: '3ヶ月',
+      budget: '200万円',
     },
     {
-      segment: "freelancers",
-      strategy: "コスト効率戦略",
-      approach: "手頃な価格で高品質なサービスを提供",
-      messaging: "「フリーランスの成功を加速する相棒」",
-      timeline: "6ヶ月",
-      budget: "100万円"
+      segment: 'freelancers',
+      strategy: 'コスト効率戦略',
+      approach: '手頃な価格で高品質なサービスを提供',
+      messaging: '「フリーランスの成功を加速する相棒」',
+      timeline: '6ヶ月',
+      budget: '100万円',
     },
     {
-      segment: "small-business",
-      strategy: "実用性重視戦略",
-      approach: "immediate ROIと使いやすさを重視",
-      messaging: "「すぐに使える実践的なビジネス戦略」",
-      timeline: "9ヶ月",
-      budget: "300万円"
-    }
+      segment: 'small-business',
+      strategy: '実用性重視戦略',
+      approach: 'immediate ROIと使いやすさを重視',
+      messaging: '「すぐに使える実践的なビジネス戦略」',
+      timeline: '9ヶ月',
+      budget: '300万円',
+    },
   ];
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 80) return 'text-green-600';
+    if (score >= 60) return 'text-yellow-600';
+    return 'text-red-600';
   };
 
   const getScoreBackground = (score: number) => {
-    if (score >= 80) return "bg-green-100";
-    if (score >= 60) return "bg-yellow-100";
-    return "bg-red-100";
+    if (score >= 80) return 'bg-green-100';
+    if (score >= 60) return 'bg-yellow-100';
+    return 'bg-red-100';
   };
 
   return (
@@ -166,7 +141,7 @@ export function TargetAnalysis() {
         <TabsContent value="segments" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {marketSegments.map((segment) => (
-              <Card 
+              <Card
                 key={segment.id}
                 className={`cursor-pointer transition-all hover:shadow-lg ${
                   selectedSegment === segment.id ? 'border-blue-500 shadow-lg' : ''
@@ -221,10 +196,10 @@ export function TargetAnalysis() {
                     <Progress value={segment.competition} className="h-2" />
                   </div>
 
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     className="w-full"
-                    variant={selectedSegment === segment.id ? "default" : "outline"}
+                    variant={selectedSegment === segment.id ? 'default' : 'outline'}
                   >
                     詳細分析
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -238,11 +213,9 @@ export function TargetAnalysis() {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  選択されたセグメント: {marketSegments.find(s => s.id === selectedSegment)?.name}
+                  選択されたセグメント: {marketSegments.find((s) => s.id === selectedSegment)?.name}
                 </CardTitle>
-                <CardDescription>
-                  このセグメントの詳細な分析結果
-                </CardDescription>
+                <CardDescription>このセグメントの詳細な分析結果</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -251,15 +224,27 @@ export function TargetAnalysis() {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span>年齢層:</span>
-                        <span>{marketSegments.find(s => s.id === selectedSegment)?.demographics.age}</span>
+                        <span>
+                          {marketSegments.find((s) => s.id === selectedSegment)?.demographics.age}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>年収:</span>
-                        <span>{marketSegments.find(s => s.id === selectedSegment)?.demographics.income}</span>
+                        <span>
+                          {
+                            marketSegments.find((s) => s.id === selectedSegment)?.demographics
+                              .income
+                          }
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>地域:</span>
-                        <span>{marketSegments.find(s => s.id === selectedSegment)?.demographics.location}</span>
+                        <span>
+                          {
+                            marketSegments.find((s) => s.id === selectedSegment)?.demographics
+                              .location
+                          }
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -267,12 +252,14 @@ export function TargetAnalysis() {
                   <div className="space-y-4">
                     <h4 className="font-medium">主要な課題・ニーズ</h4>
                     <ul className="space-y-2 text-sm">
-                      {marketSegments.find(s => s.id === selectedSegment)?.painPoints.map((point, index) => (
-                        <li key={index} className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-red-500 rounded-full" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
+                      {marketSegments
+                        .find((s) => s.id === selectedSegment)
+                        ?.painPoints.map((point, index) => (
+                          <li key={index} className="flex items-center space-x-2">
+                            <div className="w-2 h-2 bg-red-500 rounded-full" />
+                            <span>{point}</span>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 </div>
@@ -362,9 +349,7 @@ export function TargetAnalysis() {
           <Card>
             <CardHeader>
               <CardTitle>購買行動分析</CardTitle>
-              <CardDescription>
-                ターゲット顧客の意思決定プロセスと購買パターン
-              </CardDescription>
+              <CardDescription>ターゲット顧客の意思決定プロセスと購買パターン</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -404,12 +389,14 @@ export function TargetAnalysis() {
         <TabsContent value="strategy" className="space-y-6">
           <div className="space-y-6">
             {targetingStrategies.map((strategy, index) => {
-              const segment = marketSegments.find(s => s.id === strategy.segment);
+              const segment = marketSegments.find((s) => s.id === strategy.segment);
               return (
                 <Card key={strategy.segment}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
-                      <span>{segment?.name} - {strategy.strategy}</span>
+                      <span>
+                        {segment?.name} - {strategy.strategy}
+                      </span>
                       <Badge variant="outline">{strategy.timeline}</Badge>
                     </CardTitle>
                     <CardDescription>{strategy.approach}</CardDescription>

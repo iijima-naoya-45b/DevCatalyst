@@ -17,16 +17,12 @@ import {
   Lightbulb,
   Rocket,
 } from 'lucide-react';
-import {
-  RailsApiService,
-  aiService,
-  type AiChatMessage,
-  type ChatRequest,
-  type IdeaConfidenceLevel,
-} from '@/lib/services';
+import { aiService } from '@/lib/services';
+import type { ChatRequest, ChatMessage } from '@/lib/api/rails/ai';
 import { withAuthToken } from '@/lib/hooks/use-auth-token';
 
 type MessageRole = 'assistant' | 'user';
+type IdeaConfidenceLevel = 'high' | 'low';
 
 interface ConversationMessage {
   id: string;
@@ -37,10 +33,14 @@ interface ConversationMessage {
   isStreaming?: boolean;
 }
 
-const IDEA_PRESETS: Record<IdeaConfidenceLevel, { title: string; description: string; prompt: string }> = {
+const IDEA_PRESETS: Record<
+  IdeaConfidenceLevel,
+  { title: string; description: string; prompt: string }
+> = {
   high: {
     title: '確度が高いアイデア',
-    description: '既に課題・解決策・ターゲットがおおまかに定まっている状態で、実行フェーズの壁を整理したい。',
+    description:
+      '既に課題・解決策・ターゲットがおおまかに定まっている状態で、実行フェーズの壁を整理したい。',
     prompt:
       'こんにちは。アイデアの成熟度が高いと判断しました。最初に、現状整理として「想定ターゲット」と「提供価値」を教えてください。実施に向けて壁になっている論点もあれば併せて共有してください。',
   },
@@ -119,7 +119,7 @@ export default function NewProjectPage() {
     setSessionId(null);
   }, []);
 
-  const conversationPayload = useMemo<AiChatMessage[]>(() => {
+  const conversationPayload = useMemo<ChatMessage[]>(() => {
     return messages.map((message) => ({
       role: message.role === 'assistant' ? 'assistant' : 'user',
       content: message.content,
@@ -139,7 +139,7 @@ export default function NewProjectPage() {
       setIsLoading(true);
 
       try {
-        const payload: AiChatMessage[] = [
+        const payload: ChatMessage[] = [
           ...conversationPayload,
           {
             role: 'user',
@@ -154,88 +154,50 @@ export default function NewProjectPage() {
         let collectedContent = '';
 
         const streamPayload: ChatRequest = {
-          messages: payload.map((message) => ({
-            role: message.role,
-            content: message.content,
-          })),
+          messages: payload,
           provider: 'openai',
-          stream: true,
-          session_id: sessionId ?? undefined,
         };
 
         await withAuthToken(() =>
-          aiService.chatCompletionStream(
-            streamPayload,
-            (chunk) => {
+          aiService.chatCompletionStream(streamPayload, sessionId ?? undefined, {
+            onChunk: (chunk) => {
               collectedContent += chunk;
               setMessages((prev) =>
                 prev.map((message) =>
                   message.id === streamingMessageId
                     ? {
-                      ...message,
-                      content: message.content + chunk,
-                      timestamp: Date.now(),
-                    }
-                    : message,
-                ),
+                        ...message,
+                        content: message.content + chunk,
+                        timestamp: Date.now(),
+                      }
+                    : message
+                )
               );
             },
-            async (streamError) => {
+            onError: (streamError) => {
               setError(streamError || 'ストリーミング中にエラーが発生しました。');
-              // フォールバックとして通常のAPI呼び出しを試行
-              try {
-                const fallbackResponse = await RailsApiService.sendAiChatMessage({
-                  idea_confidence: ideaConfidence,
-                  messages: payload,
-                  session_id: sessionId ?? undefined,
-                });
-                const { data } = fallbackResponse;
-                if (data?.assistant_message) {
-                  collectedContent = data.assistant_message;
-                  setMessages((prev) =>
-                    prev.map((message) =>
-                      message.id === streamingMessageId
-                        ? {
-                          ...message,
-                          content: data.assistant_message,
-                          suggestions:
-                            ideaConfidence
-                              ? SUGGESTION_OPTIONS[ideaConfidence]
-                              : DEFAULT_SUGGESTIONS,
-                          isStreaming: false,
-                        }
-                        : message,
-                    ),
-                  );
-                  if (typeof data.session_id === 'number') {
-                    setSessionId(data.session_id);
-                  }
-                  setError(null);
-                  return;
-                }
-              } catch (fallbackError) {
-                console.error(fallbackError);
-                setMessages((prev) => prev.filter((message) => message.id !== streamingMessageId));
-              }
+              setMessages((prev) => prev.filter((message) => message.id !== streamingMessageId));
             },
-            () => {
+            onComplete: (newSessionId) => {
               setMessages((prev) =>
                 prev.map((message) =>
                   message.id === streamingMessageId
                     ? {
-                      ...message,
-                      content: collectedContent || message.content,
-                      isStreaming: false,
-                      suggestions:
-                        ideaConfidence
+                        ...message,
+                        content: collectedContent || message.content,
+                        isStreaming: false,
+                        suggestions: ideaConfidence
                           ? SUGGESTION_OPTIONS[ideaConfidence]
                           : DEFAULT_SUGGESTIONS,
-                    }
-                    : message,
-                ),
+                      }
+                    : message
+                )
               );
+              if (newSessionId) {
+                setSessionId(newSessionId);
+              }
             },
-          ),
+          })
         );
 
         if (!collectedContent) {
@@ -248,7 +210,7 @@ export default function NewProjectPage() {
         setIsLoading(false);
       }
     },
-    [conversationPayload, ideaConfidence, sessionId],
+    [conversationPayload, ideaConfidence, sessionId]
   );
 
   const handleSuggestionClick = useCallback(
@@ -257,7 +219,7 @@ export default function NewProjectPage() {
       setInputValue('');
       void sendMessage(suggestion);
     },
-    [isLoading, sendMessage],
+    [isLoading, sendMessage]
   );
 
   const [isComposing, setIsComposing] = useState(false);
@@ -300,7 +262,8 @@ export default function NewProjectPage() {
             </h1>
           </div>
           <p className="text-sm text-muted-foreground max-w-2xl">
-            いま抱えているアイデアの成熟度に近い方を選んでください。Aria が最適な問いを通して、次の一歩を一緒に整えます。
+            いま抱えているアイデアの成熟度に近い方を選んでください。Aria
+            が最適な問いを通して、次の一歩を一緒に整えます。
           </p>
         </div>
         {ideaConfidence && (
@@ -323,14 +286,20 @@ export default function NewProjectPage() {
               >
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    {confidence === 'high' ? <Rocket className="w-5 h-5 text-gold" /> : <Lightbulb className="w-5 h-5 text-gold" />}
+                    {confidence === 'high' ? (
+                      <Rocket className="w-5 h-5 text-gold" />
+                    ) : (
+                      <Lightbulb className="w-5 h-5 text-gold" />
+                    )}
                     {preset.title}
                   </CardTitle>
                   <CardDescription>{preset.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="rounded-xl bg-gold/10 border border-gold/20 p-4 text-sm text-slate-700 dark:text-gray-200 space-y-2">
-                    <p className="font-medium gold-soft-text">Aria からの最初の問いかけ（プレビュー）</p>
+                    <p className="font-medium gold-soft-text">
+                      Aria からの最初の問いかけ（プレビュー）
+                    </p>
                     <p className="leading-relaxed whitespace-pre-wrap">{preset.prompt}</p>
                   </div>
                 </CardContent>
@@ -361,16 +330,21 @@ export default function NewProjectPage() {
                           </Avatar>
                         ) : (
                           <Avatar className="w-10 h-10 ring-2 ring-blue-400/40">
-                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">You</AvatarFallback>
+                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                              You
+                            </AvatarFallback>
                           </Avatar>
                         )}
                       </div>
-                      <div className={`flex-1 ${message.role === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}>
+                      <div
+                        className={`flex-1 ${message.role === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'}`}
+                      >
                         <div
-                          className={`rounded-2xl px-4 py-3 leading-relaxed shadow-sm ${message.role === 'assistant'
-                            ? 'bg-gradient-to-br from-gold/15 via-gold/10 to-transparent border border-gold/30 text-slate-900 dark:text-gray-100'
-                            : 'bg-blue-600 text-white'
-                            }`}
+                          className={`rounded-2xl px-4 py-3 leading-relaxed shadow-sm ${
+                            message.role === 'assistant'
+                              ? 'bg-gradient-to-br from-gold/15 via-gold/10 to-transparent border border-gold/30 text-slate-900 dark:text-gray-100'
+                              : 'bg-blue-600 text-white'
+                          }`}
                         >
                           <p className="whitespace-pre-wrap">{message.content}</p>
                           {message.isStreaming && (
@@ -437,12 +411,17 @@ export default function NewProjectPage() {
                       size="sm"
                       className="absolute right-2 bottom-2 aria-gold-surface text-aria-dark-soft hover:shadow-lg hover:shadow-gold/30 transition-all duration-300"
                     >
-                      {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                      {isLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Send className="w-4 h-4" />
+                      )}
                     </Button>
                   </div>
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  Enter で送信、Shift + Enter で改行。いつでも「アイデアを選び直す」から別パターンの対話を始められます。
+                  Enter で送信、Shift + Enter
+                  で改行。いつでも「アイデアを選び直す」から別パターンの対話を始められます。
                 </div>
               </CardContent>
             </Card>
@@ -456,9 +435,7 @@ export default function NewProjectPage() {
                     <MessageCircle className="w-5 h-5 gold-soft-text" />
                     Aria の観点
                   </CardTitle>
-                  <CardDescription>
-                    {activePreset.description}
-                  </CardDescription>
+                  <CardDescription>{activePreset.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-slate-700 dark:text-gray-200">
                   <p className="font-medium gold-soft-text">対話の進め方</p>
@@ -476,8 +453,13 @@ export default function NewProjectPage() {
               </CardHeader>
               <CardContent className="space-y-3 text-xs text-muted-foreground">
                 <p>• 迷っている論点は正直に打ち明けると、Aria が深掘りしてくれます。</p>
-                <p>• 途中で観点を変えたくなったら、思いついたキーワードを伝えて問い直しましょう。</p>
-                <p>• プロジェクト化が決まったら、ダッシュボードの「プロジェクト作成」から正式に登録できます。</p>
+                <p>
+                  • 途中で観点を変えたくなったら、思いついたキーワードを伝えて問い直しましょう。
+                </p>
+                <p>
+                  •
+                  プロジェクト化が決まったら、ダッシュボードの「プロジェクト作成」から正式に登録できます。
+                </p>
               </CardContent>
             </Card>
           </div>

@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Progress } from "./ui/progress";
-import { 
-  TrendingUp, 
-  Users, 
-  Clock, 
-  Zap, 
-  Crown, 
-  Star, 
-  Eye, 
+import { useState, useEffect } from 'react';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import { Progress } from './ui/progress';
+import {
+  TrendingUp,
+  Users,
+  Clock,
+  Zap,
+  Crown,
+  Star,
+  Eye,
   Target,
   AlertTriangle,
   CheckCircle,
@@ -18,8 +18,8 @@ import {
   Sparkles,
   Timer,
   UserCheck,
-  Brain
-} from "lucide-react";
+  Brain,
+} from 'lucide-react';
 import {
   SocialProofProps,
   ScarcityProps,
@@ -27,11 +27,11 @@ import {
   LossAversionProps,
   AuthorityProps,
   EndowmentEffectProps,
-  FreshStartProps
-} from "./types";
+  FreshStartProps,
+} from './types';
 
 // Social Proof Component (社会的証明)
-export function SocialProof({ userCount, recentActions, className = "" }: SocialProofProps) {
+export function SocialProof({ userCount, recentActions, className = '' }: SocialProofProps) {
   const [currentActionIndex, setCurrentActionIndex] = useState(0);
 
   useEffect(() => {
@@ -48,7 +48,10 @@ export function SocialProof({ userCount, recentActions, className = "" }: Social
           <div className="flex items-center space-x-3">
             <div className="flex -space-x-2">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="w-8 h-8 bg-gradient-to-br from-gold to-bronze rounded-full border-2 border-card flex items-center justify-center">
+                <div
+                  key={i}
+                  className="w-8 h-8 bg-gradient-to-br from-gold to-bronze rounded-full border-2 border-card flex items-center justify-center"
+                >
                   <Users className="w-4 h-4 text-navy-deepest" />
                 </div>
               ))}
@@ -70,7 +73,7 @@ export function SocialProof({ userCount, recentActions, className = "" }: Social
 }
 
 // Scarcity Component (希少性)
-export function Scarcity({ limitedSpots, timeLeft, onAction, className = "" }: ScarcityProps) {
+export function Scarcity({ limitedSpots, timeLeft, onAction, className = '' }: ScarcityProps) {
   const [timeRemaining, setTimeRemaining] = useState(timeLeft || 0);
 
   useEffect(() => {
@@ -89,7 +92,7 @@ export function Scarcity({ limitedSpots, timeLeft, onAction, className = "" }: S
           <AlertTriangle className="w-5 h-5 text-orange-400" />
           <span className="font-semibold text-orange-400">限定オファー</span>
         </div>
-        
+
         {limitedSpots && (
           <div className="mb-3">
             <div className="flex items-center justify-between text-sm mb-2">
@@ -99,17 +102,19 @@ export function Scarcity({ limitedSpots, timeLeft, onAction, className = "" }: S
             <Progress value={(20 - limitedSpots) * 5} className="h-2" />
           </div>
         )}
-        
+
         {timeLeft && timeRemaining > 0 && (
           <div className="mb-3">
             <div className="flex items-center space-x-2 text-sm">
               <Timer className="w-4 h-4 text-orange-400" />
-              <span>あと{Math.floor(timeRemaining / 60)}時間{timeRemaining % 60}分で終了</span>
+              <span>
+                あと{Math.floor(timeRemaining / 60)}時間{timeRemaining % 60}分で終了
+              </span>
             </div>
           </div>
         )}
-        
-        <Button 
+
+        <Button
           onClick={onAction}
           className="w-full bg-gradient-to-r from-orange-400 to-red-500 text-white hover:from-orange-500 hover:to-red-600"
         >
@@ -122,7 +127,13 @@ export function Scarcity({ limitedSpots, timeLeft, onAction, className = "" }: S
 }
 
 // Anchoring Component (アンカリング効果)
-export function Anchoring({ originalPrice, currentPrice, savingPercentage, onSelect, className = "" }: AnchoringProps) {
+export function Anchoring({
+  originalPrice,
+  currentPrice,
+  savingPercentage,
+  onSelect,
+  className = '',
+}: AnchoringProps) {
   return (
     <Card className={`border-gold/30 bg-gold/5 backdrop-blur-sm relative ${className}`}>
       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -131,7 +142,7 @@ export function Anchoring({ originalPrice, currentPrice, savingPercentage, onSel
           {savingPercentage}% OFF
         </Badge>
       </div>
-      
+
       <CardContent className="p-6 pt-8">
         <div className="text-center space-y-4">
           <div className="space-y-2">
@@ -145,8 +156,8 @@ export function Anchoring({ originalPrice, currentPrice, savingPercentage, onSel
               年間 ¥{((originalPrice - currentPrice) * 12).toLocaleString()} お得
             </div>
           </div>
-          
-          <Button 
+
+          <Button
             onClick={onSelect}
             className="w-full bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light"
           >
@@ -159,7 +170,11 @@ export function Anchoring({ originalPrice, currentPrice, savingPercentage, onSel
 }
 
 // Loss Aversion Component (損失回避)
-export function LossAversion({ missedOpportunities, onPrevent, className = "" }: LossAversionProps) {
+export function LossAversion({
+  missedOpportunities,
+  onPrevent,
+  className = '',
+}: LossAversionProps) {
   return (
     <Card className={`border-red-400/30 bg-red-400/5 backdrop-blur-sm ${className}`}>
       <CardHeader>
@@ -177,8 +192,8 @@ export function LossAversion({ missedOpportunities, onPrevent, className = "" }:
             </div>
           ))}
         </div>
-        
-        <Button 
+
+        <Button
           onClick={onPrevent}
           className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700"
         >
@@ -191,31 +206,39 @@ export function LossAversion({ missedOpportunities, onPrevent, className = "" }:
 }
 
 // Authority Component (権威性)
-export function Authority({ expertName, credentials, recommendation, avatar, className = "" }: AuthorityProps) {
+export function Authority({
+  expertName,
+  credentials,
+  recommendation,
+  avatar,
+  className = '',
+}: AuthorityProps) {
   return (
     <Card className={`border-blue-400/30 bg-blue-400/5 backdrop-blur-sm ${className}`}>
       <CardContent className="p-6">
         <div className="flex items-start space-x-4">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
             {avatar ? (
-              <img src={avatar} alt={expertName} className="w-full h-full rounded-full object-cover" />
+              <img
+                src={avatar}
+                alt={expertName}
+                className="w-full h-full rounded-full object-cover"
+              />
             ) : (
               <UserCheck className="w-6 h-6 text-white" />
             )}
           </div>
-          
+
           <div className="flex-1 space-y-3">
             <div>
               <h4 className="font-semibold text-blue-400">{expertName}</h4>
-              <div className="text-xs text-muted-foreground">
-                {credentials.join(" • ")}
-              </div>
+              <div className="text-xs text-muted-foreground">{credentials.join(' • ')}</div>
             </div>
-            
+
             <blockquote className="text-sm italic text-muted-foreground border-l-2 border-blue-400/30 pl-4">
-              "{recommendation}"
+              &quot;{recommendation}&quot;
             </blockquote>
-            
+
             <div className="flex items-center space-x-1">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 gold-soft-text fill-current" />
@@ -228,7 +251,12 @@ export function Authority({ expertName, credentials, recommendation, avatar, cla
   );
 }
 
-export function EndowmentEffect({ currentProgress, nextMilestone, onContinue, className = "" }: EndowmentEffectProps) {
+export function EndowmentEffect({
+  currentProgress,
+  nextMilestone,
+  onContinue,
+  className = '',
+}: EndowmentEffectProps) {
   return (
     <Card className={`border-purple-400/30 bg-purple-400/5 backdrop-blur-sm ${className}`}>
       <CardContent className="p-6">
@@ -237,22 +265,22 @@ export function EndowmentEffect({ currentProgress, nextMilestone, onContinue, cl
             <span className="text-sm font-medium">あなたの進捗</span>
             <span className="text-sm text-purple-400">{currentProgress}%完了</span>
           </div>
-          
+
           <Progress value={currentProgress} className="h-3" />
-          
+
           <div className="flex items-center space-x-2">
             <Target className="w-4 h-4 text-purple-400" />
             <span className="text-sm">次のマイルストーン: {nextMilestone}</span>
           </div>
-          
-          <Button 
+
+          <Button
             onClick={onContinue}
             className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700"
           >
             <Sparkles className="w-4 h-4 mr-2" />
             続きを進める
           </Button>
-          
+
           <p className="text-xs text-muted-foreground text-center">
             ここまでの進捗を失いたくありませんよね？
           </p>
@@ -262,17 +290,17 @@ export function EndowmentEffect({ currentProgress, nextMilestone, onContinue, cl
   );
 }
 
-export function FreshStart({ opportunity, timeframe, onStart, className = "" }: FreshStartProps) {
+export function FreshStart({ opportunity, timeframe, onStart, className = '' }: FreshStartProps) {
   const today = new Date();
   const isMonday = today.getDay() === 1;
   const isFirstOfMonth = today.getDate() === 1;
   const isNewYear = today.getMonth() === 0 && isFirstOfMonth;
 
   const getTimingMessage = () => {
-    if (isNewYear) return "新年こそが新しいスタートの絶好のタイミング";
-    if (isFirstOfMonth) return "月初めは新しい習慣を始める最適な時期";
-    if (isMonday) return "月曜日は新しいことを始める理想的な日";
-    return "今この瞬間が変化の始まり";
+    if (isNewYear) return '新年こそが新しいスタートの絶好のタイミング';
+    if (isFirstOfMonth) return '月初めは新しい習慣を始める最適な時期';
+    if (isMonday) return '月曜日は新しいことを始める理想的な日';
+    return '今この瞬間が変化の始まり';
   };
 
   return (
@@ -283,14 +311,14 @@ export function FreshStart({ opportunity, timeframe, onStart, className = "" }: 
             <Zap className="w-5 h-5 text-green-400" />
             <span className="font-semibold text-green-400">新鮮スタート</span>
           </div>
-          
+
           <div className="space-y-2">
             <p className="text-sm">{getTimingMessage()}</p>
             <p className="text-lg font-semibold">{opportunity}</p>
             <p className="text-sm text-muted-foreground">{timeframe}で成果を実感</p>
           </div>
-          
-          <Button 
+
+          <Button
             onClick={onStart}
             className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600"
           >

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Header } from '../(feature)/layouts/Header';
@@ -46,27 +46,29 @@ export default function LandingPage() {
   return (
     <>
       {/* メインコンテンツ */}
-      <div className={`relative transition-opacity duration-500 ${isLoading || !isMounted ? 'opacity-0' : 'opacity-100'}`}>
+      <div
+        className={`relative transition-opacity duration-500 ${isLoading || !isMounted ? 'opacity-0' : 'opacity-100'}`}
+      >
         <Header />
-        <div className="min-h-screen bg-gradient-to-br from-gradient-start via-gradient-mid to-gradient-end dark:bg-gradient-to-br dark:from-navy-main dark:via-navy-secondary dark:to-navy-card">
+        <div className="min-h-screen bg-gradient-to-br from-gradient-start via-gradient-mid to-gradient-end dark:bg-gradient-to-br dark:from-navy-main dark:via-navy-secondary dark:to-navy-card overflow-x-hidden">
           {/* Hero - フック */}
           <HeroSection />
-          
+
           {/* WHY - なぜ存在するのか */}
           <WhySection />
-          
+
           {/* 損失回避（行動経済学：Loss Aversion） */}
           <LossAversionSection />
-          
+
           {/* HOW - どのように実現するか */}
           <DifferentiationSection />
           <HowToUseSection />
-          
+
           {/* WHAT - 何を提供するか */}
           <ServiceOverviewSection />
           <MainFeaturesSection />
           <AriaDemoSection showAriaDemo={true} />
-          
+
           {/* 行動喚起への準備 */}
           <OnboardingStepsSection />
           <FAQSection />
@@ -75,7 +77,7 @@ export default function LandingPage() {
         </div>
         <Footer />
       </div>
-      
+
       {/* ローディングアニメーション - 最後に配置して確実に最前面に */}
       {isMounted && isLoading && <SimpleAriaLoader onComplete={handleLoadingComplete} />}
     </>

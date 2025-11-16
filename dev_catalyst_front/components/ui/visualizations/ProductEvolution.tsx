@@ -38,13 +38,13 @@ const stages: StageCardData[] = [
 function StageCard({ stage, index }: StageCardProps) {
   const { ref, isInView } = useInView({ threshold: 0.1, triggerOnce: true });
   const Icon = stage.icon;
-  
+
   // 左上から右下への斜め順序: 0秒, 0.15秒, 0.15秒, 0.3秒
   const delays = [0, 0.15, 0.15, 0.3];
   const delay = delays[index];
 
   return (
-    <div 
+    <div
       ref={ref}
       className={`
         relative rounded-2xl border border-gold/20 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl transition-all duration-700
@@ -85,7 +85,9 @@ function StageCard({ stage, index }: StageCardProps) {
                   <Brain className="w-4 h-4 text-navy-deepest" />
                 </div>
                 <div className="bg-gold/10 rounded-lg px-3 py-2 text-left flex-1">
-                  <p className="text-xs text-gray-700 dark:text-gray-300">どんなユーザーの課題を？</p>
+                  <p className="text-xs text-gray-700 dark:text-gray-300">
+                    どんなユーザーの課題を？
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-2 justify-end">
@@ -116,14 +118,15 @@ function StageCard({ stage, index }: StageCardProps) {
                 ].map((item, idx) => {
                   const ItemIcon = item.icon;
                   return (
-                    <div
-                      key={idx}
-                      className="flex items-center gap-2 p-2 bg-gold/5 rounded-lg"
-                    >
+                    <div key={idx} className="flex items-center gap-2 p-2 bg-gold/5 rounded-lg">
                       <ItemIcon className="w-4 h-4 gold-soft-text flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{item.label}</p>
-                        <p className="text-xs font-bold text-gray-900 dark:text-white truncate">{item.value}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                          {item.label}
+                        </p>
+                        <p className="text-xs font-bold text-gray-900 dark:text-white truncate">
+                          {item.value}
+                        </p>
                       </div>
                     </div>
                   );
@@ -135,15 +138,21 @@ function StageCard({ stage, index }: StageCardProps) {
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">技術: Next.js + Supabase</p>
+                    <p className="text-xs text-gray-700 dark:text-gray-300">
+                      技術: Next.js + Supabase
+                    </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">競合優位性: 低価格 + LINE連携</p>
+                    <p className="text-xs text-gray-700 dark:text-gray-300">
+                      競合優位性: 低価格 + LINE連携
+                    </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">目標: 3ヶ月で100店舗導入</p>
+                    <p className="text-xs text-gray-700 dark:text-gray-300">
+                      目標: 3ヶ月で100店舗導入
+                    </p>
                   </div>
                 </div>
               </div>
@@ -168,9 +177,7 @@ function StageCard({ stage, index }: StageCardProps) {
                 </div>
               </div>
               <div className="text-center pt-2">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  ローンチ準備完了
-                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">ローンチ準備完了</p>
               </div>
             </div>
           )}
@@ -188,7 +195,7 @@ export function ProductEvolution() {
           <StageCard key={stage.id} stage={stage} index={index} />
         ))}
       </div>
-      
+
       {/* 最後のメッセージ */}
       <div className="text-center py-8 mt-8">
         <p className="text-sm text-gray-500 dark:text-gray-400">

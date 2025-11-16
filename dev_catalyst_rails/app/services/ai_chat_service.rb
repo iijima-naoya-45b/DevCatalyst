@@ -1,6 +1,8 @@
-require 'json'
-require 'faraday'
-require 'faraday/retry'
+# frozen_string_literal: true
+
+require "json"
+require "faraday"
+require "faraday/retry"
 
 class AiChatService
   class RequestError < StandardError
@@ -26,22 +28,21 @@ class AiChatService
     requestBody = buildRequestBody(payload)
     response = nil
 
-    response = faradayConnection.post('/api/ai/chat') do |request|
-      request.headers['Content-Type'] = 'application/json'
-      request.headers['Accept'] = 'application/json'
-      request.headers['Authorization'] = @authorizationToken if authorizationHeaderPresent?
+    response = faradayConnection.post("/api/ai/chat") do |request|
+      request.headers["Content-Type"] = "application/json"
+      request.headers["Accept"] = "application/json"
+      request.headers["Authorization"] = @authorizationToken if authorizationHeaderPresent?
       request.body = requestBody.to_json
     end
 
     parsedBody = parseJsonResponse(response.body)
 
-    if response.success?
-      return parsedBody
-    end
+    return parsedBody if response.success?
 
+    mapped_status = response.status.to_i >= 400 && response.status.to_i < 500 ? :internal_server_error : response.status
     raise RequestError.new(
       buildFailureMessage(response.status, parsedBody),
-      httpStatus: response.status,
+      httpStatus: mapped_status,
       details: {
         endpoint: "#{@fastApiBaseUrl}/api/ai/chat",
         requestBody: requestBody,
@@ -49,27 +50,27 @@ class AiChatService
         responseBody: parsedBody
       }
     )
-  rescue Faraday::TimeoutError => error
+  rescue Faraday::TimeoutError => e
     raise RequestError.new(
-      buildFaradayErrorMessage('timeout', error, requestBody),
+      buildFaradayErrorMessage("timeout", e, requestBody),
       httpStatus: :gateway_timeout,
-      details: buildCommonErrorDetails(error, requestBody)
+      details: buildCommonErrorDetails(e, requestBody)
     )
-  rescue Faraday::ConnectionFailed => error
+  rescue Faraday::ConnectionFailed => e
     raise RequestError.new(
-      buildFaradayErrorMessage('connection_failed', error, requestBody),
-      httpStatus: :service_unavailable,
-      details: buildCommonErrorDetails(error, requestBody)
+      buildFaradayErrorMessage("connection_failed", e, requestBody),
+      httpStatus: :internal_server_error,
+      details: buildCommonErrorDetails(e, requestBody)
     )
-  rescue Faraday::ClientError => error
+  rescue Faraday::ClientError => e
     raise RequestError.new(
-      buildFaradayErrorMessage('client_error', error, requestBody),
+      buildFaradayErrorMessage("client_error", e, requestBody),
       httpStatus: :bad_gateway,
-      details: buildCommonErrorDetails(error, requestBody)
+      details: buildCommonErrorDetails(e, requestBody)
     )
-  rescue JSON::ParserError => error
+  rescue JSON::ParserError => e
     raise RequestError.new(
-      buildParserErrorMessage(error, response&.body),
+      buildParserErrorMessage(e, response&.body),
       httpStatus: :bad_gateway,
       details: {
         endpoint: "#{@fastApiBaseUrl}/api/ai/chat",
@@ -82,21 +83,21 @@ class AiChatService
     requestBody = buildRequestBody(payload)
     response = nil
 
-    response = faradayConnection.post('/api/ai/chat/stream') do |request|
-      request.headers['Content-Type'] = 'application/json'
-      request.headers['Accept'] = 'text/plain'
-      request.headers['Authorization'] = @authorizationToken if authorizationHeaderPresent?
+    response = faradayConnection.post("/api/ai/chat/stream") do |request|
+      request.headers["Content-Type"] = "application/json"
+      request.headers["Accept"] = "text/event-stream"
+      request.headers["Authorization"] = @authorizationToken if authorizationHeaderPresent?
       request.body = requestBody.to_json
       request.options.timeout = 60
-      request.options.on_data = Proc.new do |chunk, _overall_received_bytes|
-        chunkHandler.call(chunk) if chunkHandler
+      request.options.on_data = proc do |chunk, _overall_received_bytes|
+        yield(chunk) if chunkHandler
       end
     end
 
     unless response.success?
       parsedBody = safeParseJson(response.body)
       raise RequestError.new(
-        buildFailureMessage(response.status, parsedBody, context: 'streamChatRequest'),
+        buildFailureMessage(response.status, parsedBody, context: "streamChatRequest"),
         httpStatus: response.status,
         details: {
           endpoint: "#{@fastApiBaseUrl}/api/ai/chat/stream",
@@ -108,23 +109,26 @@ class AiChatService
     end
 
     response
-  rescue Faraday::TimeoutError => error
+  rescue Faraday::TimeoutError => e
     raise RequestError.new(
-      buildFaradayErrorMessage('timeout', error, requestBody, endpoint: '/api/ai/chat/stream', context: 'streamChatRequest'),
+      buildFaradayErrorMessage("timeout", e, requestBody, endpoint: "/api/ai/chat/stream",
+                                                          context: "streamChatRequest"),
       httpStatus: :gateway_timeout,
-      details: buildCommonErrorDetails(error, requestBody, endpoint: '/api/ai/chat/stream')
+      details: buildCommonErrorDetails(e, requestBody, endpoint: "/api/ai/chat/stream")
     )
-  rescue Faraday::ConnectionFailed => error
+  rescue Faraday::ConnectionFailed => e
     raise RequestError.new(
-      buildFaradayErrorMessage('connection_failed', error, requestBody, endpoint: '/api/ai/chat/stream', context: 'streamChatRequest'),
-      httpStatus: :service_unavailable,
-      details: buildCommonErrorDetails(error, requestBody, endpoint: '/api/ai/chat/stream')
+      buildFaradayErrorMessage("connection_failed", e, requestBody, endpoint: "/api/ai/chat/stream",
+                                                                    context: "streamChatRequest"),
+      httpStatus: :internal_server_error,
+      details: buildCommonErrorDetails(e, requestBody, endpoint: "/api/ai/chat/stream")
     )
-  rescue Faraday::ClientError => error
+  rescue Faraday::ClientError => e
     raise RequestError.new(
-      buildFaradayErrorMessage('client_error', error, requestBody, endpoint: '/api/ai/chat/stream', context: 'streamChatRequest'),
+      buildFaradayErrorMessage("client_error", e, requestBody, endpoint: "/api/ai/chat/stream",
+                                                               context: "streamChatRequest"),
       httpStatus: :bad_gateway,
-      details: buildCommonErrorDetails(error, requestBody, endpoint: '/api/ai/chat/stream')
+      details: buildCommonErrorDetails(e, requestBody, endpoint: "/api/ai/chat/stream")
     )
   end
 
@@ -158,18 +162,18 @@ class AiChatService
     JSON.parse(body)
   end
 
-  def buildFailureMessage(status, parsedBody, context: 'sendChatRequest')
-    detail = parsedBody.is_a?(Hash) ? parsedBody['message'] || parsedBody['detail'] : parsedBody
+  def buildFailureMessage(status, parsedBody, context: "sendChatRequest")
+    detail = parsedBody.is_a?(Hash) ? parsedBody["message"] || parsedBody["detail"] : parsedBody
 
     "AiChatService##{context}: FastAPI returned non-success status #{status}. Detail: #{detail}."
   end
 
-  def buildFaradayErrorMessage(category, error, requestBody, endpoint: '/api/ai/chat', context: 'sendChatRequest')
-    "AiChatService##{context}: Faraday #{category} while requesting #{@fastApiBaseUrl}#{endpoint}. "\
-    "Error class: #{error.class}. Message: #{error.message}. Request body: #{requestBody}."
+  def buildFaradayErrorMessage(category, error, requestBody, endpoint: "/api/ai/chat", context: "sendChatRequest")
+    "AiChatService##{context}: Faraday #{category} while requesting #{@fastApiBaseUrl}#{endpoint}. " \
+      "Error class: #{error.class}. Message: #{error.message}. Request body: #{requestBody}."
   end
 
-  def buildCommonErrorDetails(error, requestBody, endpoint: '/api/ai/chat')
+  def buildCommonErrorDetails(error, requestBody, endpoint: "/api/ai/chat")
     {
       endpoint: "#{@fastApiBaseUrl}#{endpoint}",
       requestBody: requestBody,
@@ -179,8 +183,8 @@ class AiChatService
   end
 
   def buildParserErrorMessage(error, rawBody)
-    "AiChatService#sendChatRequest: JSON::ParserError encountered. Message: #{error.message}. "\
-    "Raw response body: #{rawBody}."
+    "AiChatService#sendChatRequest: JSON::ParserError encountered. Message: #{error.message}. " \
+      "Raw response body: #{rawBody}."
   end
 
   def safeParseJson(body)
@@ -191,4 +195,3 @@ class AiChatService
     body
   end
 end
-

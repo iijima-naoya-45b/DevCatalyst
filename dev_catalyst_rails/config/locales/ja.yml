@@ -1,0 +1,20 @@
+ja:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "メールアドレスを入力してください。安全にアカウントを管理するために必要です。"
+              taken: "このメールアドレスは既に使用されています"
+              invalid_email_format: "有効なメールアドレスを入力してください"
+            password:
+              too_short: "パスワードは8文字以上で設定してください"
+  errors:
+    messages:
+      invalid_email_format: "有効なメールアドレスを入力してください"
+      password_strength: "パスワードは大文字、小文字、数字を含む必要があります"
+      record_invalid: "検証エラーのため保存できませんでした"
+      weak_password: "パスワードは大文字、小文字、数字のうち3種類以上を含めてください"
+
+

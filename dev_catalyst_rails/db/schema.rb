@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_01_010100) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_16_000200) do
   create_table "chat_messages", force: :cascade do |t|
     t.integer "chat_session_id", null: false
     t.string "sender_role", null: false
@@ -39,6 +39,108 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_010100) do
     t.index ["user_id"], name: "index_chat_sessions_on_user_id"
   end
 
+  create_table "data_deletion_logs", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "email"
+    t.string "deletion_type", null: false
+    t.text "reason"
+    t.datetime "requested_at", null: false
+    t.datetime "completed_at"
+    t.string "status", null: false
+    t.json "deleted_data_summary"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["requested_at"], name: "index_data_deletion_logs_on_requested_at"
+    t.index ["status"], name: "index_data_deletion_logs_on_status"
+    t.index ["user_id"], name: "index_data_deletion_logs_on_user_id"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "name", default: "Test Project", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "psychological_profiles", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "cognitive_load_level", default: 5, null: false
+    t.integer "self_efficacy_score", default: 50, null: false
+    t.text "bias_awareness"
+    t.text "motivation_factors"
+    t.string "learning_style", limit: 50
+    t.integer "risk_tolerance", default: 5, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_psychological_profiles_on_user_id", unique: true
+  end
+
+  create_table "refresh_tokens", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "token", null: false
+    t.string "jti"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["jti"], name: "index_refresh_tokens_on_jti"
+    t.index ["token"], name: "index_refresh_tokens_on_token", unique: true
+    t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
+  end
+
+  create_table "spec_sections", force: :cascade do |t|
+    t.integer "spec_id", null: false
+    t.integer "section_type", null: false
+    t.string "title"
+    t.text "content"
+    t.integer "order", default: 0, null: false
+    t.boolean "is_completed", default: false, null: false
+    t.boolean "ai_generated", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["section_type"], name: "index_spec_sections_on_section_type"
+    t.index ["spec_id", "order"], name: "index_spec_sections_on_spec_id_and_order"
+    t.index ["spec_id"], name: "index_spec_sections_on_spec_id"
+  end
+
+  create_table "specs", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "chat_session_id"
+    t.string "title"
+    t.text "description"
+    t.integer "status", default: 0, null: false
+    t.integer "format", default: 1, null: false
+    t.text "content"
+    t.text "markdown_content"
+    t.string "notion_page_id"
+    t.integer "completion_percentage", default: 0
+    t.text "metadata"
+    t.datetime "exported_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_session_id"], name: "index_specs_on_chat_session_id"
+    t.index ["format"], name: "index_specs_on_format"
+    t.index ["status"], name: "index_specs_on_status"
+    t.index ["user_id", "created_at"], name: "index_specs_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_specs_on_user_id"
+  end
+
+  create_table "user_consents", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "consent_type", null: false
+    t.string "version", null: false
+    t.datetime "consented_at", null: false
+    t.datetime "revoked_at"
+    t.string "ip_address"
+    t.text "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["consent_type"], name: "index_user_consents_on_consent_type"
+    t.index ["consented_at"], name: "index_user_consents_on_consented_at"
+    t.index ["user_id", "consent_type"], name: "index_user_consents_on_user_id_and_consent_type", unique: true
+    t.index ["user_id"], name: "index_user_consents_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -57,6 +159,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_010100) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.boolean "data_processing_consent", default: false
+    t.boolean "marketing_consent", default: false
+    t.datetime "last_data_export_at"
+    t.index ["data_processing_consent"], name: "index_users_on_data_processing_consent"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -64,4 +172,11 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_010100) do
 
   add_foreign_key "chat_messages", "chat_sessions"
   add_foreign_key "chat_sessions", "users"
+  add_foreign_key "projects", "users"
+  add_foreign_key "psychological_profiles", "users"
+  add_foreign_key "refresh_tokens", "users"
+  add_foreign_key "spec_sections", "specs"
+  add_foreign_key "specs", "chat_sessions"
+  add_foreign_key "specs", "users"
+  add_foreign_key "user_consents", "users"
 end

@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Button } from "./ui/button";
-import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Switch } from "./ui/switch";
-import { Separator } from "./ui/separator";
-import { Progress } from "./ui/progress";
+import { useState } from 'react';
+import { Button } from './ui/button';
+import { Card, CardHeader, CardContent, CardDescription, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import { Switch } from './ui/switch';
+import { Separator } from './ui/separator';
+import { Progress } from './ui/progress';
 import {
   CreditCard,
   Crown,
@@ -20,8 +20,8 @@ import {
   Download,
   RefreshCw,
   Settings,
-  HelpCircle
-} from "lucide-react";
+  HelpCircle,
+} from 'lucide-react';
 
 export function PlanManagement() {
   const [currentPlan, setCurrentPlan] = useState('pro');
@@ -42,13 +42,13 @@ export function PlanManagement() {
         'ターゲット分析 月3回',
         '基本レポート出力',
         'メールサポート',
-        'データ保存期間 3ヶ月'
+        'データ保存期間 3ヶ月',
       ],
       limits: {
         aiAnalysis: 5,
         targetAnalysis: 3,
-        projects: 2
-      }
+        projects: 2,
+      },
     },
     {
       id: 'pro',
@@ -65,14 +65,14 @@ export function PlanManagement() {
         '優先サポート',
         'データ保存期間 1年',
         'API連携',
-        'チームメンバー追加 最大3名'
+        'チームメンバー追加 最大3名',
       ],
       limits: {
         aiAnalysis: -1, // unlimited
         targetAnalysis: -1,
-        projects: 10
+        projects: 10,
       },
-      recommended: true
+      recommended: true,
     },
     {
       id: 'enterprise',
@@ -89,22 +89,22 @@ export function PlanManagement() {
         'データ無期限保存',
         'SSO・セキュリティ強化',
         'カスタム統合',
-        'チームメンバー無制限'
+        'チームメンバー無制限',
       ],
       limits: {
         aiAnalysis: -1,
         targetAnalysis: -1,
-        projects: -1
-      }
-    }
+        projects: -1,
+      },
+    },
   ];
 
-  const currentPlanData = plans.find(p => p.id === currentPlan);
+  const currentPlanData = plans.find((p) => p.id === currentPlan);
 
   const usage = {
     aiAnalysis: { used: 3, limit: currentPlanData?.limits.aiAnalysis || 5 },
     targetAnalysis: { used: 1, limit: currentPlanData?.limits.targetAnalysis || 3 },
-    projects: { used: 2, limit: currentPlanData?.limits.projects || 2 }
+    projects: { used: 2, limit: currentPlanData?.limits.projects || 2 },
   };
 
   const getUsagePercentage = (used: number, limit: number) => {
@@ -144,8 +144,12 @@ export function PlanManagement() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${currentPlanData?.color} flex items-center justify-center`}>
-                {currentPlanData?.icon && <currentPlanData.icon className="w-6 h-6 text-navy-deepest" />}
+              <div
+                className={`w-12 h-12 rounded-xl bg-gradient-to-br ${currentPlanData?.color} flex items-center justify-center`}
+              >
+                {currentPlanData?.icon && (
+                  <currentPlanData.icon className="w-6 h-6 text-navy-deepest" />
+                )}
               </div>
               <div>
                 <CardTitle className="flex items-center space-x-2">
@@ -159,7 +163,12 @@ export function PlanManagement() {
             </div>
             <div className="text-right">
               <div className="text-2xl font-bold">
-                ¥{formatPrice(billingCycle === 'monthly' ? currentPlanData?.monthlyPrice || 0 : currentPlanData?.yearlyPrice || 0)}
+                ¥
+                {formatPrice(
+                  billingCycle === 'monthly'
+                    ? currentPlanData?.monthlyPrice || 0
+                    : currentPlanData?.yearlyPrice || 0
+                )}
               </div>
               <div className="text-sm text-muted-foreground">
                 /{billingCycle === 'monthly' ? '月' : '年'}
@@ -176,7 +185,8 @@ export function PlanManagement() {
                 <div className="flex justify-between text-sm">
                   <span>AI戦略分析</span>
                   <span className="gold-soft-text">
-                    {usage.aiAnalysis.used}/{usage.aiAnalysis.limit === -1 ? '無制限' : usage.aiAnalysis.limit}
+                    {usage.aiAnalysis.used}/
+                    {usage.aiAnalysis.limit === -1 ? '無制限' : usage.aiAnalysis.limit}
                   </span>
                 </div>
                 <Progress
@@ -188,7 +198,8 @@ export function PlanManagement() {
                 <div className="flex justify-between text-sm">
                   <span>ターゲット分析</span>
                   <span className="text-bronze">
-                    {usage.targetAnalysis.used}/{usage.targetAnalysis.limit === -1 ? '無制限' : usage.targetAnalysis.limit}
+                    {usage.targetAnalysis.used}/
+                    {usage.targetAnalysis.limit === -1 ? '無制限' : usage.targetAnalysis.limit}
                   </span>
                 </div>
                 <Progress
@@ -200,7 +211,8 @@ export function PlanManagement() {
                 <div className="flex justify-between text-sm">
                   <span>アクティブプロジェクト</span>
                   <span className="text-copper">
-                    {usage.projects.used}/{usage.projects.limit === -1 ? '無制限' : usage.projects.limit}
+                    {usage.projects.used}/
+                    {usage.projects.limit === -1 ? '無制限' : usage.projects.limit}
                   </span>
                 </div>
                 <Progress
@@ -214,12 +226,22 @@ export function PlanManagement() {
           {/* Billing Cycle Toggle */}
           <div className="flex items-center space-x-4 p-4 bg-gold/5 rounded-lg border border-gold/20">
             <div className="flex items-center space-x-2">
-              <span className={`transition-colors duration-200 ${billingCycle === 'monthly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>月額</span>
+              <span
+                className={`transition-colors duration-200 ${billingCycle === 'monthly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}
+              >
+                月額
+              </span>
               <Switch
                 checked={billingCycle === 'yearly'}
-                onCheckedChange={(checked: boolean) => setBillingCycle(checked ? 'yearly' : 'monthly')}
+                onCheckedChange={(checked: boolean) =>
+                  setBillingCycle(checked ? 'yearly' : 'monthly')
+                }
               />
-              <span className={`transition-colors duration-200 ${billingCycle === 'yearly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>年額</span>
+              <span
+                className={`transition-colors duration-200 ${billingCycle === 'yearly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}
+              >
+                年額
+              </span>
             </div>
             {billingCycle === 'yearly' && (
               <Badge variant="outline" className="border-gold gold-soft-text bg-gold/10">
@@ -256,14 +278,18 @@ export function PlanManagement() {
             const isCurrentPlan = plan.id === currentPlan;
 
             return (
-              <Card key={plan.id} className={`
+              <Card
+                key={plan.id}
+                className={`
                 relative border transition-all duration-300 hover:shadow-lg
-                ${isCurrentPlan
-                  ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent'
-                  : 'border-gold/25 bg-navy-dark/40 hover:border-gold/40'
+                ${
+                  isCurrentPlan
+                    ? 'border-gold shadow-xl shadow-gold/20 bg-gradient-to-br from-gold/10 to-transparent'
+                    : 'border-gold/25 bg-navy-dark/40 hover:border-gold/40'
                 }
                 backdrop-blur-md
-              `}>
+              `}
+              >
                 {plan.recommended && !isCurrentPlan && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                     <Badge className="bg-gradient-to-r from-gold to-bronze text-navy-deepest px-4 py-1">
@@ -273,14 +299,19 @@ export function PlanManagement() {
                 )}
 
                 <CardHeader className="text-center">
-                  <div className={`w-16 h-16 mx-auto rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center mb-4`}>
+                  <div
+                    className={`w-16 h-16 mx-auto rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center mb-4`}
+                  >
                     <Icon className="w-8 h-8 text-navy-deepest" />
                   </div>
                   <CardTitle className="text-xl font-serif">{plan.name}</CardTitle>
                   <CardDescription>{plan.description}</CardDescription>
                   <div className="space-y-2">
                     <div className="text-3xl font-bold">
-                      ¥{formatPrice(billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice)}
+                      ¥
+                      {formatPrice(
+                        billingCycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice
+                      )}
                     </div>
                     <div className="text-sm text-muted-foreground">
                       /{billingCycle === 'monthly' ? '月' : '年'}
@@ -301,12 +332,13 @@ export function PlanManagement() {
                   <Button
                     onClick={() => handleUpgrade(plan.id)}
                     disabled={isCurrentPlan}
-                    className={`w-full ${isCurrentPlan
-                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                      : plan.recommended
-                        ? 'bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light'
-                        : 'bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light'
-                      }`}
+                    className={`w-full ${
+                      isCurrentPlan
+                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                        : plan.recommended
+                          ? 'bg-gradient-to-r from-gold to-bronze text-navy-deepest hover:from-gold-light hover:to-bronze-light'
+                          : 'bg-gradient-to-r from-bronze to-copper text-navy-deepest hover:from-bronze-light hover:to-copper-light'
+                    }`}
                   >
                     {isCurrentPlan ? (
                       <>
@@ -315,7 +347,11 @@ export function PlanManagement() {
                       </>
                     ) : (
                       <>
-                        {currentPlan === 'starter' ? 'アップグレード' : plan.id === 'starter' ? 'ダウングレード' : 'プラン変更'}
+                        {currentPlan === 'starter'
+                          ? 'アップグレード'
+                          : plan.id === 'starter'
+                            ? 'ダウングレード'
+                            : 'プラン変更'}
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </>
                     )}
@@ -360,7 +396,9 @@ export function PlanManagement() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>請求額</span>
-                <span className="font-medium">¥{formatPrice(currentPlanData?.monthlyPrice || 0)}</span>
+                <span className="font-medium">
+                  ¥{formatPrice(currentPlanData?.monthlyPrice || 0)}
+                </span>
               </div>
             </div>
           </CardContent>
@@ -419,7 +457,8 @@ export function PlanManagement() {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => {                        setShowCancelDialog(false);
+                      onClick={() => {
+                        setShowCancelDialog(false);
                       }}
                     >
                       キャンセル実行
