@@ -14,9 +14,7 @@ class StreamChatUseCase
                 params || {}
               end
     # { chat: { ... } } 形式で渡ってくる場合にフラット化
-    if @params.is_a?(Hash) && @params[:chat].is_a?(Hash)
-      @params = @params[:chat].deep_symbolize_keys
-    end
+    @params = @params[:chat].deep_symbolize_keys if @params.is_a?(Hash) && @params[:chat].is_a?(Hash)
     @session_id = session_id
     @stream = stream
     @authorization_token = authorization_token

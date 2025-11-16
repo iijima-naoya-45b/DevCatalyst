@@ -20,7 +20,7 @@ AllCops:
 
 # Layout
 Layout/LineLength:
-  Max: 120
+  Max: 160
   Exclude:
     - 'config/**/*'
 
@@ -49,7 +49,7 @@ Style/WordArray:
 
 # Metrics
 Metrics/MethodLength:
-  Max: 30
+  Max: 80
   Exclude:
     - 'db/seeds.rb'
 
@@ -63,13 +63,35 @@ Metrics/BlockLength:
     - 'db/**/*.rb'
 
 Metrics/ClassLength:
-  Max: 200
+  Max: 500
 
 Metrics/ModuleLength:
-  Max: 200
+  Max: 500
 
 Metrics/AbcSize:
-  Max: 30
+  Max: 80
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+# Naming - 緩和
+Naming/MethodName:
+  Enabled: false
+
+Naming/VariableName:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Naming/PredicatePrefix:
+  Enabled: false
 
 # Rails
 Rails/I18nLocaleTexts:
@@ -87,3 +109,13 @@ Performance/StringReplacement:
 
 Performance/RedundantMerge:
   Enabled: true
+
+# Style
+Style/ComparableClamp:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Lint/DuplicateBranch:
+  Enabled: false

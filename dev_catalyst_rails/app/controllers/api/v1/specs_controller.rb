@@ -60,9 +60,7 @@ module Api
       # PATCH /api/v1/specs/:id
       def update
         if @spec.update(spec_params)
-          if @spec.saved_change_to_attribute?(:title) || @spec.spec_sections.any?(&:saved_changes?)
-            @spec.generate_markdown!
-          end
+          @spec.generate_markdown! if @spec.saved_change_to_attribute?(:title) || @spec.spec_sections.any?(&:saved_changes?)
           render json: success_response(serialize_spec(@spec))
         else
           render json: error_response(@spec.errors.full_messages.join(", ")), status: :unprocessable_entity

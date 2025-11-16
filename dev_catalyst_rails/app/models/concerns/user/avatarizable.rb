@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-module User::Avatarizable
-  extend ActiveSupport::Concern
+module User
+  module Avatarizable
+    extend ActiveSupport::Concern
 
     GRAVATAR_BASE_URL = "https://www.gravatar.com/avatar/"
     DEFAULT_AVATAR_SIZE = 200
@@ -44,4 +45,5 @@ module User::Avatarizable
     def using_oauth_avatar?
       has_custom_avatar? && provider.present?
     end
+  end
 end
