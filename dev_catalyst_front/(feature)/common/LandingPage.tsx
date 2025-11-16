@@ -585,7 +585,9 @@ export function LandingPage({ onStartTrial, onShowDemo }: LandingPageProps) {
                     ))}
                   </div>
 
-                  <p className="text-muted-foreground leading-relaxed">&quot;{testimonial.content}&quot;</p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    &quot;{testimonial.content}&quot;
+                  </p>
 
                   <div className="bg-gold/5 border border-gold/20 rounded-lg p-3">
                     <div className="text-sm font-medium gold-soft-text">{testimonial.result}</div>

@@ -84,7 +84,7 @@ class AiChatService
 
     response = faradayConnection.post("/api/ai/chat/stream") do |request|
       request.headers["Content-Type"] = "application/json"
-      request.headers["Accept"] = "text/plain"
+      request.headers["Accept"] = "text/event-stream"
       request.headers["Authorization"] = @authorizationToken if authorizationHeaderPresent?
       request.body = requestBody.to_json
       request.options.timeout = 60

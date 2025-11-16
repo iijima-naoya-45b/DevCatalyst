@@ -25,6 +25,10 @@ class ChatMessage(BaseModel):
             raise ValueError("Content cannot be empty or whitespace only")
         return v.strip()
 
+    class Config:
+        use_enum_values = True
+        anystr_strip_whitespace = True
+        extra = "ignore"
 
 class ChatRequest(BaseModel):
     messages: List[ChatMessage] = Field(..., min_items=1, max_items=100)
@@ -40,9 +44,9 @@ class ChatRequest(BaseModel):
         if not v:
             raise ValueError("Messages list cannot be empty")
 
-        # 最後のメッセージはuserである必要がある
-        if v[-1].role != ChatRole.USER:
-            raise ValueError("Last message must be from user")
+        # 最後のメッセージは user または assistant を許可（フロント側の実装差異に対応）
+        if v[-1].role not in (ChatRole.USER, ChatRole.ASSISTANT):
+            raise ValueError("Last message must be from user or assistant")
 
         return v
 
@@ -57,10 +61,16 @@ class ChatRequest(BaseModel):
             AIProvider.ANTHROPIC: ["claude-3-haiku-20240307", "claude-3-sonnet-20240229"],
         }
 
+        # 以前のクライアント互換性のため、未知モデルはエラーにせず None にフォールバック
         if provider and v not in valid_models.get(provider, []):
-            raise ValueError(f"Invalid model {v} for provider {provider}")
+            return None
 
         return v
+
+    class Config:
+        use_enum_values = True
+        anystr_strip_whitespace = True
+        extra = "ignore"
 
 
 class ChatResponse(BaseModel):

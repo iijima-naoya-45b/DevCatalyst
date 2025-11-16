@@ -40,23 +40,32 @@ module Api
         end
 
         def chat_params
-          params.expect(
-            chat: [:provider,
-                   :model,
-                   :temperature,
-                   :max_tokens,
-                   { messages: [:role, :content],
-                     metadata: {} }]
+          # 受け取り形式の揺れを吸収してフラット化して返す
+          # 許容する入力:
+          # - { chat: { ... } }
+          # - { stream: { chat: { ... } } }
+          # - { messages: [...], provider: "..." } (フラット)
+          raw = if params[:stream].is_a?(ActionController::Parameters) && params[:stream][:chat].present?
+                  params[:stream][:chat]
+                elsif params[:chat].present?
+                  params[:chat]
+                else
+                  params
+                end
+
+          permitted = raw.permit(
+            :provider, :model, :temperature, :max_tokens,
+            messages: [:role, :content],
+            metadata: {}
           )
-        rescue ActionController::ParameterMissing
-          # messagesが直接渡される場合の対応
+
           {
-            messages: params.permit(messages: [:role, :content])[:messages],
-            provider: params[:provider],
-            model: params[:model],
-            temperature: params[:temperature],
-            max_tokens: params[:max_tokens],
-            metadata: params[:metadata] || {}
+            messages: permitted[:messages],
+            provider: permitted[:provider],
+            model: permitted[:model],
+            temperature: permitted[:temperature],
+            max_tokens: permitted[:max_tokens],
+            metadata: permitted[:metadata] || {}
           }
         end
       end

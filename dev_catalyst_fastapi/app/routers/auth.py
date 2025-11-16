@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
 from ..auth import AuthResponse, auth_service, get_current_user, get_optional_user
-from ..models import AuthTokens, User
+from ..models import AuthResponse
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 

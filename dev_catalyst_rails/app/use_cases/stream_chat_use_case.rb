@@ -5,7 +5,18 @@ class StreamChatUseCase
 
   def initialize(user:, params:, stream:, session_id: nil, authorization_token: nil)
     @user = user
-    @params = params
+    # パラメータのキーをシンボル化して正規化（messages が欠落しないようにする）
+    @params = if params.respond_to?(:to_unsafe_h)
+                params.to_unsafe_h.deep_symbolize_keys
+              elsif params.respond_to?(:to_h)
+                params.to_h.deep_symbolize_keys
+              else
+                params || {}
+              end
+    # { chat: { ... } } 形式で渡ってくる場合にフラット化
+    if @params.is_a?(Hash) && @params[:chat].is_a?(Hash)
+      @params = @params[:chat].deep_symbolize_keys
+    end
     @session_id = session_id
     @stream = stream
     @authorization_token = authorization_token

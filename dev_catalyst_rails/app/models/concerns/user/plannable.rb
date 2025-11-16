@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-module User
-  module Plannable
-    extend ActiveSupport::Concern
+module User::Plannable
+  extend ActiveSupport::Concern
 
     # プラン定義
     PLANS = {
@@ -128,5 +127,4 @@ module User
 
       new_plan_index && new_plan_index > current_plan_index
     end
-  end
 end

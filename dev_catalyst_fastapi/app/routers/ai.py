@@ -1,6 +1,6 @@
 import json
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
 from fastapi.responses import StreamingResponse
 
 from ..ai_service import ai_service
@@ -11,16 +11,41 @@ from ..utils.plan_checker import check_ai_access, check_plan_access
 router = APIRouter(prefix="/ai", tags=["AI"])
 
 
+def _normalize_chat_payload(payload: dict) -> dict:
+    """
+    受け取りボディが以下のいずれでも正規化して返す:
+    - {"messages": [...], "provider": "...", ...}  (フラット)
+    - {"chat": {...}}                              (ラップ)
+    - {"stream": {"chat": {...}}}                  (二重ラップ)
+    """
+    if not isinstance(payload, dict):
+        return {}
+    # 二重ラップ優先で展開
+    if "stream" in payload and isinstance(payload["stream"], dict):
+        inner = payload["stream"]
+        if "chat" in inner and isinstance(inner["chat"], dict):
+            return inner["chat"]
+    # 単ラップ
+    if "chat" in payload and isinstance(payload["chat"], dict):
+        return payload["chat"]
+    # フラット
+    return payload
+
+
 @router.post("/chat", response_model=ChatResponse)
 async def chat_completion(
-    request: ChatRequest, current_user: AuthResponse = Depends(get_current_user)
+    payload: dict = Body(...),
+    current_user: AuthResponse = Depends(get_current_user),
 ):
     """AI チャット補完"""
     try:
-        if not check_ai_access(current_user.user.plan, request.provider.value):
+        normalized = _normalize_chat_payload(payload)
+        request = ChatRequest(**normalized)
+        provider_key = request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        if not check_ai_access(current_user.user.plan, provider_key):
             raise HTTPException(
                 status_code=403,
-                detail=f"Your plan ({current_user.user.plan}) does not support {request.provider.value} AI provider",
+                detail=f"Your plan ({current_user.user.plan}) does not support {provider_key} AI provider",
             )
 
         response = await ai_service.chat_completion(request)
@@ -34,14 +59,18 @@ async def chat_completion(
 
 @router.post("/chat/stream")
 async def chat_completion_stream(
-    request: ChatRequest, current_user: AuthResponse = Depends(get_current_user)
+    payload: dict = Body(...),
+    current_user: AuthResponse = Depends(get_current_user),
 ):
     """AI チャット補完（ストリーミング）"""
     try:
-        if not check_ai_access(current_user.user.plan, request.provider.value):
+        normalized = _normalize_chat_payload(payload)
+        request = ChatRequest(**normalized)
+        provider_key = request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        if not check_ai_access(current_user.user.plan, provider_key):
             raise HTTPException(
                 status_code=403,
-                detail=f"Your plan ({current_user.user.plan}) does not support {request.provider.value} AI provider",
+                detail=f"Your plan ({current_user.user.plan}) does not support {provider_key} AI provider",
             )
 
         request.stream = True
@@ -57,7 +86,7 @@ async def chat_completion_stream(
 
         return StreamingResponse(
             generate(),
-            media_type="text/plain",
+            media_type="text/event-stream",
             headers={
                 "Cache-Control": "no-cache",
                 "Connection": "keep-alive",

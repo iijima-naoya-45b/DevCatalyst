@@ -11,9 +11,9 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     # 開発環境 - 環境変数から取得
     frontend_url = ENV["FRONTEND_URL"] || "http://localhost:3000"
-    # 127.0.0.1版も生成
-    frontend_127 = frontend_url.gsub("localhost", "127.0.0.1")
-    origins frontend_url, frontend_127
+    # 127.0.0.1 版の URL も生成（変数名は数字付きでもスネークケース準拠に）
+    frontend127 = frontend_url.gsub("localhost", "127.0.0.1")
+    origins frontend_url, frontend127
 
     resource "*",
              headers: :any,

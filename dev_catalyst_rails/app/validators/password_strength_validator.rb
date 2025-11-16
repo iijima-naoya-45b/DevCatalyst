@@ -4,6 +4,8 @@ class PasswordStrengthValidator < ActiveModel::EachValidator
   MIN_LENGTH = 8
   MAX_LENGTH = 128
 
+  # Complexity justified: validation covers length, character classes, and common-password checks.
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
   def validate_each(record, attribute, value)
     return if value.blank?
 
@@ -47,4 +49,5 @@ class PasswordStrengthValidator < ActiveModel::EachValidator
 
     common_passwords.include?(password.downcase)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
 end

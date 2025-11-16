@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+export const dynamic = 'force-dynamic';
+
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,7 +22,7 @@ import { specService, type Spec, type SpecSection } from '@/lib/services/spec-se
 import { useAuth } from '@/contexts/auth-context';
 import ReactMarkdown from 'react-markdown';
 
-export default function NewSpecPage() {
+function NewSpecContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
@@ -643,5 +645,19 @@ export default function NewSpecPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function NewSpecPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto p-6 max-w-7xl">
+          <div className="text-center text-sm text-gray-500">読み込み中...</div>
+        </div>
+      }
+    >
+      <NewSpecContent />
+    </Suspense>
   );
 }

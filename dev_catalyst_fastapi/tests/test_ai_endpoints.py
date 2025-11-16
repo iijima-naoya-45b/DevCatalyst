@@ -1,9 +1,7 @@
-import pytest
 from fastapi.testclient import TestClient
 
-from app.models import AIProvider, ChatMessage, ChatRequest, ChatResponse, ChatRole
+from app.models import ChatResponse
 from app.routers import ai as ai_router
-from main import app
 
 
 def _chat_payload(provider="openai"):

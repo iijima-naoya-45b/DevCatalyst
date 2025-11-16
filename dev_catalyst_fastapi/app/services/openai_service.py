@@ -18,7 +18,10 @@ class OpenAIService:
             raise ValueError("OpenAI API key is not configured")
 
         model = request.model or "gpt-3.5-turbo"
-        messages = [{"role": msg.role.value, "content": msg.content} for msg in request.messages]
+        messages = [
+            {"role": (msg.role.value if hasattr(msg.role, "value") else str(msg.role)), "content": msg.content}
+            for msg in request.messages
+        ]
 
         try:
             response = await self.client.chat.completions.create(
@@ -40,6 +43,29 @@ class OpenAIService:
                 },
             )
         except Exception as e:
+            # モデル関連エラー時のフォールバック（以前の互換用）
+            if model != "gpt-3.5-turbo":
+                try:
+                    fallback_model = "gpt-3.5-turbo"
+                    response = await self.client.chat.completions.create(
+                        model=fallback_model,
+                        messages=messages,
+                        temperature=request.temperature,
+                        max_tokens=request.max_tokens,
+                        stream=False,
+                    )
+                    return ChatResponse(
+                        message=response.choices[0].message.content,
+                        provider="openai",
+                        model=fallback_model,
+                        usage={
+                            "prompt_tokens": response.usage.prompt_tokens,
+                            "completion_tokens": response.usage.completion_tokens,
+                            "total_tokens": response.usage.total_tokens,
+                        },
+                    )
+                except Exception:
+                    pass
             raise ValueError(f"OpenAI API error: {str(e)}")
 
     async def chat_completion_stream(self, request: ChatRequest) -> AsyncGenerator[str, None]:
@@ -48,7 +74,10 @@ class OpenAIService:
             raise ValueError("OpenAI API key is not configured")
 
         model = request.model or "gpt-3.5-turbo"
-        messages = [{"role": msg.role.value, "content": msg.content} for msg in request.messages]
+        messages = [
+            {"role": (msg.role.value if hasattr(msg.role, "value") else str(msg.role)), "content": msg.content}
+            for msg in request.messages
+        ]
 
         try:
             stream = await self.client.chat.completions.create(
@@ -63,4 +92,21 @@ class OpenAIService:
                 if chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
         except Exception as e:
+            # モデル関連エラー時のフォールバック（ストリーミング）
+            if model != "gpt-3.5-turbo":
+                try:
+                    fallback_model = "gpt-3.5-turbo"
+                    stream = await self.client.chat.completions.create(
+                        model=fallback_model,
+                        messages=messages,
+                        temperature=request.temperature,
+                        max_tokens=request.max_tokens,
+                        stream=True,
+                    )
+                    async for chunk in stream:
+                        if chunk.choices[0].delta.content:
+                            yield chunk.choices[0].delta.content
+                    return
+                except Exception:
+                    pass
             raise ValueError(f"OpenAI API error: {str(e)}")

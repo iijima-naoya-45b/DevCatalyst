@@ -12,23 +12,25 @@ class AIService:
 
     async def chat_completion(self, request: ChatRequest) -> ChatResponse:
         """AI チャット補完"""
-        if request.provider == AIProvider.OPENAI:
+        provider_key = request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        if provider_key == AIProvider.OPENAI.value:
             return await self.openai_service.chat_completion(request)
-        elif request.provider == AIProvider.ANTHROPIC:
+        elif provider_key == AIProvider.ANTHROPIC.value:
             return await self.anthropic_service.chat_completion(request)
         else:
-            raise ValueError(f"Unsupported AI provider: {request.provider}")
+            raise ValueError(f"Unsupported AI provider: {provider_key}")
 
     async def chat_completion_stream(self, request: ChatRequest) -> AsyncGenerator[str, None]:
         """AI チャット補完（ストリーミング）"""
-        if request.provider == AIProvider.OPENAI:
+        provider_key = request.provider.value if hasattr(request.provider, "value") else str(request.provider)
+        if provider_key == AIProvider.OPENAI.value:
             async for chunk in self.openai_service.chat_completion_stream(request):
                 yield chunk
-        elif request.provider == AIProvider.ANTHROPIC:
+        elif provider_key == AIProvider.ANTHROPIC.value:
             async for chunk in self.anthropic_service.chat_completion_stream(request):
                 yield chunk
         else:
-            raise ValueError(f"Unsupported AI provider: {request.provider}")
+            raise ValueError(f"Unsupported AI provider: {provider_key}")
 
 
 ai_service = AIService()
