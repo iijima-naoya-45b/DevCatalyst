@@ -1,11 +1,18 @@
-import anthropic
 from typing import AsyncGenerator
+
+import anthropic
+
 from ..config import settings
 from ..models import ChatRequest, ChatResponse
 
+
 class AnthropicService:
     def __init__(self):
-        self.client = anthropic.AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY) if settings.ANTHROPIC_API_KEY else None
+        self.client = (
+            anthropic.AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
+            if settings.ANTHROPIC_API_KEY
+            else None
+        )
 
     async def chat_completion(self, request: ChatRequest) -> ChatResponse:
         """Anthropic チャット補完"""
@@ -21,7 +28,7 @@ class AnthropicService:
                 max_tokens=request.max_tokens or 1000,
                 temperature=request.temperature,
                 system=system_message,
-                messages=messages
+                messages=messages,
             )
 
             return ChatResponse(
@@ -31,8 +38,8 @@ class AnthropicService:
                 usage={
                     "input_tokens": response.usage.input_tokens,
                     "output_tokens": response.usage.output_tokens,
-                    "total_tokens": response.usage.input_tokens + response.usage.output_tokens
-                }
+                    "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
+                },
             )
         except Exception as e:
             raise ValueError(f"Anthropic API error: {str(e)}")
@@ -51,7 +58,7 @@ class AnthropicService:
                 max_tokens=request.max_tokens or 1000,
                 temperature=request.temperature,
                 system=system_message,
-                messages=messages
+                messages=messages,
             ) as stream:
                 async for text in stream.text_stream:
                     yield text
@@ -62,14 +69,11 @@ class AnthropicService:
         """Anthropic用にメッセージを準備（systemメッセージを分離）"""
         system_message = None
         messages = []
-        
+
         for msg in request.messages:
             if msg.role.value == "system":
                 system_message = msg.content
             else:
-                messages.append({
-                    "role": msg.role.value,
-                    "content": msg.content
-                })
-        
+                messages.append({"role": msg.role.value, "content": msg.content})
+
         return system_message, messages

@@ -25,5 +25,3 @@ describe('Header mobile menu icon toggle', () => {
     expect(document.querySelector('svg')).toBeInTheDocument();
   });
 });
-
-

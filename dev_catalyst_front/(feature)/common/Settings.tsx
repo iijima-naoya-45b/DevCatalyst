@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Textarea } from "./ui/textarea";
-import { Switch } from "./ui/switch";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { Badge } from "./ui/badge";
-import { 
-  Settings as SettingsIcon, 
-  User, 
-  Bell, 
-  Shield, 
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+import { Switch } from './ui/switch';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Badge } from './ui/badge';
+import {
+  Settings as SettingsIcon,
+  User,
+  Bell,
+  Shield,
   CreditCard,
   Download,
   Trash2,
@@ -25,53 +25,54 @@ import {
   Crown,
   ArrowRight,
   MessageSquare,
-  Sparkles
-} from "lucide-react";
-import { SettingsProps } from "./types";
+  Sparkles,
+} from 'lucide-react';
+import { SettingsProps } from './types';
 
 export function Settings({ onShowPlanManagement }: SettingsProps) {
   const aiAssistants = [
     {
-      id: "aria-celestia",
-      name: "Aria Celestia",
-      role: "静謐な戦略パートナー",
-      description: "落ち着いた洞察と緻密な提案で、深夜の意思決定を支える。",
-      strengths: ["静かな共感", "構造的な思考整理", "長期戦略の視座"],
-      palette: "from-gold/20 via-gold/10 to-transparent",
-      image: "/aria-celestia.png"
+      id: 'aria-celestia',
+      name: 'Aria Celestia',
+      role: '静謐な戦略パートナー',
+      description: '落ち着いた洞察と緻密な提案で、深夜の意思決定を支える。',
+      strengths: ['静かな共感', '構造的な思考整理', '長期戦略の視座'],
+      palette: 'from-gold/20 via-gold/10 to-transparent',
+      image: '/aria-celestia.png',
     },
     {
-      id: "aria-nocturne",
-      name: "Aria Nocturne",
-      role: "夜型の実行支援ナビゲーター",
-      description: "夜間のタスク管理と実行計画づくりにフォーカスしたアシスト。",
-      strengths: ["意思決定の迅速化", "実行ロードマップ", "感情の整理"],
-      palette: "from-navy-medium/80 via-navy-medium/40 to-transparent",
-      image: "/aria-nocturne.png"
+      id: 'aria-nocturne',
+      name: 'Aria Nocturne',
+      role: '夜型の実行支援ナビゲーター',
+      description: '夜間のタスク管理と実行計画づくりにフォーカスしたアシスト。',
+      strengths: ['意思決定の迅速化', '実行ロードマップ', '感情の整理'],
+      palette: 'from-navy-medium/80 via-navy-medium/40 to-transparent',
+      image: '/aria-nocturne.png',
     },
     {
-      id: "aria-orbit",
-      name: "Aria Orbit",
-      role: "市場感覚に敏感な参謀",
-      description: "トレンド捕捉と競合動向の可視化で、次の打ち手を導く。",
-      strengths: ["市場洞察", "ポジショニング分析", "リスク評価"],
-      palette: "from-cyan/30 via-gold/10 to-transparent",
-      image: "/aria-orbit.png"
-    }
+      id: 'aria-orbit',
+      name: 'Aria Orbit',
+      role: '市場感覚に敏感な参謀',
+      description: 'トレンド捕捉と競合動向の可視化で、次の打ち手を導く。',
+      strengths: ['市場洞察', 'ポジショニング分析', 'リスク評価'],
+      palette: 'from-cyan/30 via-gold/10 to-transparent',
+      image: '/aria-orbit.png',
+    },
   ];
 
   const [profile, setProfile] = useState({
-    name: "田中 太郎",
-    email: "tanaka@example.com",
-    phone: "090-1234-5678",
-    location: "東京都渋谷区",
-    company: "DevCatalist株式会社",
-    bio: "テクノロジーを活用したソロプレナー。AI・SaaS分野で事業展開中。",
-    website: "https://example.com",
-    assistantId: aiAssistants[0]?.id ?? "aria-celestia"
+    name: '田中 太郎',
+    email: 'tanaka@example.com',
+    phone: '090-1234-5678',
+    location: '東京都渋谷区',
+    company: 'DevCatalist株式会社',
+    bio: 'テクノロジーを活用したソロプレナー。AI・SaaS分野で事業展開中。',
+    website: 'https://example.com',
+    assistantId: aiAssistants[0]?.id ?? 'aria-celestia',
   });
 
-  const activeAssistant = aiAssistants.find((assistant) => assistant.id === profile.assistantId) ?? aiAssistants[0];
+  const activeAssistant =
+    aiAssistants.find((assistant) => assistant.id === profile.assistantId) ?? aiAssistants[0];
 
   const [notifications, setNotifications] = useState({
     emailUpdates: true,
@@ -79,29 +80,27 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
     weeklyReport: true,
     marketingEmails: false,
     aiInsights: true,
-    strategyAlerts: true
+    strategyAlerts: true,
   });
 
   const [privacy, setPrivacy] = useState({
     profilePublic: false,
     analyticsSharing: true,
-    dataCollection: true
+    dataCollection: true,
   });
 
   const subscriptionInfo = {
-    plan: "プロフェッショナル",
-    status: "アクティブ",
-    nextBilling: "2024年11月15日",
-    amount: "¥9,800/月"
+    plan: 'プロフェッショナル',
+    status: 'アクティブ',
+    nextBilling: '2024年11月15日',
+    amount: '¥9,800/月',
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
         <h2 className="text-3xl mb-2">設定</h2>
-        <p className="text-muted-foreground">
-          アカウント、通知、プライバシー設定を管理
-        </p>
+        <p className="text-muted-foreground">アカウント、通知、プライバシー設定を管理</p>
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
@@ -120,14 +119,15 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <User className="w-5 h-5" />
                 <span>プロフィール情報</span>
               </CardTitle>
-              <CardDescription>
-                公開されるプロフィール情報を編集
-              </CardDescription>
+              <CardDescription>公開されるプロフィール情報を編集</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center space-x-6">
                 <Avatar className="w-20 h-20">
-                  <AvatarImage src={activeAssistant?.image ?? "/api/placeholder/80/80"} alt={activeAssistant?.name ?? "AI Assistant"} />
+                  <AvatarImage
+                    src={activeAssistant?.image ?? '/api/placeholder/80/80'}
+                    alt={activeAssistant?.name ?? 'AI Assistant'}
+                  />
                   <AvatarFallback>AI</AvatarFallback>
                 </Avatar>
                 <div>
@@ -135,9 +135,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                     <Camera className="w-4 h-4 mr-2" />
                     写真を変更
                   </Button>
-                  <p className="text-sm text-muted-foreground">
-                    JPG、PNG形式。最大5MB。
-                  </p>
+                  <p className="text-sm text-muted-foreground">JPG、PNG形式。最大5MB。</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     現在の担当AI：{activeAssistant?.name}
                   </p>
@@ -150,7 +148,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   <Input
                     id="name"
                     value={profile.name}
-                    onChange={(e) => setProfile({...profile, name: e.target.value})}
+                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                   />
                 </div>
 
@@ -162,7 +160,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                       id="email"
                       type="email"
                       value={profile.email}
-                      onChange={(e) => setProfile({...profile, email: e.target.value})}
+                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                     />
                   </div>
                 </div>
@@ -174,7 +172,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                     <Input
                       id="phone"
                       value={profile.phone}
-                      onChange={(e) => setProfile({...profile, phone: e.target.value})}
+                      onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                     />
                   </div>
                 </div>
@@ -186,7 +184,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                     <Input
                       id="location"
                       value={profile.location}
-                      onChange={(e) => setProfile({...profile, location: e.target.value})}
+                      onChange={(e) => setProfile({ ...profile, location: e.target.value })}
                     />
                   </div>
                 </div>
@@ -198,7 +196,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                     <Input
                       id="company"
                       value={profile.company}
-                      onChange={(e) => setProfile({...profile, company: e.target.value})}
+                      onChange={(e) => setProfile({ ...profile, company: e.target.value })}
                     />
                   </div>
                 </div>
@@ -209,7 +207,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                     id="bio"
                     placeholder="あなたの事業や専門分野について簡潔に紹介してください"
                     value={profile.bio}
-                    onChange={(e) => setProfile({...profile, bio: e.target.value})}
+                    onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                     className="min-h-[100px]"
                   />
                 </div>
@@ -246,14 +244,18 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                       onClick={() => setProfile((prev) => ({ ...prev, assistantId: assistant.id }))}
                       className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 text-left focus:outline-none ${
                         isActive
-                          ? "border-gold/60 shadow-[0_18px_40px_-18px_rgba(217,178,116,0.65)]"
-                          : "border-transparent hover:border-gold/30 hover:shadow-[0_18px_36px_-20px_rgba(15,23,42,0.35)]"
+                          ? 'border-gold/60 shadow-[0_18px_40px_-18px_rgba(217,178,116,0.65)]'
+                          : 'border-transparent hover:border-gold/30 hover:shadow-[0_18px_36px_-20px_rgba(15,23,42,0.35)]'
                       }`}
                     >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${assistant.palette} opacity-80`} />
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${assistant.palette} opacity-80`}
+                      />
                       <div className="relative flex flex-col h-full p-5 space-y-4">
                         <div className="flex items-center space-x-3">
-                          <Avatar className={`w-16 h-16 ring-2 ${isActive ? "ring-gold/80" : "ring-transparent"} transition`}>
+                          <Avatar
+                            className={`w-16 h-16 ring-2 ${isActive ? 'ring-gold/80' : 'ring-transparent'} transition`}
+                          >
                             <AvatarImage src={assistant.image} alt={assistant.name} />
                             <AvatarFallback>{assistant.name.slice(0, 2)}</AvatarFallback>
                           </Avatar>
@@ -280,7 +282,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                             <Badge
                               key={strength}
                               variant="outline"
-                              className={`backdrop-blur-sm ${isActive ? "border-gold/50 text-aria-dark-soft bg-gold/15" : "border-white/30 text-white/80 bg-white/10"}`}
+                              className={`backdrop-blur-sm ${isActive ? 'border-gold/50 text-aria-dark-soft bg-gold/15' : 'border-white/30 text-white/80 bg-white/10'}`}
                             >
                               {strength}
                             </Badge>
@@ -307,7 +309,8 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
             <CardContent className="space-y-4">
               <div className="border border-dashed border-gold/30 rounded-xl p-5 bg-gold/5 text-sm text-muted-foreground">
                 選択したAIに今の状況や目標を共有すると、提案の精度が向上します。準備ができたら、
-                <span className="gold-soft-text font-medium">「最初の対話を始める」</span>をクリックしてください。
+                <span className="gold-soft-text font-medium">「最初の対話を始める」</span>
+                をクリックしてください。
               </div>
 
               <div className="flex justify-end space-x-4">
@@ -328,9 +331,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <Bell className="w-5 h-5" />
                 <span>通知設定</span>
               </CardTitle>
-              <CardDescription>
-                受け取りたい通知の種類を選択
-              </CardDescription>
+              <CardDescription>受け取りたい通知の種類を選択</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -343,8 +344,8 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   </div>
                   <Switch
                     checked={notifications.emailUpdates}
-                    onCheckedChange={(checked: boolean) => 
-                      setNotifications({...notifications, emailUpdates: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setNotifications({ ...notifications, emailUpdates: checked })
                     }
                   />
                 </div>
@@ -358,8 +359,8 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   </div>
                   <Switch
                     checked={notifications.pushNotifications}
-                    onCheckedChange={(checked: boolean) => 
-                      setNotifications({...notifications, pushNotifications: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setNotifications({ ...notifications, pushNotifications: checked })
                     }
                   />
                 </div>
@@ -367,14 +368,12 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-medium">週次レポート</div>
-                    <div className="text-sm text-muted-foreground">
-                      毎週の進捗レポートを配信
-                    </div>
+                    <div className="text-sm text-muted-foreground">毎週の進捗レポートを配信</div>
                   </div>
                   <Switch
                     checked={notifications.weeklyReport}
-                    onCheckedChange={(checked: boolean) => 
-                      setNotifications({...notifications, weeklyReport: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setNotifications({ ...notifications, weeklyReport: checked })
                     }
                   />
                 </div>
@@ -382,14 +381,12 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-medium">AI戦略インサイト</div>
-                    <div className="text-sm text-muted-foreground">
-                      新しいAI分析結果の通知
-                    </div>
+                    <div className="text-sm text-muted-foreground">新しいAI分析結果の通知</div>
                   </div>
                   <Switch
                     checked={notifications.aiInsights}
-                    onCheckedChange={(checked: boolean) => 
-                      setNotifications({...notifications, aiInsights: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setNotifications({ ...notifications, aiInsights: checked })
                     }
                   />
                 </div>
@@ -403,8 +400,8 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   </div>
                   <Switch
                     checked={notifications.strategyAlerts}
-                    onCheckedChange={(checked: boolean) => 
-                      setNotifications({...notifications, strategyAlerts: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setNotifications({ ...notifications, strategyAlerts: checked })
                     }
                   />
                 </div>
@@ -412,14 +409,12 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-medium">マーケティングメール</div>
-                    <div className="text-sm text-muted-foreground">
-                      新機能やプロモーション情報
-                    </div>
+                    <div className="text-sm text-muted-foreground">新機能やプロモーション情報</div>
                   </div>
                   <Switch
                     checked={notifications.marketingEmails}
-                    onCheckedChange={(checked: boolean) => 
-                      setNotifications({...notifications, marketingEmails: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setNotifications({ ...notifications, marketingEmails: checked })
                     }
                   />
                 </div>
@@ -435,9 +430,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <Shield className="w-5 h-5" />
                 <span>プライバシー設定</span>
               </CardTitle>
-              <CardDescription>
-                データの使用方法とプライバシー設定
-              </CardDescription>
+              <CardDescription>データの使用方法とプライバシー設定</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -450,8 +443,8 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   </div>
                   <Switch
                     checked={privacy.profilePublic}
-                    onCheckedChange={(checked: boolean) => 
-                      setPrivacy({...privacy, profilePublic: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setPrivacy({ ...privacy, profilePublic: checked })
                     }
                   />
                 </div>
@@ -465,8 +458,8 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   </div>
                   <Switch
                     checked={privacy.analyticsSharing}
-                    onCheckedChange={(checked: boolean) => 
-                      setPrivacy({...privacy, analyticsSharing: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setPrivacy({ ...privacy, analyticsSharing: checked })
                     }
                   />
                 </div>
@@ -480,8 +473,8 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   </div>
                   <Switch
                     checked={privacy.dataCollection}
-                    onCheckedChange={(checked: boolean) => 
-                      setPrivacy({...privacy, dataCollection: checked})
+                    onCheckedChange={(checked: boolean) =>
+                      setPrivacy({ ...privacy, dataCollection: checked })
                     }
                   />
                 </div>
@@ -506,9 +499,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <CreditCard className="w-5 h-5" />
                 <span>請求情報</span>
               </CardTitle>
-              <CardDescription>
-                サブスクリプションと請求の管理
-              </CardDescription>
+              <CardDescription>サブスクリプションと請求の管理</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -533,7 +524,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                       )}
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label>月額料金</Label>
                     <div className="text-2xl font-bold mt-1">{subscriptionInfo.amount}</div>
@@ -586,9 +577,7 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                 <Download className="w-5 h-5" />
                 <span>データ管理</span>
               </CardTitle>
-              <CardDescription>
-                データのエクスポート、削除、アカウント管理
-              </CardDescription>
+              <CardDescription>データのエクスポート、削除、アカウント管理</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -608,14 +597,12 @@ export function Settings({ onShowPlanManagement }: SettingsProps) {
                   <p className="text-sm text-muted-foreground mb-3">
                     ローカルに保存されているキャッシュデータを削除してアプリをリフレッシュ
                   </p>
-                  <Button variant="outline">
-                    キャッシュをクリア
-                  </Button>
+                  <Button variant="outline">キャッシュをクリア</Button>
                 </div>
 
                 <div className="border border-red-200 rounded-lg p-4">
                   <h4 className="font-medium mb-2 text-red-600">危険な操作</h4>
-                  
+
                   <div className="space-y-3">
                     <div>
                       <h5 className="font-medium text-sm">すべてのデータを削除</h5>

@@ -1,8 +1,9 @@
 import pytest
 from fastapi.testclient import TestClient
-from main import app
-from app.models import ChatRequest, ChatMessage, ChatRole, AIProvider, ChatResponse
+
+from app.models import AIProvider, ChatMessage, ChatRequest, ChatResponse, ChatRole
 from app.routers import ai as ai_router
+from main import app
 
 
 def _chat_payload(provider="openai"):
@@ -41,7 +42,9 @@ def test_chat_forbidden_with_anthropic_on_free_plan(client_free_plan: TestClient
 
 def test_chat_success_with_openai_on_free_plan(monkeypatch, client_free_plan: TestClient):
     async def fake_chat_completion(request):
-        return ChatResponse(message="ok", provider="openai", model="gpt-3.5-turbo", usage={"tokens": 10})
+        return ChatResponse(
+            message="ok", provider="openai", model="gpt-3.5-turbo", usage={"tokens": 10}
+        )
 
     # patch underlying ai_service
     monkeypatch.setattr(ai_router.ai_service, "chat_completion", fake_chat_completion)
@@ -50,5 +53,3 @@ def test_chat_success_with_openai_on_free_plan(monkeypatch, client_free_plan: Te
     assert res.status_code == 200
     assert res.json()["message"] == "ok"
     assert res.json()["provider"] == "openai"
-
-

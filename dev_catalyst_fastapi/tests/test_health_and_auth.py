@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
-from main import app
+
 from app.auth import get_optional_user
+from main import app
 
 
 def test_health_endpoints():
@@ -23,5 +24,3 @@ def test_auth_check_unauthenticated(monkeypatch):
     data = r.json()
     assert data["authenticated"] is False
     assert data["user"] is None
-
-

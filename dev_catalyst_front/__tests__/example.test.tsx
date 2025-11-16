@@ -12,4 +12,3 @@ describe('Example Test', () => {
     expect(screen.getByText('Test')).toBeInTheDocument();
   });
 });
-

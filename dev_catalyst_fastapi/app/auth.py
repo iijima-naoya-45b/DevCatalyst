@@ -1,13 +1,16 @@
-import httpx
 import json
-from fastapi import HTTPException, Request, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jose import JWTError, jwt
 from typing import Optional
+
+import httpx
+from fastapi import Depends, HTTPException, Request
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jose import JWTError, jwt
+
 from .config import settings
-from .models import User, AuthTokens, AuthResponse
+from .models import AuthResponse, AuthTokens, User
 
 security = HTTPBearer(auto_error=False)
+
 
 class AuthService:
     def __init__(self):
@@ -22,18 +25,15 @@ class AuthService:
                 response = await client.post(
                     f"{self.rails_backend_url}/api/auth/verify_token",
                     json={"token": token},
-                    headers={"Authorization": f"Bearer {token}"}
+                    headers={"Authorization": f"Bearer {token}"},
                 )
-                
+
                 if response.status_code == 200:
                     data = response.json()
                     return AuthResponse(
                         user=User(**data["user"]),
-                        tokens=AuthTokens(
-                            access_token=token,
-                            expires_in=data.get("expires_in")
-                        ),
-                        valid=True
+                        tokens=AuthTokens(access_token=token, expires_in=data.get("expires_in")),
+                        valid=True,
                     )
                 return None
         except Exception as e:
@@ -46,15 +46,13 @@ class AuthService:
             async with httpx.AsyncClient() as client:
                 response = await client.post(
                     f"{self.rails_backend_url}/api/auth/refresh",
-                    json={"refresh_token": refresh_token}
+                    json={"refresh_token": refresh_token},
                 )
-                
+
                 if response.status_code == 200:
                     data = response.json()
                     return AuthResponse(
-                        user=User(**data["user"]),
-                        tokens=AuthTokens(**data["tokens"]),
-                        valid=True
+                        user=User(**data["user"]), tokens=AuthTokens(**data["tokens"]), valid=True
                     )
                 return None
         except Exception as e:
@@ -69,32 +67,32 @@ class AuthService:
         except JWTError:
             return None
 
+
 auth_service = AuthService()
 
+
 async def get_current_user(
-    request: Request,
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)
+    request: Request, credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)
 ) -> AuthResponse:
     """現在のユーザーを取得（認証チェック付き）"""
-    
+
     # Authorizationヘッダーからトークンを取得
     token = None
     if credentials:
         token = credentials.credentials
-    
+
     # Cookieからトークンを取得（フォールバック）
     if not token:
         token = request.cookies.get("access_token")
-    
+
     if not token:
         raise HTTPException(
-            status_code=401,
-            detail="認証トークンが見つかりません。ログインしてください。"
+            status_code=401, detail="認証トークンが見つかりません。ログインしてください。"
         )
-    
+
     # Railsバックエンドでトークンを検証
     auth_response = await auth_service.verify_token_with_rails(token)
-    
+
     if not auth_response:
         # トークンが無効な場合、リフレッシュトークンを試す
         refresh_token = request.cookies.get("refresh_token")
@@ -102,17 +100,16 @@ async def get_current_user(
             auth_response = await auth_service.refresh_token(refresh_token)
             if auth_response:
                 return auth_response
-        
+
         raise HTTPException(
-            status_code=401,
-            detail="認証トークンが無効です。再度ログインしてください。"
+            status_code=401, detail="認証トークンが無効です。再度ログインしてください。"
         )
-    
+
     return auth_response
 
+
 async def get_optional_user(
-    request: Request,
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)
+    request: Request, credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)
 ) -> Optional[AuthResponse]:
     """オプショナルなユーザー取得（認証が必須でない場合）"""
     try:

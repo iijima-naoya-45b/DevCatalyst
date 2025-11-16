@@ -13,14 +13,16 @@ const losses = [
     title: '戦略立案に週10時間',
     value: '年間520時間',
     cost: '時給5,000円なら¥2,600,000',
-    description: '市場調査・競合分析・戦略立案。ひとりで全部やると年間520時間。本業に集中できない。',
+    description:
+      '市場調査・競合分析・戦略立案。ひとりで全部やると年間520時間。本業に集中できない。',
   },
   {
     icon: DollarSign,
     title: '高額な戦略コンサル',
     value: '月30万円〜',
     cost: '年間¥3,600,000+',
-    description: '戦略コンサルは月30万円〜。ソロプレナーには重すぎる負担。でも戦略なしでは勝てない。',
+    description:
+      '戦略コンサルは月30万円〜。ソロプレナーには重すぎる負担。でも戦略なしでは勝てない。',
   },
   {
     icon: TrendingDown,
@@ -47,7 +49,7 @@ export function LossAversionSection() {
           <span
             className={cn(
               'inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-red-500 transition-all duration-1000',
-              isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+              isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             )}
           >
             <TrendingDown className="h-6 w-6" />
@@ -86,12 +88,14 @@ export function LossAversionSection() {
                     <p className="text-sm text-gray-600 dark:text-gray-400">{value}</p>
                     <p className="text-2xl font-bold text-red-500">{cost}</p>
                   </div>
-                  <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{description}</p>
+                  <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                    {description}
+                  </p>
                 </>
               }
               className={cn(
                 'border-2 border-red-200 text-center transition-all duration-500 hover:border-red-400 hover:shadow-xl dark:border-red-900/50',
-                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               )}
               iconWrapperClassName="justify-center"
               descriptionClassName="space-y-4 text-center"
@@ -103,7 +107,7 @@ export function LossAversionSection() {
         <div
           className={cn(
             'transition-all duration-1000',
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           )}
           style={{ transitionDelay: '800ms' }}
         >
@@ -141,4 +145,3 @@ function LossStat({ value, label }: { value: string; label: string }) {
     </div>
   );
 }
-

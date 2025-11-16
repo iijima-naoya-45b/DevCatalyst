@@ -70,11 +70,7 @@ export function FAQSection() {
 
       <div ref={ref} className="relative space-y-12">
         <LpSectionHeader
-          title={
-            <span className="gold-soft-text">
-              よくある質問
-            </span>
-          }
+          title={<span className="gold-soft-text">よくある質問</span>}
           description="お客様からよくいただく質問をまとめました"
           isVisible={isInView}
           titleClassName="text-3xl md:text-4xl lg:text-5xl"
@@ -86,7 +82,7 @@ export function FAQSection() {
               key={faq.id}
               className={cn(
                 'overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-500 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800/50',
-                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               )}
               style={{ transitionDelay: `${index * 70 + 300}ms` }}
             >
@@ -94,21 +90,25 @@ export function FAQSection() {
                 onClick={() => toggleFAQ(index)}
                 className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-gray-50 dark:hover:bg-slate-700/30"
               >
-                <h3 className="pr-8 text-lg font-semibold text-gray-900 dark:text-white">{faq.question}</h3>
+                <h3 className="pr-8 text-lg font-semibold text-gray-900 dark:text-white">
+                  {faq.question}
+                </h3>
                 <ChevronDown
                   className={cn(
                     'h-5 w-5 flex-shrink-0 gold-soft-text transition-transform duration-300',
-                    openIndex === index && 'rotate-180',
+                    openIndex === index && 'rotate-180'
                   )}
                 />
               </button>
               <div
                 className={cn(
                   'overflow-hidden transition-all duration-300',
-                  openIndex === index ? 'max-h-96' : 'max-h-0',
+                  openIndex === index ? 'max-h-96' : 'max-h-0'
                 )}
               >
-                <p className="px-6 pb-6 leading-relaxed text-gray-700 dark:text-gray-300">{faq.answer}</p>
+                <p className="px-6 pb-6 leading-relaxed text-gray-700 dark:text-gray-300">
+                  {faq.answer}
+                </p>
               </div>
             </div>
           ))}
@@ -117,7 +117,7 @@ export function FAQSection() {
         <div
           className={cn(
             'mt-12 text-center transition-all duration-1000',
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           )}
           style={{ transitionDelay: '700ms' }}
         >
@@ -133,4 +133,3 @@ export function FAQSection() {
     </LpSection>
   );
 }
-

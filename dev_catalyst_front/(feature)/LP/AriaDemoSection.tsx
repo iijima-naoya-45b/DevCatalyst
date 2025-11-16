@@ -1,5 +1,5 @@
-import { Badge } from "../../(feature)/common/ui/badge";
-import { AriaChat } from "../../(feature)/common/AriaChat";
+import { Badge } from '../../(feature)/common/ui/badge';
+import { AriaChat } from '../../(feature)/common/AriaChat';
 import { useInView } from '../../hooks/use-in-view';
 
 export function AriaDemoSection({ showAriaDemo }: { showAriaDemo: boolean }) {
@@ -13,9 +13,7 @@ export function AriaDemoSection({ showAriaDemo }: { showAriaDemo: boolean }) {
     <section ref={ref} className="py-20 px-4 border-t border-gold/20 bg-white dark:bg-slate-900">
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-12 fade-in-up ${isInView ? 'in-view' : ''}`}>
-          <Badge className="bg-gold/10 gold-soft-text border-gold/30 mb-4">
-            LIVE DEMO
-          </Badge>
+          <Badge className="bg-gold/10 gold-soft-text border-gold/30 mb-4">LIVE DEMO</Badge>
           <h3 className="text-3xl md:text-4xl font-serif font-semibold mb-4 text-gray-900 dark:text-white">
             アリアと、実際に話してみる
           </h3>

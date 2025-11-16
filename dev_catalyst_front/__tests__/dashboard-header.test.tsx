@@ -28,5 +28,3 @@ describe('DashboardHeader', () => {
     expect(userInitial).toBeInTheDocument();
   });
 });
-
-

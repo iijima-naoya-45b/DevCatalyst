@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { plans } from '../../app/lp-settings';
-import { Card, CardContent, CardHeader, CardTitle } from "../../(feature)/common/ui/card";
-import { Badge } from "../../(feature)/common/ui/badge";
-import { Target, CheckCircle } from "lucide-react";
-import { Button } from "../../(feature)/common/ui/button";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from '../../(feature)/common/ui/card';
+import { Badge } from '../../(feature)/common/ui/badge';
+import { Target, CheckCircle } from 'lucide-react';
+import { Button } from '../../(feature)/common/ui/button';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
 import { useInView } from '../../hooks/use-in-view';
 
@@ -25,12 +25,14 @@ export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
     } else {
       router.push('/login');
     }
-  }
+  };
 
   return (
     <section ref={ref} className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-white dark:bg-slate-900">
       <div className="max-w-7xl mx-auto">
-        <div className={`text-center mb-8 sm:mb-12 md:mb-16 fade-in-up ${isInView ? 'in-view' : ''}`}>
+        <div
+          className={`text-center mb-8 sm:mb-12 md:mb-16 fade-in-up ${isInView ? 'in-view' : ''}`}
+        >
           <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-semibold mb-4 sm:mb-6 text-gray-900 dark:text-white">
             あなたに合った、話し方を
           </h3>
@@ -41,13 +43,14 @@ export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
-            <Card 
-              key={plan.id} 
+            <Card
+              key={plan.id}
               className={`
                 relative border transition-all duration-300 hover:shadow-2xl
-                ${plan.popular
-                  ? 'gold-soft-outline shadow-xl shadow-gold/25 bg-white dark:bg-slate-900 sm:scale-105'
-                  : 'border-gold/30 dark:border-gold/40 bg-white dark:bg-slate-900 hover:border-gold/40 dark:hover:border-gold/50'
+                ${
+                  plan.popular
+                    ? 'gold-soft-outline shadow-xl shadow-gold/25 bg-white dark:bg-slate-900 sm:scale-105'
+                    : 'border-gold/30 dark:border-gold/40 bg-white dark:bg-slate-900 hover:border-gold/40 dark:hover:border-gold/50'
                 }
                 backdrop-blur-md text-gray-900 dark:text-white
                 scale-in ${isInView ? 'in-view' : ''}
@@ -64,12 +67,20 @@ export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
               )}
 
               <CardHeader className="text-center pb-4 sm:pb-6 md:pb-8 px-4 sm:px-6">
-                <CardTitle className="text-xl sm:text-2xl font-serif mb-2 text-gray-900 dark:text-white">{plan.name}</CardTitle>
+                <CardTitle className="text-xl sm:text-2xl font-serif mb-2 text-gray-900 dark:text-white">
+                  {plan.name}
+                </CardTitle>
                 <div className="space-y-1 sm:space-y-2">
-                  <div className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">{plan.price}</div>
-                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{plan.period}</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+                    {plan.price}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                    {plan.period}
+                  </div>
                 </div>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">{plan.description}</p>
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
+                  {plan.description}
+                </p>
               </CardHeader>
 
               <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
@@ -77,7 +88,9 @@ export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
                   {plan.features.map((feature, index) => (
                     <div key={index} className="flex items-center space-x-2 sm:space-x-3">
                       <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 gold-soft-text dark:gold-soft-text-light flex-shrink-0" />
-                      <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-200">{feature}</span>
+                      <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-200">
+                        {feature}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -96,4 +109,3 @@ export function PricingSection({ onStartTrial }: { onStartTrial: () => void }) {
     </section>
   );
 }
-

@@ -1,16 +1,33 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import { Brain, LayoutDashboard, FileText, Target, BarChart3, Menu, Shield, Mail, X } from "lucide-react";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { ThemeToggleSwitch } from "@/components/theme-toggle-switch";
-import { ThemeToggleAnimated } from "@/components/theme-toggle-animated";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import {
+  Brain,
+  LayoutDashboard,
+  FileText,
+  Target,
+  BarChart3,
+  Menu,
+  Shield,
+  Mail,
+  X,
+} from 'lucide-react';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { ThemeToggleSwitch } from '@/components/theme-toggle-switch';
+import { ThemeToggleAnimated } from '@/components/theme-toggle-animated';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
 export function Header() {
   const router = useRouter();
@@ -124,9 +141,7 @@ export function Header() {
                 <SheetContent side="right" className="w-full sm:w-96">
                   <SheetHeader>
                     <SheetTitle>メニュー</SheetTitle>
-                    <SheetDescription className="sr-only">
-                      ナビゲーションメニュー
-                    </SheetDescription>
+                    <SheetDescription className="sr-only">ナビゲーションメニュー</SheetDescription>
                   </SheetHeader>
                   <nav className="mt-6 space-y-2">
                     <Button
@@ -176,7 +191,9 @@ export function Header() {
                     {/* テーマトグル */}
                     <div className="pt-4 border-t border-gray-200 dark:border-gray-700 mt-4">
                       <div className="flex items-center justify-between px-2 py-2">
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">テーマ</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          テーマ
+                        </span>
                         <ThemeToggleSwitch size="sm" />
                       </div>
                     </div>
@@ -186,7 +203,11 @@ export function Header() {
                         <Avatar className="h-10 w-10 border-2 border-gold/50">
                           <AvatarImage src={user.avatar_url} alt={user.name} />
                           <AvatarFallback className="bg-gold/20 gold-soft-text-enhanced">
-                            {user.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
+                            {user.name
+                              ?.split(' ')
+                              .map((n) => n[0])
+                              .join('')
+                              .toUpperCase() || 'U'}
                           </AvatarFallback>
                         </Avatar>
                       </div>
@@ -200,7 +221,11 @@ export function Header() {
                   <Avatar className="h-9 w-9 border-2 border-gold/40 shadow-sm">
                     <AvatarImage src={user.avatar_url} alt={user.name} />
                     <AvatarFallback className="bg-gold/20 gold-soft-text-enhanced text-sm font-semibold">
-                      {user.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
+                      {user.name
+                        ?.split(' ')
+                        .map((n) => n[0])
+                        .join('')
+                        .toUpperCase() || 'U'}
                     </AvatarFallback>
                   </Avatar>
                 </div>
@@ -259,9 +284,7 @@ export function Header() {
                 <SheetContent side="right" className="w-full sm:w-96">
                   <SheetHeader>
                     <SheetTitle>メニュー</SheetTitle>
-                    <SheetDescription className="sr-only">
-                      ナビゲーションメニュー
-                    </SheetDescription>
+                    <SheetDescription className="sr-only">ナビゲーションメニュー</SheetDescription>
                   </SheetHeader>
                   <nav className="mt-6 space-y-2">
                     <Button
@@ -299,7 +322,9 @@ export function Header() {
                     {/* テーマトグル */}
                     <div className="pt-4 border-t border-gray-200 dark:border-gray-700 mt-4">
                       <div className="flex items-center justify-between px-2 py-2">
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">テーマ</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          テーマ
+                        </span>
                         <ThemeToggleSwitch size="sm" />
                       </div>
                     </div>

@@ -1,15 +1,15 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { 
-  TrendingUp, 
-  Target, 
-  AlertTriangle, 
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import {
+  TrendingUp,
+  Target,
+  AlertTriangle,
   Lightbulb,
   BarChart3,
   PieChart,
-  Activity
-} from "lucide-react";
-import { AnalysisData, AnalysisResultsProps } from "./types";
+  Activity,
+} from 'lucide-react';
+import { AnalysisData, AnalysisResultsProps } from './types';
 
 export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
   return (
@@ -29,7 +29,7 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
             </button>
           </div>
         </CardHeader>
-        
+
         <CardContent className="p-6 space-y-8">
           {/* Vertexからのメッセージ */}
           {data.vertexMessage && (
@@ -40,7 +40,9 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
                 </div>
                 <div>
                   <h4 className="font-semibold gold-soft-text mb-2">Vertexからの分析コメント</h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{data.vertexMessage}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {data.vertexMessage}
+                  </p>
                 </div>
               </div>
             </div>
@@ -57,7 +59,7 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
                 <p className="text-sm text-muted-foreground">{data.marketInsights.size}</p>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-green-500/5 border-green-500/20">
               <CardContent className="p-4 text-center">
                 <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -67,7 +69,7 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
                 <p className="text-sm text-muted-foreground">{data.marketInsights.growth}</p>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-orange-500/5 border-orange-500/20">
               <CardContent className="p-4 text-center">
                 <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -144,10 +146,11 @@ export function AnalysisResults({ data, onClose }: AnalysisResultsProps) {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {data.recommendations.map((recommendation, index) => (
-                  <div key={index} className="flex items-start space-x-3 p-3 bg-bronze/10 rounded-lg">
-                    <Badge className="bg-bronze text-navy-deepest text-xs">
-                      {index + 1}
-                    </Badge>
+                  <div
+                    key={index}
+                    className="flex items-start space-x-3 p-3 bg-bronze/10 rounded-lg"
+                  >
+                    <Badge className="bg-bronze text-navy-deepest text-xs">{index + 1}</Badge>
                     <p className="text-sm text-muted-foreground">{recommendation}</p>
                   </div>
                 ))}

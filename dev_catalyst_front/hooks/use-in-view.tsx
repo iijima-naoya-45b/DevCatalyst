@@ -9,7 +9,7 @@ interface UseInViewOptions {
 export function useInView(options: UseInViewOptions = {}) {
   const { threshold = 0.1, triggerOnce = true, rootMargin = '0px' } = options;
   const ref = useRef<HTMLDivElement>(null);
-  
+
   // グローバルフラグをチェック
   const skipAnimation = typeof window !== 'undefined' && (window as any).lpSkipAnimation === true;
   const [isInView, setIsInView] = useState(skipAnimation);
@@ -29,13 +29,11 @@ export function useInView(options: UseInViewOptions = {}) {
     // 初回チェック: すでに画面内にある要素は即座に表示
     const checkInitialPosition = () => {
       if (hasBeenInView.current && triggerOnce) return;
-      
+
       const rect = element.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      const isCurrentlyInView = 
-        rect.top < windowHeight &&
-        rect.bottom > 0;
-      
+      const isCurrentlyInView = rect.top < windowHeight && rect.bottom > 0;
+
       if (isCurrentlyInView) {
         setIsInView(true);
         hasBeenInView.current = true;
@@ -76,4 +74,3 @@ export function useInView(options: UseInViewOptions = {}) {
 
   return { ref, isInView };
 }
-

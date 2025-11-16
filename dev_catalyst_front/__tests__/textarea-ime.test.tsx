@@ -40,5 +40,3 @@ describe('Textarea IME behavior', () => {
     expect(submitted).toHaveTextContent('yes');
   });
 });
-
-

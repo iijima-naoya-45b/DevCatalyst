@@ -1,7 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { Brain, TrendingUp, Users, Target, Zap, CheckCircle, XCircle, ArrowRight, AlertTriangle, Clock, DollarSign, Lightbulb, Database, Palette } from 'lucide-react';
+import {
+  Brain,
+  TrendingUp,
+  Users,
+  Target,
+  Zap,
+  CheckCircle,
+  XCircle,
+  ArrowRight,
+  AlertTriangle,
+  Clock,
+  DollarSign,
+  Lightbulb,
+  Database,
+  Palette,
+} from 'lucide-react';
 import { Card, CardContent } from '../common/ui/card';
 import { Badge } from '../common/ui/badge';
 import { useInView } from '../../hooks/use-in-view';
@@ -90,7 +105,7 @@ const comparison = {
     ],
     psychology: '損失回避バイアスで動けない',
   },
-  'AI開発ツール': {
+  AI開発ツール: {
     approach: [
       { label: '市場調査', value: '手動で実施', negative: true },
       { label: '技術選定', value: 'コード生成のみ', negative: true },
@@ -130,10 +145,11 @@ export function DifferentiationSection() {
             なぜ、DevCatalystは違うのか？
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-6">
-            行動経済学と戦略フレームワークに基づいた、<br />
+            行動経済学と戦略フレームワークに基づいた、
+            <br />
             科学的なアプローチで、あなたのプロダクト成功を支援します。
           </p>
-          
+
           {/* RAGとデザインの強調 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mt-8">
             <Card className="border-2 border-gold/40 bg-gradient-to-br from-gold/5 to-gold/10 dark:from-gold/10 dark:to-gold/5">
@@ -142,23 +158,33 @@ export function DifferentiationSection() {
                   <div className="w-12 h-12 rounded-lg gold-soft-gradient flex items-center justify-center">
                     <Database className="w-6 h-6 text-aria-dark-soft" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">RAGによる戦略特化</h3>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    RAGによる戦略特化
+                  </h3>
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                  <span className="gold-soft-text font-semibold">Retrieval-Augmented Generation（RAG）技術</span>により、
-                  戦略立案に特化した専門知識ベースから最適な情報を取得。
-                  一般的なAIとは異なり、<span className="font-semibold">戦略・マーケティング・行動経済学に特化した提案</span>を実現します。
+                  <span className="gold-soft-text font-semibold">
+                    Retrieval-Augmented Generation（RAG）技術
+                  </span>
+                  により、 戦略立案に特化した専門知識ベースから最適な情報を取得。
+                  一般的なAIとは異なり、
+                  <span className="font-semibold">
+                    戦略・マーケティング・行動経済学に特化した提案
+                  </span>
+                  を実現します。
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card className="border-2 border-gold/40 bg-gradient-to-br from-gold/5 to-gold/10 dark:from-gold/10 dark:to-gold/5">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 rounded-lg gold-soft-gradient flex items-center justify-center">
                     <Palette className="w-6 h-6 text-aria-dark-soft" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">視覚的に優れたデザイン</h3>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    視覚的に優れたデザイン
+                  </h3>
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                   洗練されたUI/UXデザインと、直感的なインターフェース。
@@ -171,14 +197,17 @@ export function DifferentiationSection() {
         </div>
 
         {/* タブ */}
-        <div className={`flex justify-center gap-4 mb-12 flex-wrap fade-in-up ${isInView ? 'in-view delay-200' : ''}`}>
+        <div
+          className={`flex justify-center gap-4 mb-12 flex-wrap fade-in-up ${isInView ? 'in-view delay-200' : ''}`}
+        >
           <button
             onClick={() => setActiveTab('comparison')}
             className={`
               px-6 py-3 rounded-full font-medium transition-all
-              ${activeTab === 'comparison'
-                ? 'aria-gold-surface shadow-lg shadow-gold/30'
-                : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
+              ${
+                activeTab === 'comparison'
+                  ? 'aria-gold-surface shadow-lg shadow-gold/30'
+                  : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
               }
             `}
           >
@@ -188,9 +217,10 @@ export function DifferentiationSection() {
             onClick={() => setActiveTab('5segs')}
             className={`
               px-6 py-3 rounded-full font-medium transition-all
-              ${activeTab === '5segs'
-                ? 'aria-gold-surface shadow-lg shadow-gold/30'
-                : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
+              ${
+                activeTab === '5segs'
+                  ? 'aria-gold-surface shadow-lg shadow-gold/30'
+                  : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
               }
             `}
           >
@@ -200,9 +230,10 @@ export function DifferentiationSection() {
             onClick={() => setActiveTab('behavioral')}
             className={`
               px-6 py-3 rounded-full font-medium transition-all
-              ${activeTab === 'behavioral'
-                ? 'aria-gold-surface shadow-lg shadow-gold/30'
-                : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
+              ${
+                activeTab === 'behavioral'
+                  ? 'aria-gold-surface shadow-lg shadow-gold/30'
+                  : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700'
               }
             `}
           >
@@ -220,7 +251,9 @@ export function DifferentiationSection() {
                   <tr className="border-b-2 border-gold/30">
                     <th className="text-left p-4 text-gray-700 dark:text-gray-300">比較項目</th>
                     <th className="text-center p-4 text-gray-700 dark:text-gray-300">従来の方法</th>
-                    <th className="text-center p-4 text-gray-700 dark:text-gray-300">AI開発ツール</th>
+                    <th className="text-center p-4 text-gray-700 dark:text-gray-300">
+                      AI開発ツール
+                    </th>
                     <th className="text-center p-4 aria-gold-surface text-gray-900 dark:text-white font-bold">
                       DevCatalyst
                     </th>
@@ -229,11 +262,15 @@ export function DifferentiationSection() {
                 <tbody>
                   {comparison['従来の方法'].approach.map((item, index) => (
                     <tr key={index} className="border-b border-gray-200 dark:border-slate-700">
-                      <td className="p-4 font-medium text-gray-900 dark:text-white">{item.label}</td>
+                      <td className="p-4 font-medium text-gray-900 dark:text-white">
+                        {item.label}
+                      </td>
                       <td className="p-4 text-center">
                         <div className="flex items-center justify-center gap-2">
                           <XCircle className="w-4 h-4 text-red-500" />
-                          <span className="text-gray-600 dark:text-gray-400">{comparison['従来の方法'].approach[index].value}</span>
+                          <span className="text-gray-600 dark:text-gray-400">
+                            {comparison['従来の方法'].approach[index].value}
+                          </span>
                         </div>
                       </td>
                       <td className="p-4 text-center">
@@ -243,13 +280,17 @@ export function DifferentiationSection() {
                           ) : (
                             <CheckCircle className="w-4 h-4 text-blue-500" />
                           )}
-                          <span className="text-gray-600 dark:text-gray-400">{comparison['AI開発ツール'].approach[index].value}</span>
+                          <span className="text-gray-600 dark:text-gray-400">
+                            {comparison['AI開発ツール'].approach[index].value}
+                          </span>
                         </div>
                       </td>
-                  <td className="p-4 text-center aria-gold-surface">
+                      <td className="p-4 text-center aria-gold-surface">
                         <div className="flex items-center justify-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="font-medium text-gray-900 dark:text-white">{comparison.DevCatalyst.approach[index].value}</span>
+                          <span className="font-medium text-gray-900 dark:text-white">
+                            {comparison.DevCatalyst.approach[index].value}
+                          </span>
                         </div>
                       </td>
                     </tr>
@@ -261,11 +302,15 @@ export function DifferentiationSection() {
             {/* 心理的アプローチの違い */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
               {Object.entries(comparison).map(([key, value]) => (
-                <Card key={key} className={`${key === 'DevCatalyst' ? 'border-2 border-gold shadow-xl' : 'border-gray-200 dark:border-slate-700'}`}>
+                <Card
+                  key={key}
+                  className={`${key === 'DevCatalyst' ? 'border-2 border-gold shadow-xl' : 'border-gray-200 dark:border-slate-700'}`}
+                >
                   <CardContent className="p-6">
                     <h4 className="font-bold text-lg mb-3 text-gray-900 dark:text-white">{key}</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <span className="font-semibold">心理的アプローチ:</span><br />
+                      <span className="font-semibold">心理的アプローチ:</span>
+                      <br />
                       {value.psychology}
                     </p>
                   </CardContent>
@@ -282,22 +327,30 @@ export function DifferentiationSection() {
               return (
                 <Card key={seg.segment} className="border-gold/30 hover:shadow-xl transition-all">
                   <CardContent className="p-6">
-                    <div className={`w-16 h-16 rounded-full gold-soft-gradient flex items-center justify-center mb-4`}>
+                    <div
+                      className={`w-16 h-16 rounded-full gold-soft-gradient flex items-center justify-center mb-4`}
+                    >
                       <Icon className="w-8 h-8 text-aria-dark-soft" />
                     </div>
-                    <h4 className="font-bold text-lg mb-3 text-gray-900 dark:text-white">{seg.segment}</h4>
-                    
+                    <h4 className="font-bold text-lg mb-3 text-gray-900 dark:text-white">
+                      {seg.segment}
+                    </h4>
+
                     <div className="space-y-3">
                       <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border-l-4 border-red-400">
                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">従来</p>
-                        <p className="text-sm text-gray-800 dark:text-gray-200">{seg.traditional}</p>
+                        <p className="text-sm text-gray-800 dark:text-gray-200">
+                          {seg.traditional}
+                        </p>
                       </div>
-                      
+
                       <ArrowRight className="w-5 h-5 gold-soft-text mx-auto" />
-                      
+
                       <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border-l-4 border-green-400">
                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">DevCatalyst</p>
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{seg.devCatalyst}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {seg.devCatalyst}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -312,32 +365,45 @@ export function DifferentiationSection() {
             {behavioralEconomics.map((item) => {
               const Icon = item.icon;
               return (
-                <Card key={item.principle} className="border-gold/30 hover:shadow-xl transition-all">
+                <Card
+                  key={item.principle}
+                  className="border-gold/30 hover:shadow-xl transition-all"
+                >
                   <CardContent className="p-8">
                     <div className="flex items-start gap-4 mb-6">
-                    <div className="w-14 h-14 rounded-full gold-soft-gradient flex items-center justify-center flex-shrink-0 shadow-lg shadow-gold/30">
-                      <Icon className="w-7 h-7 text-aria-dark-soft" />
-                    </div>
+                      <div className="w-14 h-14 rounded-full gold-soft-gradient flex items-center justify-center flex-shrink-0 shadow-lg shadow-gold/30">
+                        <Icon className="w-7 h-7 text-aria-dark-soft" />
+                      </div>
                       <div>
-                        <h4 className="font-bold text-xl text-gray-900 dark:text-white">{item.principle}</h4>
-                        <Badge className="mt-2 bg-blue-100 text-blue-700 border-0">行動経済学</Badge>
+                        <h4 className="font-bold text-xl text-gray-900 dark:text-white">
+                          {item.principle}
+                        </h4>
+                        <Badge className="mt-2 bg-blue-100 text-blue-700 border-0">
+                          行動経済学
+                        </Badge>
                       </div>
                     </div>
 
                     <div className="space-y-4">
                       <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                        <p className="text-xs font-semibold text-red-600 dark:text-red-400 mb-2">❌ 問題</p>
+                        <p className="text-xs font-semibold text-red-600 dark:text-red-400 mb-2">
+                          ❌ 問題
+                        </p>
                         <p className="text-sm text-gray-800 dark:text-gray-200">{item.problem}</p>
                       </div>
 
                       <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                        <p className="text-xs font-semibold text-green-600 dark:text-green-400 mb-2">✅ DevCatalystの解決策</p>
+                        <p className="text-xs font-semibold text-green-600 dark:text-green-400 mb-2">
+                          ✅ DevCatalystの解決策
+                        </p>
                         <p className="text-sm text-gray-800 dark:text-gray-200">{item.solution}</p>
                       </div>
 
                       <div className="p-4 aria-gold-surface rounded-lg border-l-4 border-gold/35">
                         <p className="text-xs font-semibold gold-soft-text mb-2">📊 効果</p>
-                        <p className="text-lg font-bold text-gray-900 dark:text-white">{item.impact}</p>
+                        <p className="text-lg font-bold text-gray-900 dark:text-white">
+                          {item.impact}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -368,4 +434,3 @@ export function DifferentiationSection() {
     </section>
   );
 }
-

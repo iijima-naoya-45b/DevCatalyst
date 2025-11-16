@@ -37,4 +37,3 @@ body:has(.aria-loader-container) {
 html:has(.aria-loader-container) {
   overflow: hidden !important;
 }
-

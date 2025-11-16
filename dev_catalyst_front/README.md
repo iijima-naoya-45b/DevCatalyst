@@ -215,18 +215,18 @@ dev_catalyst_front/
 
 ### 必須
 
-| 変数名 | 説明 | 例 |
-|--------|------|-----|
+| 変数名                     | 説明                  | 例                      |
+| -------------------------- | --------------------- | ----------------------- |
 | `NEXT_PUBLIC_API_BASE_URL` | Rails API のベースURL | `http://localhost:3001` |
-| `NEXT_PUBLIC_AI_API_URL` | FastAPI のベースURL | `http://localhost:8000` |
+| `NEXT_PUBLIC_AI_API_URL`   | FastAPI のベースURL   | `http://localhost:8000` |
 
 ### オプション
 
-| 変数名 | 説明 | 例 |
-|--------|------|-----|
-| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | Google OAuth クライアントID | `xxx.apps.googleusercontent.com` |
-| `NEXT_PUBLIC_GITHUB_CLIENT_ID` | GitHub OAuth クライアントID | `Iv1.xxx` |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe 公開鍵 | `pk_test_xxx` |
+| 変数名                               | 説明                        | 例                               |
+| ------------------------------------ | --------------------------- | -------------------------------- |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID`       | Google OAuth クライアントID | `xxx.apps.googleusercontent.com` |
+| `NEXT_PUBLIC_GITHUB_CLIENT_ID`       | GitHub OAuth クライアントID | `Iv1.xxx`                        |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe 公開鍵               | `pk_test_xxx`                    |
 
 ---
 

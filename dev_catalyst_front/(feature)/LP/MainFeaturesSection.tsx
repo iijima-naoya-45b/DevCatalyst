@@ -35,7 +35,7 @@ export function MainFeaturesSection() {
                 key={feature.id}
                 className={cn(
                   'group border border-gold/25 bg-white/95 backdrop-blur-md transition-all duration-500 dark:border-gold/30 dark:bg-slate-900/60',
-                  isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+                  isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
                 )}
                 style={{ transitionDelay: `${index * 120 + 200}ms` }}
               >
@@ -44,7 +44,7 @@ export function MainFeaturesSection() {
                     <div
                       className={cn(
                         'flex h-18 w-18 items-center justify-center rounded-xl border border-gold/20 transition-transform duration-300 group-hover:scale-105',
-                        feature.color,
+                        feature.color
                       )}
                     >
                       <Icon className="h-9 w-9 text-aria-dark-soft" />

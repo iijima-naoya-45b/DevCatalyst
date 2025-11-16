@@ -1,11 +1,16 @@
-import openai
 from typing import AsyncGenerator
+
+import openai
+
 from ..config import settings
 from ..models import ChatRequest, ChatResponse
 
+
 class OpenAIService:
     def __init__(self):
-        self.client = openai.AsyncOpenAI(api_key=settings.OPENAI_API_KEY) if settings.OPENAI_API_KEY else None
+        self.client = (
+            openai.AsyncOpenAI(api_key=settings.OPENAI_API_KEY) if settings.OPENAI_API_KEY else None
+        )
 
     async def chat_completion(self, request: ChatRequest) -> ChatResponse:
         """OpenAI チャット補完"""
@@ -13,10 +18,7 @@ class OpenAIService:
             raise ValueError("OpenAI API key is not configured")
 
         model = request.model or "gpt-3.5-turbo"
-        messages = [
-            {"role": msg.role.value, "content": msg.content}
-            for msg in request.messages
-        ]
+        messages = [{"role": msg.role.value, "content": msg.content} for msg in request.messages]
 
         try:
             response = await self.client.chat.completions.create(
@@ -24,7 +26,7 @@ class OpenAIService:
                 messages=messages,
                 temperature=request.temperature,
                 max_tokens=request.max_tokens,
-                stream=False
+                stream=False,
             )
 
             return ChatResponse(
@@ -34,8 +36,8 @@ class OpenAIService:
                 usage={
                     "prompt_tokens": response.usage.prompt_tokens,
                     "completion_tokens": response.usage.completion_tokens,
-                    "total_tokens": response.usage.total_tokens
-                }
+                    "total_tokens": response.usage.total_tokens,
+                },
             )
         except Exception as e:
             raise ValueError(f"OpenAI API error: {str(e)}")
@@ -46,10 +48,7 @@ class OpenAIService:
             raise ValueError("OpenAI API key is not configured")
 
         model = request.model or "gpt-3.5-turbo"
-        messages = [
-            {"role": msg.role.value, "content": msg.content}
-            for msg in request.messages
-        ]
+        messages = [{"role": msg.role.value, "content": msg.content} for msg in request.messages]
 
         try:
             stream = await self.client.chat.completions.create(
@@ -57,7 +56,7 @@ class OpenAIService:
                 messages=messages,
                 temperature=request.temperature,
                 max_tokens=request.max_tokens,
-                stream=True
+                stream=True,
             )
 
             async for chunk in stream:

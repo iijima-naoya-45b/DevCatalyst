@@ -1,9 +1,11 @@
 import json
+
 from fastapi.testclient import TestClient
-from main import app
-from app.routers import ai as ai_router
-from app.models import ChatResponse, User, AuthTokens, AuthResponse
+
 from app.auth import get_current_user
+from app.models import AuthResponse, AuthTokens, ChatResponse, User
+from app.routers import ai as ai_router
+from main import app
 
 
 def _auth_response():
@@ -48,5 +50,3 @@ def test_streaming_sends_sse_chunks(monkeypatch):
         assert json.dumps({"done": True}) in text
 
     app.dependency_overrides.clear()
-
-

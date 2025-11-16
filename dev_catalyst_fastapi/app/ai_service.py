@@ -1,7 +1,9 @@
 from typing import AsyncGenerator
-from .models import ChatRequest, ChatResponse, AIProvider
-from .services.openai_service import OpenAIService
+
+from .models import AIProvider, ChatRequest, ChatResponse
 from .services.anthropic_service import AnthropicService
+from .services.openai_service import OpenAIService
+
 
 class AIService:
     def __init__(self):
@@ -27,5 +29,6 @@ class AIService:
                 yield chunk
         else:
             raise ValueError(f"Unsupported AI provider: {request.provider}")
+
 
 ai_service = AIService()

@@ -1,7 +1,8 @@
 from fastapi.testclient import TestClient
-from main import app
+
+from app.models import AuthResponse, AuthTokens, User
 from app.routers import auth as auth_router
-from app.models import User, AuthTokens, AuthResponse
+from main import app
 
 
 def _auth_response() -> AuthResponse:
@@ -34,5 +35,3 @@ def test_refresh_sets_cookies_and_returns_tokens(monkeypatch):
     assert any("access_token=new_access" in sc for sc in set_cookie_headers)
     # refresh token cookie present
     assert any("refresh_token=new_refresh" in sc for sc in set_cookie_headers)
-
-

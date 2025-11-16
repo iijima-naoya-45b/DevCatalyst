@@ -11,7 +11,8 @@ const painPoints = [
   {
     icon: Moon,
     title: '深夜、ひとりで戦略に悩む孤独',
-    description: 'アイデアはある。でも、市場で勝てる戦略が分からない。ソロだからこそ、相談相手もいない。',
+    description:
+      'アイデアはある。でも、市場で勝てる戦略が分からない。ソロだからこそ、相談相手もいない。',
   },
   {
     icon: Users,
@@ -21,7 +22,8 @@ const painPoints = [
   {
     icon: Lightbulb,
     title: '高額なコンサルは手が届かない',
-    description: '戦略コンサルは月30万円〜。ソロプレナーには重すぎる負担。でも戦略なしでは勝てない。',
+    description:
+      '戦略コンサルは月30万円〜。ソロプレナーには重すぎる負担。でも戦略なしでは勝てない。',
   },
 ];
 
@@ -43,9 +45,7 @@ export function WhySection() {
             <>
               ソロプレナーの、
               <br />
-              <span className="gold-soft-text">
-                孤独な戦略立案を終わらせたい
-              </span>
+              <span className="gold-soft-text">孤独な戦略立案を終わらせたい</span>
             </>
           }
           description={
@@ -71,7 +71,7 @@ export function WhySection() {
               description={description}
               className={cn(
                 'text-center transition-all duration-500 hover:scale-[1.02]',
-                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+                isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               )}
               style={{ transitionDelay: `${index * 120 + 400}ms` }}
             />
@@ -81,7 +81,7 @@ export function WhySection() {
         <div
           className={cn(
             'transition-all duration-1000',
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           )}
           style={{ transitionDelay: '800ms' }}
         >
@@ -89,9 +89,7 @@ export function WhySection() {
             <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-gray-900 dark:text-white">
               すべてのソロプレナーに、
               <br />
-              <span className="gold-soft-text">
-                戦略的思考のパートナーを
-              </span>
+              <span className="gold-soft-text">戦略的思考のパートナーを</span>
             </h3>
             <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg leading-relaxed text-gray-700 dark:text-gray-300">
               ひとりで事業を回すソロプレナーが、リソース不足で市場機会を逃してしまう。
@@ -115,4 +113,3 @@ export function WhySection() {
     </LpSection>
   );
 }
-

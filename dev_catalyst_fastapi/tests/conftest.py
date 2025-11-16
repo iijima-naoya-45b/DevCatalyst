@@ -1,9 +1,11 @@
 import asyncio
+
 import pytest
 from fastapi.testclient import TestClient
-from main import app
-from app.models import User, AuthTokens, AuthResponse
+
 from app.auth import get_current_user
+from app.models import AuthResponse, AuthTokens, User
+from main import app
 
 
 def _make_auth_response(plan: str = "free") -> AuthResponse:
@@ -30,5 +32,3 @@ def client_standard_plan():
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
-
-
