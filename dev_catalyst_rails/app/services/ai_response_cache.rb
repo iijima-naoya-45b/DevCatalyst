@@ -1,8 +1,10 @@
-require 'json'
-require 'digest'
+# frozen_string_literal: true
+
+require "json"
+require "digest"
 
 class AiResponseCache
-  CACHE_NAMESPACE = 'ai_response_cache'
+  CACHE_NAMESPACE = "ai_response_cache"
   DEFAULT_TTL_SECONDS = 600
 
   def initialize(redisClient: defaultRedisClient, ttlSeconds: DEFAULT_TTL_SECONDS)
@@ -28,11 +30,11 @@ class AiResponseCache
     return nil if rawValue.blank?
 
     JSON.parse(rawValue)
-  rescue JSON::ParserError => error
-    Rails.logger.warn "AiResponseCache#read: JSON::ParserError for key=#{cacheKey}. Message=#{error.message}"
+  rescue JSON::ParserError => e
+    Rails.logger.warn "AiResponseCache#read: JSON::ParserError for key=#{cacheKey}. Message=#{e.message}"
     nil
-  rescue StandardError => error
-    Rails.logger.warn "AiResponseCache#read: Unexpected #{error.class} for key=#{cacheKey}. Message=#{error.message}"
+  rescue StandardError => e
+    Rails.logger.warn "AiResponseCache#read: Unexpected #{e.class} for key=#{cacheKey}. Message=#{e.message}"
     nil
   end
 
@@ -41,8 +43,8 @@ class AiResponseCache
 
     serializedValue = value.to_json
     @redisClient.setex(cacheKey, @ttlSeconds, serializedValue)
-  rescue StandardError => error
-    Rails.logger.warn "AiResponseCache#write: Failed to cache response for key=#{cacheKey}. Error=#{error.class} Message=#{error.message}"
+  rescue StandardError => e
+    Rails.logger.warn "AiResponseCache#write: Failed to cache response for key=#{cacheKey}. Error=#{e.class} Message=#{e.message}"
   end
 
   private
@@ -51,8 +53,8 @@ class AiResponseCache
     payload.deep_dup.tap do |duplicated|
       duplicated[:messages] = Array(duplicated[:messages]).map do |message|
         {
-          role: message[:role] || message['role'],
-          content: message[:content] || message['content']
+          role: message[:role] || message["role"],
+          content: message[:content] || message["content"]
         }
       end
     end
@@ -62,16 +64,20 @@ class AiResponseCache
     return NullRedisClient.new unless defined?(Redis)
 
     if Redis.respond_to?(:current)
-      current = Redis.current rescue nil
+      current = begin
+        Redis.current
+      rescue StandardError
+        nil
+      end
       return current if current
     end
 
-    redisUrl = ENV['REDIS_URL']
+    redisUrl = ENV.fetch("REDIS_URL", nil)
     return NullRedisClient.new if redisUrl.blank?
 
     Redis.new(url: redisUrl)
-  rescue StandardError => error
-    Rails.logger.warn "AiResponseCache#defaultRedisClient: Redis is unavailable. #{error.class} #{error.message}"
+  rescue StandardError => e
+    Rails.logger.warn "AiResponseCache#defaultRedisClient: Redis is unavailable. #{e.class} #{e.message}"
     NullRedisClient.new
   end
 
@@ -92,4 +98,3 @@ class AiResponseCache
     end
   end
 end
-

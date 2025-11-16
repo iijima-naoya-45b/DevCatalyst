@@ -4,13 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { specService } from '@/lib/services/spec-service';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
@@ -162,12 +156,14 @@ export default function DashboardPage() {
           return;
         }
 
-        const normalizedMessages: ConversationMessage[] = sessionData.messages.map((message: any) => ({
-          id: String(message.id),
-          role: message.sender_role === 'aria' ? 'assistant' : 'user',
-          content: message.content,
-          createdAt: new Date(message.created_at),
-        }));
+        const normalizedMessages: ConversationMessage[] = sessionData.messages.map(
+          (message: any) => ({
+            id: String(message.id),
+            role: message.sender_role === 'aria' ? 'assistant' : 'user',
+            content: message.content,
+            createdAt: new Date(message.created_at),
+          })
+        );
 
         setMessages(normalizedMessages);
 
@@ -183,7 +179,7 @@ export default function DashboardPage() {
         setMessagesLoading(false);
       }
     },
-    [sessions],
+    [sessions]
   );
 
   useEffect(() => {
@@ -228,19 +224,22 @@ export default function DashboardPage() {
     }
   }, [messageInput]);
 
-  const handleGenerateSpecFromSession = useCallback(async (sessionId: number) => {
-    setGeneratingSpecSessionId(sessionId);
-    try {
-      const spec = await specService.createFromSession(sessionId);
-      // 生成が完了したらSpecページに遷移
-      router.push(`/specs/new?spec_id=${spec.id}`);
-    } catch (error: any) {
-      console.error('Spec generation error:', error);
-      setErrorMessage(error.message || 'Specの生成に失敗しました');
-    } finally {
-      setGeneratingSpecSessionId(null);
-    }
-  }, [router]);
+  const handleGenerateSpecFromSession = useCallback(
+    async (sessionId: number) => {
+      setGeneratingSpecSessionId(sessionId);
+      try {
+        const spec = await specService.createFromSession(sessionId);
+        // 生成が完了したらSpecページに遷移
+        router.push(`/specs/new?spec_id=${spec.id}`);
+      } catch (error: any) {
+        console.error('Spec generation error:', error);
+        setErrorMessage(error.message || 'Specの生成に失敗しました');
+      } finally {
+        setGeneratingSpecSessionId(null);
+      }
+    },
+    [router]
+  );
 
   const handleDeleteSessionClick = useCallback((sessionId: number, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -281,7 +280,7 @@ export default function DashboardPage() {
       setMessagesError(null);
       void loadSessionMessages(session.id);
     },
-    [loadSessionMessages],
+    [loadSessionMessages]
   );
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -338,46 +337,42 @@ export default function DashboardPage() {
 
       try {
         await withAuthToken(() =>
-          aiService.chatCompletionStream(
-            requestPayload,
-            activeSessionId,
-            {
-              onChunk: (chunk) => {
-                collectedContent += chunk;
-                setMessages((prev) =>
-                  prev.map((message) =>
-                    message.id === streamingMessageId
-                      ? {
+          aiService.chatCompletionStream(requestPayload, activeSessionId, {
+            onChunk: (chunk) => {
+              collectedContent += chunk;
+              setMessages((prev) =>
+                prev.map((message) =>
+                  message.id === streamingMessageId
+                    ? {
                         ...message,
                         content: message.content + chunk,
                       }
-                      : message,
-                  ),
-                );
-              },
-              onError: (errorMessage) => {
-                setAssistantThinking(false);
-                setMessagesError(errorMessage || 'ストリーミング中にエラーが発生しました。');
-                setMessages((prev) => prev.filter((message) => message.id !== streamingMessageId));
-              },
-              onComplete: (sessionId) => {
-                setAssistantThinking(false);
-                setMessages((prev) =>
-                  prev.map((message) =>
-                    message.id === streamingMessageId
-                      ? {
+                    : message
+                )
+              );
+            },
+            onError: (errorMessage) => {
+              setAssistantThinking(false);
+              setMessagesError(errorMessage || 'ストリーミング中にエラーが発生しました。');
+              setMessages((prev) => prev.filter((message) => message.id !== streamingMessageId));
+            },
+            onComplete: (sessionId) => {
+              setAssistantThinking(false);
+              setMessages((prev) =>
+                prev.map((message) =>
+                  message.id === streamingMessageId
+                    ? {
                         ...message,
                         content: collectedContent,
                         isStreaming: false,
                       }
-                      : message,
-                  ),
-                );
+                    : message
+                )
+              );
 
-                void loadSessions();
-              },
-            }
-          ),
+              void loadSessions();
+            },
+          })
         );
       } catch (error) {
         console.error(error);
@@ -386,7 +381,7 @@ export default function DashboardPage() {
         setMessagesError('会話の送信中にエラーが発生しました。時間をおいて再試行してください。');
       }
     },
-    [activeSessionId, assistantThinking, loadSessions, messageInput, messages],
+    [activeSessionId, assistantThinking, loadSessions, messageInput, messages]
   );
 
   if (sessionsLoading) {
@@ -429,11 +424,13 @@ export default function DashboardPage() {
             </Alert>
           )}
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => {
-              setDeleteDialogOpen(false);
-              setSessionToDelete(null);
-              setErrorMessage(null);
-            }}>
+            <AlertDialogCancel
+              onClick={() => {
+                setDeleteDialogOpen(false);
+                setSessionToDelete(null);
+                setErrorMessage(null);
+              }}
+            >
               キャンセル
             </AlertDialogCancel>
             <AlertDialogAction
@@ -501,156 +498,164 @@ export default function DashboardPage() {
       </div>
 
       {/* スマホ: ドロワー（Portal経由でbody直下にレンダリング） */}
-      {isMounted && createPortal(
-        <>
-          {/* オーバーレイ */}
-          {isDrawerOpen && (
+      {isMounted &&
+        createPortal(
+          <>
+            {/* オーバーレイ */}
+            {isDrawerOpen && (
+              <div
+                className="lg:hidden fixed inset-0 z-[60] bg-black/50 transition-opacity data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+                onClick={() => setIsDrawerOpen(false)}
+              />
+            )}
+            {/* ドロワー */}
             <div
-              className="lg:hidden fixed inset-0 z-[60] bg-black/50 transition-opacity data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
-              onClick={() => setIsDrawerOpen(false)}
-            />
-          )}
-          {/* ドロワー */}
-          <div
-            className={`lg:hidden fixed left-0 top-0 bottom-0 z-[60] w-80 bg-white dark:bg-slate-900 shadow-2xl transform transition-transform duration-300 ease-in-out ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
-          >
-            <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between p-4 border-b border-gold/25">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">セッション一覧</h2>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsDrawerOpen(false)}
-                  className="h-8 w-8"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="p-4 border-b border-gold/25">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                  <Input
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    placeholder="キーワードで検索..."
-                    className="pl-9 rounded-lg"
-                  />
+              className={`lg:hidden fixed left-0 top-0 bottom-0 z-[60] w-80 bg-white dark:bg-slate-900 shadow-2xl transform transition-transform duration-300 ease-in-out ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
+            >
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between p-4 border-b border-gold/25">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    セッション一覧
+                  </h2>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsDrawerOpen(false)}
+                    className="h-8 w-8"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
-              </div>
-              <div className="flex-1 overflow-y-auto p-4">
-                {filteredSessions.length === 0 ? (
-                  <div className="text-sm text-gray-500 dark:text-gray-400 space-y-2">
-                    <p>該当するセッションが見つかりませんでした。</p>
-                    <p>別のキーワードでお試しください。</p>
+                <div className="p-4 border-b border-gold/25">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <Input
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      placeholder="キーワードで検索..."
+                      className="pl-9 rounded-lg"
+                    />
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    {filteredSessions.map((session, index) => {
-                      const isActive = session.id === activeSessionId;
-                      return (
-                        <div
-                          key={session.id}
-                          onClick={() => {
-                            handleSelectSession(session);
-                            setIsDrawerOpen(false);
-                          }}
-                          className={`w-full text-left rounded-lg border p-3 transition-all duration-300 cursor-pointer animate-slide-in-left ${isActive
-                            ? 'border-gold/60 bg-gold/10 shadow-md shadow-gold/10'
-                            : 'border-gold/15 hover:border-gold/40 hover:bg-gold/10/70'
+                </div>
+                <div className="flex-1 overflow-y-auto p-4">
+                  {filteredSessions.length === 0 ? (
+                    <div className="text-sm text-gray-500 dark:text-gray-400 space-y-2">
+                      <p>該当するセッションが見つかりませんでした。</p>
+                      <p>別のキーワードでお試しください。</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {filteredSessions.map((session, index) => {
+                        const isActive = session.id === activeSessionId;
+                        return (
+                          <div
+                            key={session.id}
+                            onClick={() => {
+                              handleSelectSession(session);
+                              setIsDrawerOpen(false);
+                            }}
+                            className={`w-full text-left rounded-lg border p-3 transition-all duration-300 cursor-pointer animate-slide-in-left ${
+                              isActive
+                                ? 'border-gold/60 bg-gold/10 shadow-md shadow-gold/10'
+                                : 'border-gold/15 hover:border-gold/40 hover:bg-gold/10/70'
                             }`}
-                          style={{
-                            animationDelay: `${index * 50}ms`,
-                            animationFillMode: 'both',
-                          }}
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                              {session.title}
-                            </span>
-                            <span className="text-[11px] text-gray-600 dark:text-gray-400 flex-shrink-0">
-                              {new Date(session.last_interacted_at).toLocaleDateString('ja-JP', {
-                                month: 'short',
-                                day: 'numeric',
-                              })}
-                            </span>
-                          </div>
-                          {session.last_message_preview && (
-                            <p className="mt-2 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
-                              {session.last_message_preview}
-                            </p>
-                          )}
-                          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                            <div className="flex flex-wrap items-center gap-3 text-[11px] text-gray-500 dark:text-gray-400">
-                              <span className="flex items-center gap-1">
-                                <MessageCircle className="h-3 w-3" />
-                                {session.messages_count} 件
+                            style={{
+                              animationDelay: `${index * 50}ms`,
+                              animationFillMode: 'both',
+                            }}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                                {session.title}
                               </span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {new Date(session.last_interacted_at).toLocaleTimeString('ja-JP', {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
+                              <span className="text-[11px] text-gray-600 dark:text-gray-400 flex-shrink-0">
+                                {new Date(session.last_interacted_at).toLocaleDateString('ja-JP', {
+                                  month: 'short',
+                                  day: 'numeric',
                                 })}
                               </span>
-                              {session.archived && (
-                                <span className="rounded-full bg-slate-200 px-2 py-0.5 text-[10px] text-slate-600 dark:bg-slate-700 dark:text-slate-200">
-                                  アーカイブ
-                                </span>
-                              )}
                             </div>
-                            <div className="flex items-center gap-2">
-                              <div
-                                onClick={async (e) => {
-                                  e.stopPropagation();
-                                  if (!generatingSpecSessionId || generatingSpecSessionId !== session.id) {
-                                    await handleGenerateSpecFromSession(session.id);
-                                  }
-                                }}
-                                className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-7 px-2 ${generatingSpecSessionId === session.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                              >
-                                {generatingSpecSessionId === session.id ? (
-                                  <>
-                                    <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
-                                    生成中...
-                                  </>
-                                ) : (
-                                  <>
-                                    <FileText className="h-3.5 w-3.5 mr-1" />
-                                    Spec生成
-                                  </>
+                            {session.last_message_preview && (
+                              <p className="mt-2 line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
+                                {session.last_message_preview}
+                              </p>
+                            )}
+                            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                              <div className="flex flex-wrap items-center gap-3 text-[11px] text-gray-500 dark:text-gray-400">
+                                <span className="flex items-center gap-1">
+                                  <MessageCircle className="h-3 w-3" />
+                                  {session.messages_count} 件
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {new Date(session.last_interacted_at).toLocaleTimeString(
+                                    'ja-JP',
+                                    {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    }
+                                  )}
+                                </span>
+                                {session.archived && (
+                                  <span className="rounded-full bg-slate-200 px-2 py-0.5 text-[10px] text-slate-600 dark:bg-slate-700 dark:text-slate-200">
+                                    アーカイブ
+                                  </span>
                                 )}
                               </div>
-                              <button
-                                onClick={(e) => handleDeleteSessionClick(session.id, e)}
-                                disabled={deletingSessionId === session.id}
-                                className={`inline-flex items-center justify-center rounded-md text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 h-7 w-7 p-0 ${deletingSessionId === session.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-gray-500 dark:text-gray-400'}`}
-                                title="セッションを削除"
-                              >
-                                {deletingSessionId === session.id ? (
-                                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                ) : (
-                                  <Trash2 className="h-3.5 w-3.5" />
-                                )}
-                              </button>
+                              <div className="flex items-center gap-2">
+                                <div
+                                  onClick={async (e) => {
+                                    e.stopPropagation();
+                                    if (
+                                      !generatingSpecSessionId ||
+                                      generatingSpecSessionId !== session.id
+                                    ) {
+                                      await handleGenerateSpecFromSession(session.id);
+                                    }
+                                  }}
+                                  className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-7 px-2 ${generatingSpecSessionId === session.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                >
+                                  {generatingSpecSessionId === session.id ? (
+                                    <>
+                                      <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
+                                      生成中...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <FileText className="h-3.5 w-3.5 mr-1" />
+                                      Spec生成
+                                    </>
+                                  )}
+                                </div>
+                                <button
+                                  onClick={(e) => handleDeleteSessionClick(session.id, e)}
+                                  disabled={deletingSessionId === session.id}
+                                  className={`inline-flex items-center justify-center rounded-md text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 h-7 w-7 p-0 ${deletingSessionId === session.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-gray-500 dark:text-gray-400'}`}
+                                  title="セッションを削除"
+                                >
+                                  {deletingSessionId === session.id ? (
+                                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  )}
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </>,
-        document.body
-      )}
+          </>,
+          document.body
+        )}
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* デスクトップ: セッション一覧サイドバー */}
-        <Card
-          className="hidden lg:block lg:w-64 xl:w-72 border border-gold/25 dark:border-gold/25 bg-white/90 dark:bg-slate-900/70 backdrop-blur"
-        >
+        <Card className="hidden lg:block lg:w-64 xl:w-72 border border-gold/25 dark:border-gold/25 bg-white/90 dark:bg-slate-900/70 backdrop-blur">
           <CardHeader className="space-y-3 p-4">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base font-semibold text-gray-900 dark:text-white">
@@ -684,10 +689,11 @@ export default function DashboardPage() {
                     <div
                       key={session.id}
                       onClick={() => handleSelectSession(session)}
-                      className={`w-full text-left rounded-lg border p-2.5 transition-all duration-300 cursor-pointer animate-slide-in-left ${isActive
-                        ? 'border-gold/60 bg-gold/10 shadow-md shadow-gold/10'
-                        : 'border-gold/15 hover:border-gold/40 hover:bg-gold/10/70'
-                        }`}
+                      className={`w-full text-left rounded-lg border p-2.5 transition-all duration-300 cursor-pointer animate-slide-in-left ${
+                        isActive
+                          ? 'border-gold/60 bg-gold/10 shadow-md shadow-gold/10'
+                          : 'border-gold/15 hover:border-gold/40 hover:bg-gold/10/70'
+                      }`}
                       style={{
                         animationDelay: `${index * 50}ms`,
                         animationFillMode: 'both',
@@ -732,7 +738,10 @@ export default function DashboardPage() {
                           <div
                             onClick={async (e) => {
                               e.stopPropagation();
-                              if (!generatingSpecSessionId || generatingSpecSessionId !== session.id) {
+                              if (
+                                !generatingSpecSessionId ||
+                                generatingSpecSessionId !== session.id
+                              ) {
                                 await handleGenerateSpecFromSession(session.id);
                               }
                             }}
@@ -796,9 +805,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card
-          className="flex-1 border border-gold/25 dark:border-gold/25 bg-white/90 dark:bg-slate-900/70 backdrop-blur"
-        >
+        <Card className="flex-1 border border-gold/25 dark:border-gold/25 bg-white/90 dark:bg-slate-900/70 backdrop-blur">
           <CardHeader className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
@@ -845,12 +852,15 @@ export default function DashboardPage() {
                     className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'} space-y-1.5`}
                   >
                     <div
-                      className={`max-w-full rounded-lg px-3 py-2 sm:px-4 sm:py-3 shadow ${message.role === 'user'
-                        ? 'bg-gradient-to-br from-amber-100 via-amber-200 to-amber-100 text-slate-900 dark:!text-slate-900'
-                        : 'bg-white dark:bg-slate-900/80 text-gray-900 dark:text-amber-100 border border-gold/30'
-                        } ${message.isStreaming ? 'animate-pulse' : ''}`}
+                      className={`max-w-full rounded-lg px-3 py-2 sm:px-4 sm:py-3 shadow ${
+                        message.role === 'user'
+                          ? 'bg-gradient-to-br from-amber-100 via-amber-200 to-amber-100 text-slate-900 dark:!text-slate-900'
+                          : 'bg-white dark:bg-slate-900/80 text-gray-900 dark:text-amber-100 border border-gold/30'
+                      } ${message.isStreaming ? 'animate-pulse' : ''}`}
                     >
-                      <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-1.5 [&>ol]:mb-1.5 [&>li]:mb-0.5 [&>h1]:mb-1.5 [&>h2]:mb-1.5 [&>h3]:mb-1.5 [&>h4]:mb-1.5">{message.content}</div>
+                      <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-1.5 [&>ol]:mb-1.5 [&>li]:mb-0.5 [&>h1]:mb-1.5 [&>h2]:mb-1.5 [&>h3]:mb-1.5 [&>h4]:mb-1.5">
+                        {message.content}
+                      </div>
                     </div>
                     <span className="text-[10px] sm:text-[11px] text-gray-400">
                       {message.createdAt.toLocaleTimeString('ja-JP', {
@@ -932,4 +942,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

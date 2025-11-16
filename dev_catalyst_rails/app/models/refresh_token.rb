@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: refresh_tokens
@@ -31,8 +33,8 @@ class RefreshToken < ApplicationRecord
 
   # スコープ
   scope :active, -> { where(is_revoked: false) }
-  scope :expired, -> { where('expires_at < ?', Time.current) }
-  scope :valid, -> { active.where('expires_at > ?', Time.current) }
+  scope :expired, -> { where(expires_at: ...Time.current) }
+  scope :valid, -> { active.where("expires_at > ?", Time.current) }
 
   # コールバック
   before_create :set_expiration_time
@@ -43,16 +45,16 @@ class RefreshToken < ApplicationRecord
   def self.generate_for_user(user)
     # 既存のアクティブなトークンを無効化
     user.refresh_tokens.active.update_all(is_revoked: true)
-    
+
     # 新しいトークンを生成
     raw_token = SecureRandom.hex(32)
     token_hash = Digest::SHA256.hexdigest(raw_token)
-    
+
     refresh_token = create!(
       user: user,
       token_hash: token_hash
     )
-    
+
     # 生のトークンを返す（ハッシュ化前）
     [refresh_token, raw_token]
   end
@@ -60,7 +62,7 @@ class RefreshToken < ApplicationRecord
   # トークンの検証
   def self.find_by_token(raw_token)
     return nil if raw_token.blank?
-    
+
     token_hash = Digest::SHA256.hexdigest(raw_token)
     valid.find_by(token_hash: token_hash)
   end
@@ -90,6 +92,7 @@ class RefreshToken < ApplicationRecord
   # 残り有効期間（秒）
   def remaining_lifetime
     return 0 if expired?
+
     (expires_at - Time.current).to_i
   end
 

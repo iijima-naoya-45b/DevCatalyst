@@ -1,14 +1,13 @@
 export interface LoadingProps {
-    message?: string;
-    size?: 'sm' | 'md' | 'lg';
-    fullScreen?: boolean;
+  message?: string;
+  size?: 'sm' | 'md' | 'lg';
+  fullScreen?: boolean;
 }
 
 export interface SimpleAriaLoaderProps {
-    onComplete: () => void;
+  onComplete: () => void;
 }
 
 export interface LoadingMessageProps {
-    message?: string;
+  message?: string;
 }
-

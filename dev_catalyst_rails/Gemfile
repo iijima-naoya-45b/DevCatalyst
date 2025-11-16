@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.3"
 
 # Database
-gem "sqlite3", ">= 1.4"  # SQLite adapter
+gem "sqlite3", ">= 1.4" # SQLite adapter
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -13,39 +15,39 @@ gem "puma", ">= 5.0"
 gem "jbuilder"
 
 # Authentication & Authorization
-gem "devise"  # Authentication
-gem "omniauth"  # OAuth authentication
-gem "omniauth-google-oauth2"  # Google OAuth
-gem "omniauth-github"  # GitHub OAuth
-gem "omniauth-rails_csrf_protection"  # CSRF protection for OmniAuth
-gem "bcrypt", "~> 3.1.7"  # Use Active Model has_secure_password
-gem "jwt"  # JSON Web Token
-gem "pundit"  # Authorization
+gem "bcrypt", "~> 3.1.7" # Use Active Model has_secure_password
+gem "devise" # Authentication
+gem "jwt" # JSON Web Token
+gem "omniauth" # OAuth authentication
+gem "omniauth-github" # GitHub OAuth
+gem "omniauth-google-oauth2" # Google OAuth
+gem "omniauth-rails_csrf_protection" # CSRF protection for OmniAuth
+gem "pundit" # Authorization
 
 # API & CORS
-gem "rack-cors"  # Cross-Origin Resource Sharing
-gem "rack-attack"  # Rate limiting and throttling
+gem "rack-attack" # Rate limiting and throttling
+gem "rack-cors" # Cross-Origin Resource Sharing
 
 # External APIs
-gem "stripe"  # Stripe payment processing
-gem "octokit"  # GitHub API
-gem "httparty"  # HTTP requests
-gem "faraday"  # HTTP client
-gem "faraday-retry"  # Retry middleware for Faraday
+gem "faraday" # HTTP client
+gem "faraday-retry" # Retry middleware for Faraday
+gem "httparty" # HTTP requests
+gem "octokit" # GitHub API
+gem "stripe" # Stripe payment processing
 
 # Background Jobs
-gem "sidekiq"  # Background job processing
-gem "sidekiq-cron"  # Cron jobs for Sidekiq
+gem "sidekiq" # Background job processing
+gem "sidekiq-cron" # Cron jobs for Sidekiq
 
 # Caching & Session
-gem "redis", "~> 5.0"  # Redis for caching and sessions
+gem "redis", "~> 5.0" # Redis for caching and sessions
 
 # Monitoring & Error Tracking
-gem "sentry-ruby"
 gem "sentry-rails"
+gem "sentry-ruby"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: [:windows, :jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -58,19 +60,19 @@ gem "thruster", require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "debug", platforms: [:mri, :windows], require: "debug/prelude"
 
   # Testing framework
-  gem "rspec-rails"  # RSpec testing framework
-  gem "factory_bot_rails"  # Test data factories
-  gem "faker"  # Fake data generation
+  gem "factory_bot_rails" # Test data factories
+  gem "faker" # Fake data generation
+  gem "rspec-rails" # RSpec testing framework
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-  
+
   # Additional RuboCop extensions
   gem "rubocop-performance", require: false
   gem "rubocop-rspec", require: false
@@ -78,12 +80,12 @@ end
 
 group :development do
   # Development tools
-  gem "listen", "~> 3.3"  # File change listener
-  gem "spring"  # Application preloader
-  gem "annotate"  # Model annotation
-  gem "bullet"  # N+1 query detection
-  gem "pry-rails"  # Better console
-  gem "dotenv-rails"  # Environment variables
-  gem "letter_opener"  # Preview email in the browser
-  gem "letter_opener_web"  # Web interface for letter_opener
+  gem "annotate" # Model annotation
+  gem "bullet" # N+1 query detection
+  gem "dotenv-rails" # Environment variables
+  gem "letter_opener" # Preview email in the browser
+  gem "letter_opener_web" # Web interface for letter_opener
+  gem "listen", "~> 3.3" # File change listener
+  gem "pry-rails" # Better console
+  gem "spring" # Application preloader
 end

@@ -4,11 +4,11 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function ProjectsRedirect() {
-    const router = useRouter();
+  const router = useRouter();
 
-    useEffect(() => {
-        router.replace('/dashboard');
-    }, [router]);
+  useEffect(() => {
+    router.replace('/dashboard');
+  }, [router]);
 
-    return null;
+  return null;
 }

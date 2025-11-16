@@ -25,9 +25,9 @@ class OauthService
   def self.handle_callback(auth_data)
     service = new(auth_data)
     user = service.find_or_create_user
-    
+
     return nil unless user.persisted?
-    
+
     tokens = service.generate_tokens(user)
     service.build_success_response(user, tokens)
   end

@@ -2,19 +2,19 @@
 
 module InputSanitizer
   extend ActiveSupport::Concern
-  
+
   included do
     before_action :sanitize_params_recursively
   end
-  
+
   private
-  
+
   def sanitize_params_recursively
-    return unless params.present?
-    
+    return if params.blank?
+
     sanitize_hash(params)
   end
-  
+
   def sanitize_hash(hash)
     hash.each do |key, value|
       case value
@@ -29,7 +29,7 @@ module InputSanitizer
       end
     end
   end
-  
+
   def sanitize_value(value)
     case value
     when String
@@ -44,10 +44,10 @@ module InputSanitizer
       value
     end
   end
-  
+
   def sanitize_string(str)
     return str if str.blank?
-    
+
     # XSS対策: HTMLタグを除去（特定のエンドポイントを除く）
     if should_sanitize_html?
       ActionController::Base.helpers.sanitize(str, tags: [], attributes: [])
@@ -55,14 +55,14 @@ module InputSanitizer
       str
     end
   end
-  
+
   def should_sanitize_html?
     # チャットメッセージなど、HTMLを許可する必要があるエンドポイントを除外
     excluded_paths = [
-      '/api/v1/ai/chat',
-      '/api/v1/ai/chat/stream'
+      "/api/v1/ai/chat",
+      "/api/v1/ai/chat/stream"
     ]
-    
-    !excluded_paths.any? { |path| request.path.start_with?(path) }
+
+    excluded_paths.none? { |path| request.path.start_with?(path) }
   end
 end

@@ -6,7 +6,7 @@ class User < ApplicationRecord
   include User::Plannable
   include User::Avatarizable
   include GdprCompliant
-  
+
   # Associations
   has_many :chat_sessions, dependent: :destroy
   has_many :chat_messages, through: :chat_sessions
@@ -24,8 +24,6 @@ class User < ApplicationRecord
   scope :regular_users, -> { where(provider: nil) }
   scope :active, -> { where(deleted_at: nil) }
 
-
-
   # User info for API response
   def as_json(options = {})
     super(options.merge(
@@ -36,7 +34,7 @@ class User < ApplicationRecord
 
   def self.token_remaining_seconds(token)
     payload = JWT.decode(token, jwt_secret_key).first
-    expiration = payload['exp'].to_i
+    expiration = payload["exp"].to_i
     [expiration - Time.current.to_i, 0].max
   rescue JWT::DecodeError, JWT::ExpiredSignature
     0
@@ -48,16 +46,16 @@ class User < ApplicationRecord
 
   # 表示用名前
   def display_name
-    name.presence || email.split('@').first
+    name.presence || email.split("@").first
   end
-  
+
   # アクティブユーザーかどうか
   def active?
     deleted_at.nil?
   end
-  
+
   private
-  
+
   def oauth_user?
     provider.present?
   end

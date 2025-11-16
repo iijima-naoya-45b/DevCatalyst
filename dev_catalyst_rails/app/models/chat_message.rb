@@ -3,7 +3,7 @@
 class ChatMessage < ApplicationRecord
   belongs_to :chat_session
 
-  SENDER_ROLES = %w[user aria system].freeze
+  SENDER_ROLES = ["user", "aria", "system"].freeze
 
   validates :sender_role, presence: true, inclusion: { in: SENDER_ROLES }
   validates :content, presence: true, content_length: { minimum: 1, maximum: 10_000, no_whitespace_only: true }
@@ -29,6 +29,3 @@ class ChatMessage < ApplicationRecord
     update!(cached_response: true)
   end
 end
-
-
-

@@ -16,19 +16,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { 
-  FileText, 
-  Plus, 
-  Search, 
-  Trash2, 
-  Edit2, 
+import {
+  FileText,
+  Plus,
+  Search,
+  Trash2,
+  Edit2,
   Download,
   Loader2,
   Calendar,
   CheckCircle,
   Clock,
   Sparkles,
-  X
+  X,
 } from 'lucide-react';
 import { specService, type Spec } from '@/lib/services/spec-service';
 import { useAuth } from '@/contexts/auth-context';
@@ -38,7 +38,7 @@ const SPECS_PER_PAGE = 12;
 export default function SpecsPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
-  
+
   const [specs, setSpecs] = useState<Spec[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -91,7 +91,7 @@ export default function SpecsPage() {
     setErrorMessage(null);
     try {
       await specService.deleteSpec(specToDelete);
-      setSpecs(specs.filter(s => s.id !== specToDelete));
+      setSpecs(specs.filter((s) => s.id !== specToDelete));
       setDeleteDialogOpen(false);
       setSpecToDelete(null);
     } catch (err: any) {
@@ -204,11 +204,13 @@ export default function SpecsPage() {
             </Alert>
           )}
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => {
-              setDeleteDialogOpen(false);
-              setSpecToDelete(null);
-              setErrorMessage(null);
-            }}>
+            <AlertDialogCancel
+              onClick={() => {
+                setDeleteDialogOpen(false);
+                setSpecToDelete(null);
+                setErrorMessage(null);
+              }}
+            >
               キャンセル
             </AlertDialogCancel>
             <AlertDialogAction
@@ -240,18 +242,11 @@ export default function SpecsPage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-            >
+            <Button variant="outline" onClick={handleRefresh} disabled={isRefreshing}>
               <Loader2 className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
               更新
             </Button>
-            <Button
-              onClick={() => router.push('/specs/new')}
-              className="aria-gold-surface"
-            >
+            <Button onClick={() => router.push('/specs/new')} className="aria-gold-surface">
               <Plus className="h-4 w-4 mr-2" />
               新規作成
             </Button>
@@ -291,10 +286,7 @@ export default function SpecsPage() {
               {searchTerm ? '別のキーワードでお試しください' : '新しいSpecを作成して始めましょう'}
             </p>
             {!searchTerm && (
-              <Button
-                onClick={() => router.push('/specs/new')}
-                className="aria-gold-surface"
-              >
+              <Button onClick={() => router.push('/specs/new')} className="aria-gold-surface">
                 <Plus className="h-4 w-4 mr-2" />
                 新規作成
               </Button>
@@ -395,7 +387,7 @@ export default function SpecsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
               >
                 前へ
@@ -406,7 +398,7 @@ export default function SpecsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
               >
                 次へ
@@ -418,4 +410,3 @@ export default function SpecsPage() {
     </div>
   );
 }
-

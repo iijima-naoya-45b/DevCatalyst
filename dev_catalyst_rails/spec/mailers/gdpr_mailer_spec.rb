@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe GdprMailer, type: :mailer do
@@ -56,5 +58,4 @@ RSpec.describe GdprMailer, type: :mailer do
       expect(mail.body.encoded).to match("Hi")
     end
   end
-
 end

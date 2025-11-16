@@ -2,19 +2,19 @@
 
 module GdprCompliant
   extend ActiveSupport::Concern
-  
+
   included do
     has_many :user_consents, dependent: :destroy
-    
+
     scope :active, -> { where(deleted_at: nil) }
     scope :deleted, -> { where.not(deleted_at: nil) }
   end
-  
+
   # データ削除（Right to be Forgotten）
   def gdpr_delete!(deletion_type: :anonymize, reason: nil)
     DataDeletionLog.transaction do
       log = create_deletion_log(deletion_type, reason)
-      
+
       case deletion_type.to_sym
       when :soft
         perform_soft_delete
@@ -23,7 +23,7 @@ module GdprCompliant
       when :hard
         perform_hard_delete
       end
-      
+
       log.mark_completed!(generate_deletion_summary)
       log
     end
@@ -31,7 +31,7 @@ module GdprCompliant
     Rails.logger.error "GDPR deletion failed: #{e.message}"
     raise
   end
-  
+
   # 個人データの匿名化
   def anonymize_personal_data!
     update!(
@@ -40,27 +40,27 @@ module GdprCompliant
       avatar_url: nil,
       provider: nil,
       uid: nil,
-      encrypted_password: '',
+      encrypted_password: "",
       deleted_at: Time.current
     )
   end
-  
+
   # 関連データの削除
   def delete_associated_data!
     chat_sessions.destroy_all
     user_consents.destroy_all
   end
-  
+
   # データエクスポート（Right to Data Portability）
   def export_personal_data
     Gdpr::DataExportService.new(self).export_all_data
   end
-  
+
   # 同意の確認
   def has_consent?(consent_type)
     user_consents.active.exists?(consent_type: consent_type)
   end
-  
+
   # 同意の記録
   def record_consent(consent_type:, version:, ip_address:, user_agent:)
     user_consents.create!(
@@ -71,9 +71,9 @@ module GdprCompliant
       user_agent: user_agent
     )
   end
-  
+
   private
-  
+
   def create_deletion_log(deletion_type, reason)
     DataDeletionLog.create!(
       user_id: id,
@@ -84,21 +84,21 @@ module GdprCompliant
       status: :processing
     )
   end
-  
+
   def perform_soft_delete
     update!(deleted_at: Time.current)
   end
-  
+
   def perform_anonymization
     anonymize_personal_data!
     chat_sessions.update_all(archived: true)
   end
-  
+
   def perform_hard_delete
     delete_associated_data!
     destroy!
   end
-  
+
   def generate_deletion_summary
     {
       user_id: id,

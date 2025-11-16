@@ -6,7 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, FileText, Download, Sparkles, FileDown, MessageSquare, Brain, X } from 'lucide-react';
+import {
+  Loader2,
+  FileText,
+  Download,
+  Sparkles,
+  FileDown,
+  MessageSquare,
+  Brain,
+  X,
+} from 'lucide-react';
 import { specService, type Spec, type SpecSection } from '@/lib/services/spec-service';
 import { useAuth } from '@/contexts/auth-context';
 import ReactMarkdown from 'react-markdown';
@@ -25,7 +34,9 @@ export default function NewSpecPage() {
   const previewRef = useRef<HTMLDivElement>(null);
   const [conversationMode, setConversationMode] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<string | null>(null);
-  const [conversationMessages, setConversationMessages] = useState<Array<{ role: 'user' | 'aria'; content: string }>>([]);
+  const [conversationMessages, setConversationMessages] = useState<
+    Array<{ role: 'user' | 'aria'; content: string }>
+  >([]);
   const conversationRef = useRef<HTMLDivElement>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -51,7 +62,7 @@ export default function NewSpecPage() {
       const loadedSpec = await specService.getSpec(id);
       setSpec(loadedSpec);
       setCompletionPercentage(loadedSpec.completion_percentage);
-      
+
       // 生成中の場合はポーリングで更新
       if (loadedSpec.status === 'generating') {
         pollSpecStatus(id);
@@ -70,7 +81,7 @@ export default function NewSpecPage() {
         const updatedSpec = await specService.getSpec(id);
         setSpec(updatedSpec);
         setCompletionPercentage(updatedSpec.completion_percentage);
-        
+
         if (updatedSpec.status !== 'generating') {
           clearInterval(interval);
         }
@@ -78,7 +89,7 @@ export default function NewSpecPage() {
         clearInterval(interval);
       }
     }, 2000);
-    
+
     setTimeout(() => clearInterval(interval), 60000); // 60秒でタイムアウト
   };
 
@@ -88,10 +99,10 @@ export default function NewSpecPage() {
       const newSpec = await specService.createFromSession(sessionId);
       setSpec(newSpec);
       setCompletionPercentage(newSpec.completion_percentage);
-      
+
       // 生成が完了したらSpecページに遷移
       router.push(`/specs/new?spec_id=${newSpec.id}`);
-      
+
       // セクションが生成されるまで待機して更新
       if (newSpec.status === 'generating') {
         pollSpecStatus(newSpec.id);
@@ -133,12 +144,10 @@ export default function NewSpecPage() {
       const result = await specService.startConversation(spec.id);
       setCurrentQuestion(result.question);
       setConversationMode(true);
-      setConversationMessages([
-        { role: 'aria', content: result.question }
-      ]);
+      setConversationMessages([{ role: 'aria', content: result.question }]);
       setSpec(result.spec);
       setCompletionPercentage(result.spec.completion_percentage);
-      
+
       // 会話エリアをスクロール
       setTimeout(() => {
         if (conversationRef.current) {
@@ -161,29 +170,32 @@ export default function NewSpecPage() {
     setIsComposing(false);
 
     // ユーザーメッセージを追加
-    setConversationMessages(prev => [...prev, { role: 'user', content: userResponse }]);
+    setConversationMessages((prev) => [...prev, { role: 'user', content: userResponse }]);
 
     setIsGenerating(true);
     try {
       const result = await specService.respondToQuestion(spec.id, userResponse);
-      
+
       setSpec(result.spec);
       setCompletionPercentage(result.completion_percentage);
-      
+
       // 次の質問を追加
       if (result.question) {
         setCurrentQuestion(result.question);
-        setConversationMessages(prev => [...prev, { role: 'aria', content: result.question! }]);
+        setConversationMessages((prev) => [...prev, { role: 'aria', content: result.question! }]);
       } else {
         setCurrentQuestion(null);
-        setConversationMessages(prev => [...prev, { role: 'aria', content: 'ありがとうございます！Specの生成が完了しました。' }]);
+        setConversationMessages((prev) => [
+          ...prev,
+          { role: 'aria', content: 'ありがとうございます！Specの生成が完了しました。' },
+        ]);
       }
-      
+
       // プレビューをスクロール
       if (previewRef.current) {
         previewRef.current.scrollTop = previewRef.current.scrollHeight;
       }
-      
+
       // 会話エリアをスクロール
       setTimeout(() => {
         if (conversationRef.current) {
@@ -194,7 +206,7 @@ export default function NewSpecPage() {
       console.error('Response error:', error);
       setErrorMessage(error.message || '回答の処理に失敗しました');
       // エラー時はユーザーメッセージを削除
-      setConversationMessages(prev => prev.slice(0, -1));
+      setConversationMessages((prev) => prev.slice(0, -1));
     } finally {
       setIsGenerating(false);
     }
@@ -212,7 +224,7 @@ export default function NewSpecPage() {
       setSpec(result.spec);
       setCompletionPercentage(result.spec.completion_percentage);
       setUserInput('');
-      
+
       // プレビューをスクロール
       if (previewRef.current) {
         previewRef.current.scrollTop = previewRef.current.scrollHeight;
@@ -230,7 +242,7 @@ export default function NewSpecPage() {
 
     try {
       const result = await specService.exportMarkdown(spec.id);
-      
+
       // Markdownファイルをダウンロード
       const blob = new Blob([result.markdown], { type: 'text/markdown;charset=utf-8' });
       const url = URL.createObjectURL(blob);
@@ -252,14 +264,14 @@ export default function NewSpecPage() {
 
     try {
       const result = await specService.exportPdf(spec.id);
-      
+
       // HTMLをPDFに変換（ブラウザの印刷機能を使用）
       const printWindow = window.open('', '_blank');
       if (!printWindow) {
         setErrorMessage('ポップアップがブロックされています。ブラウザの設定を確認してください。');
         return;
       }
-      
+
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
@@ -293,9 +305,9 @@ export default function NewSpecPage() {
         </body>
         </html>
       `);
-      
+
       printWindow.document.close();
-      
+
       // 印刷ダイアログを表示（PDFとして保存可能）
       setTimeout(() => {
         printWindow.print();
@@ -386,7 +398,10 @@ export default function NewSpecPage() {
             ) : conversationMode ? (
               <div className="flex-1 flex flex-col space-y-4">
                 {/* 会話エリア */}
-                <div className="flex-1 overflow-y-auto space-y-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg" ref={conversationRef}>
+                <div
+                  className="flex-1 overflow-y-auto space-y-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg"
+                  ref={conversationRef}
+                >
                   {conversationMessages.map((message, index) => (
                     <div
                       key={index}
@@ -415,7 +430,9 @@ export default function NewSpecPage() {
                         <div className="flex items-center gap-2">
                           <Brain className="h-4 w-4 text-gold" />
                           <Loader2 className="h-4 w-4 animate-spin text-gold" />
-                          <span className="text-sm text-gray-600 dark:text-gray-400">考え中...</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            考え中...
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -436,7 +453,9 @@ export default function NewSpecPage() {
                     }}
                     onCompositionStart={() => setIsComposing(true)}
                     onCompositionEnd={() => setIsComposing(false)}
-                    placeholder={currentQuestion ? "回答を入力してください..." : "対話が完了しました"}
+                    placeholder={
+                      currentQuestion ? '回答を入力してください...' : '対話が完了しました'
+                    }
                     rows={3}
                     className="min-h-[80px]"
                     disabled={!currentQuestion || isGenerating}
@@ -626,4 +645,3 @@ export default function NewSpecPage() {
     </div>
   );
 }
-

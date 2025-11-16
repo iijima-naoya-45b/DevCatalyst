@@ -9,19 +9,19 @@ FactoryBot.define do
     revoked_at { nil }
     ip_address { "127.0.0.1" }
     user_agent { "Mozilla/5.0 (Test)" }
-    
+
     trait :revoked do
       revoked_at { 1.day.ago }
     end
-    
+
     trait :expired do
       consented_at { 3.years.ago }
     end
-    
+
     trait :privacy_policy do
       consent_type { :privacy_policy }
     end
-    
+
     trait :marketing do
       consent_type { :marketing }
     end

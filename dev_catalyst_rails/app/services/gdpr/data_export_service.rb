@@ -5,7 +5,7 @@ module Gdpr
     def initialize(user)
       @user = user
     end
-    
+
     def export_all_data
       {
         metadata: export_metadata,
@@ -15,29 +15,29 @@ module Gdpr
         activity_log: export_activity_log
       }
     end
-    
+
     def generate_export_file
       data = export_all_data
-      filename = "user_data_#{@user.id}_#{Date.today}.json"
-      
+      filename = "user_data_#{@user.id}_#{Time.zone.today}.json"
+
       {
         filename: filename,
         content: JSON.pretty_generate(data),
-        content_type: 'application/json'
+        content_type: "application/json"
       }
     end
-    
+
     private
-    
+
     def export_metadata
       {
         export_date: Time.current.iso8601,
         user_id: @user.id,
-        format_version: '1.0',
+        format_version: "1.0",
         gdpr_compliant: true
       }
     end
-    
+
     def export_profile
       {
         id: @user.id,
@@ -51,7 +51,7 @@ module Gdpr
         last_sign_in_at: @user.last_sign_in_at&.iso8601
       }
     end
-    
+
     def export_chat_data
       @user.chat_sessions.includes(:chat_messages).map do |session|
         {
@@ -71,7 +71,7 @@ module Gdpr
         }
       end
     end
-    
+
     def export_consents
       @user.user_consents.map do |consent|
         {
@@ -83,7 +83,7 @@ module Gdpr
         }
       end
     end
-    
+
     def export_activity_log
       {
         total_chat_sessions: @user.chat_sessions.count,
