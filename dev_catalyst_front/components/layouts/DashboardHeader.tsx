@@ -42,7 +42,7 @@ export function DashboardHeader() {
     if (!mounted) {
         return (
             <header className="p-4 bg-white text-gray-900 border-b border-gray-200 shadow-sm dark:bg-slate-900 dark:text-foreground dark:border-gold/30">
-                <div className="container mx-auto h-12 flex items-center justify-between">
+                <div className="mx-auto w-full max-w-[1600px] h-12 flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                         <div className="w-10 h-10 rounded-lg bg-gold/20 animate-pulse" />
                         <div className="h-4 w-24 bg-gold/20 rounded animate-pulse" />
@@ -55,7 +55,7 @@ export function DashboardHeader() {
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md dark:bg-slate-900/80 text-gray-900 dark:text-foreground border-gray-200/50 dark:border-gold/30 shadow-sm">
-            <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8 h-16 sm:h-18">
+            <div className="mx-auto w-full max-w-[1600px] flex justify-between items-center px-4 sm:px-6 lg:px-8 h-16 sm:h-18">
                 <div
                     className="flex items-center space-x-3 cursor-pointer group transition-all duration-300 hover:scale-[1.02]"
                     onClick={handleClickHome}
@@ -81,7 +81,7 @@ export function DashboardHeader() {
                                 <li>
                                     <button
                                         onClick={() => router.push('/dashboard')}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 ${
                                             isActive('/dashboard')
                                                 ? 'bg-gold/10 shadow-sm border border-gold/20 text-slate-900 dark:text-amber-100'
                                                 : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gold-600 dark:hover:text-gold-400'
@@ -94,7 +94,7 @@ export function DashboardHeader() {
                                 <li>
                                     <button
                                         onClick={() => router.push('/specs')}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 ${
                                             isActive('/specs')
                                                 ? 'bg-gold/10 shadow-sm border border-gold/20 text-slate-900 dark:text-amber-100'
                                                 : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gold-600 dark:hover:text-gold-400'
@@ -107,7 +107,7 @@ export function DashboardHeader() {
                                 <li>
                                     <button
                                         onClick={() => router.push('/dashboard')}
-                                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gold-600 dark:hover:text-gold-400 transition-all duration-200"
+                                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gold-600 dark:hover:text-gold-400 transition-all duration-200"
                                     >
                                         <Target className="h-4 w-4" />
                                         <span>アクションプラン</span>
@@ -116,7 +116,7 @@ export function DashboardHeader() {
                                 <li>
                                     <button
                                         onClick={() => router.push('/dashboard')}
-                                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gold-600 dark:hover:text-gold-400 transition-all duration-200"
+                                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gold-600 dark:hover:text-gold-400 transition-all duration-200"
                                     >
                                         <BarChart3 className="h-4 w-4" />
                                         <span>分析</span>
@@ -177,7 +177,7 @@ export function DashboardHeader() {
             {/* モバイルメニュー */}
             {authenticated && mobileMenuOpen && (
                 <div className="md:hidden border-t border-gray-200 dark:border-gray-700 mt-2 pt-4">
-                    <div className="container mx-auto space-y-2">
+                    <div className="mx-auto w-full max-w-[1600px] space-y-2">
                         <button
                             onClick={() => {
                                 router.push('/dashboard');
