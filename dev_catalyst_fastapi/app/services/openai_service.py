@@ -1,7 +1,7 @@
-from typing import AsyncGenerator, List, Optional, cast
+from typing import AsyncGenerator, List, cast
 
 import openai
-from openai.types.chat import ChatCompletion, ChatCompletionChunk, ChatCompletionMessageParam
+from openai.types.chat import ChatCompletion, ChatCompletionMessageParam
 
 from ..config import settings
 from ..models import ChatRequest, ChatResponse

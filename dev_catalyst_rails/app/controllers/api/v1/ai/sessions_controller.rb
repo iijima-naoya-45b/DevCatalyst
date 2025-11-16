@@ -100,6 +100,7 @@ module Api
             password: "ValidPass123",
             password_confirmation: "ValidPass123"
           )
+          @current_user = @ensure_test_user
         end
       end
     end

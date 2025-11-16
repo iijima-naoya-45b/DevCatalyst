@@ -1,9 +1,9 @@
-from typing import Any, AsyncGenerator, Dict, List, Optional, Tuple
+from typing import AsyncGenerator, Optional, Tuple
 
 import anthropic
 from anthropic import NOT_GIVEN
 from anthropic.types import Message
-from anthropic.types.content_block import TextBlock, ToolUseBlock
+from anthropic.types.content_block import TextBlock
 
 from ..config import settings
 from ..models import ChatRequest, ChatResponse
