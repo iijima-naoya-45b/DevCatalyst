@@ -1,9 +1,9 @@
 import os
 import sys
 
+import httpx
 import pytest
 from fastapi.testclient import TestClient
-import httpx
 
 #
 # テスト実行ディレクトリがリポジトリルートの場合でも
@@ -15,8 +15,10 @@ if SERVICE_ROOT not in sys.path:
 
 # httpx.Headers 互換: requests風の get_all を提供（テストで使用）
 if not hasattr(httpx.Headers, "get_all"):  # type: ignore[attr-defined]
+
     def _get_all(self, name: str) -> list[str]:  # type: ignore[no-redef]
         return self.get_list(name)
+
     setattr(httpx.Headers, "get_all", _get_all)
 
 from app.auth import get_current_user
