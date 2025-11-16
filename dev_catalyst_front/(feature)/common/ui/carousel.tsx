@@ -19,8 +19,8 @@ type CarouselProps = {
 };
 
 type CarouselContextProps = {
-  carouselRef: ReturnType<typeof useEmblaCarousel>[0];
-  api: ReturnType<typeof useEmblaCarousel>[1];
+  carouselRef: React.RefObject<HTMLDivElement>;
+  api: CarouselApi;
   scrollPrev: () => void;
   scrollNext: () => void;
   canScrollPrev: boolean;

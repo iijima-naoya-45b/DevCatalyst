@@ -19,6 +19,7 @@ class AIService {
   /**
    * チャット送信（ストリーミング）
    */
+  // オーバーロード宣言
   async chatCompletionStream(
     request: ChatRequest,
     sessionId: number | undefined,
@@ -27,27 +28,45 @@ class AIService {
       onError?: (error: string) => void;
       onComplete?: (sessionId: number) => void;
     }
+  ): Promise<void>;
+  async chatCompletionStream(
+    request: ChatRequest,
+    onChunk: (chunk: string) => void,
+    onError?: (error: string) => void,
+    onComplete?: () => void
+  ): Promise<void>;
+  // 実装
+  async chatCompletionStream(
+    request: ChatRequest,
+    arg2: any,
+    arg3?: any,
+    arg4?: any
   ): Promise<void> {
+    let sessionId: number | undefined;
+    let callbacks: {
+      onChunk: (chunk: string) => void;
+      onError?: (error: string) => void;
+      onComplete?: (sessionId: number) => void;
+    };
+
+    if (typeof arg2 === 'number' || arg2 === undefined) {
+      sessionId = arg2 as number | undefined;
+      callbacks = arg3 as any;
+    } else {
+      // 旧シグネチャ
+      callbacks = {
+        onChunk: arg2,
+        onError: arg3,
+        onComplete: arg4 ? () => arg4() : undefined,
+      };
+    }
+
     try {
       await aiApi.chatStream(request, sessionId, callbacks);
     } catch (error: any) {
       callbacks.onError?.(error.message || 'ストリーミング中にエラーが発生しました。');
       throw error;
     }
-  }
-
-  // オーバーロード: 古い呼び出しシグネチャ互換
-  async chatCompletionStream(
-    request: ChatRequest,
-    onChunk: (chunk: string) => void,
-    onError?: (error: string) => void,
-    onComplete?: () => void
-  ): Promise<void> {
-    return this.chatCompletionStream(request, undefined, {
-      onChunk,
-      onError,
-      onComplete: () => onComplete?.(),
-    });
   }
 
   /**
