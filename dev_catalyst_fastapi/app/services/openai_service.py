@@ -85,34 +85,24 @@ class OpenAIService:
             for msg in request.messages
         ]
 
-        try:
-            stream = await self.client.chat.completions.create(
-                model=model,
-                messages=messages,
-                temperature=request.temperature,
-                max_tokens=request.max_tokens,
-                stream=True,
-            )
+        candidate_models = [model] + (["gpt-3.5-turbo"] if model != "gpt-3.5-turbo" else [])
+        last_error: Exception | None = None
 
-            async for chunk in stream:
-                if chunk.choices[0].delta.content:
-                    yield chunk.choices[0].delta.content
-        except Exception as e:
-            # モデル関連エラー時のフォールバック（ストリーミング）
-            if model != "gpt-3.5-turbo":
-                try:
-                    fallback_model = "gpt-3.5-turbo"
-                    stream = await self.client.chat.completions.create(
-                        model=fallback_model,
-                        messages=messages,
-                        temperature=request.temperature,
-                        max_tokens=request.max_tokens,
-                        stream=True,
-                    )
-                    async for chunk in stream:
-                        if chunk.choices[0].delta.content:
-                            yield chunk.choices[0].delta.content
-                    return
-                except Exception:
-                    pass
-            raise ValueError(f"OpenAI API error: {str(e)}")
+        for candidate in candidate_models:
+            try:
+                stream = await self.client.chat.completions.create(
+                    model=candidate,
+                    messages=messages,
+                    temperature=request.temperature,
+                    max_tokens=request.max_tokens,
+                    stream=True,
+                )
+                async for chunk in stream:
+                    if chunk.choices[0].delta.content:
+                        yield chunk.choices[0].delta.content
+                return
+            except Exception as e:
+                last_error = e
+                continue
+
+        raise ValueError(f"OpenAI API error: {str(last_error) if last_error else 'Unknown error'}")

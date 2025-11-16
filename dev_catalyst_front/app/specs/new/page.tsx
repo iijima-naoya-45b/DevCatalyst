@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,23 +42,25 @@ function NewSpecContent() {
   const conversationRef = useRef<HTMLDivElement>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-      return;
-    }
+  const pollSpecStatus = useCallback((id: number) => {
+    const interval = setInterval(async () => {
+      try {
+        const updatedSpec = await specService.getSpec(id);
+        setSpec(updatedSpec);
+        setCompletionPercentage(updatedSpec.completion_percentage);
 
-    // spec_idが指定されている場合は既存のSpecを読み込む
-    if (specId && !spec) {
-      handleLoadSpec(Number(specId));
-    }
-    // セッションIDが指定されている場合は自動生成（後方互換性のため）
-    else if (sessionId && !spec) {
-      handleCreateFromSession(Number(sessionId));
-    }
-  }, [isAuthenticated, router, sessionId, specId, handleCreateFromSession, handleLoadSpec, spec]);
+        if (updatedSpec.status !== 'generating') {
+          clearInterval(interval);
+        }
+      } catch (error) {
+        clearInterval(interval);
+      }
+    }, 2000);
 
-  const handleLoadSpec = async (id: number) => {
+    setTimeout(() => clearInterval(interval), 60000); // 60秒でタイムアウト
+  }, []);
+
+  const handleLoadSpec = useCallback(async (id: number) => {
     setIsGenerating(true);
     try {
       const loadedSpec = await specService.getSpec(id);
@@ -75,27 +77,9 @@ function NewSpecContent() {
     } finally {
       setIsGenerating(false);
     }
-  };
+  }, [pollSpecStatus]);
 
-  const pollSpecStatus = (id: number) => {
-    const interval = setInterval(async () => {
-      try {
-        const updatedSpec = await specService.getSpec(id);
-        setSpec(updatedSpec);
-        setCompletionPercentage(updatedSpec.completion_percentage);
-
-        if (updatedSpec.status !== 'generating') {
-          clearInterval(interval);
-        }
-      } catch (error) {
-        clearInterval(interval);
-      }
-    }, 2000);
-
-    setTimeout(() => clearInterval(interval), 60000); // 60秒でタイムアウト
-  };
-
-  const handleCreateFromSession = async (sessionId: number) => {
+  const handleCreateFromSession = useCallback(async (sessionId: number) => {
     setIsGenerating(true);
     try {
       const newSpec = await specService.createFromSession(sessionId);
@@ -115,7 +99,23 @@ function NewSpecContent() {
     } finally {
       setIsGenerating(false);
     }
-  };
+  }, [router, pollSpecStatus]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    // spec_idが指定されている場合は既存のSpecを読み込む
+    if (specId && !spec) {
+      handleLoadSpec(Number(specId));
+    }
+    // セッションIDが指定されている場合は自動生成（後方互換性のため）
+    else if (sessionId && !spec) {
+      handleCreateFromSession(Number(sessionId));
+    }
+  }, [isAuthenticated, router, sessionId, specId, handleCreateFromSession, handleLoadSpec, spec]);
 
   const handleCreateSpec = async () => {
     if (!userInput.trim()) return;

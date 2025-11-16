@@ -6,8 +6,8 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.3"
 
 # Database
-gem "sqlite3", ">= 1.4" # SQLite adapter
 gem "pg", ">= 1.5" # PostgreSQL adapter
+gem "sqlite3", ">= 1.4" # SQLite adapter
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
