@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+class RefreshToken < ApplicationRecord
+  belongs_to :user
+end
+
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: refresh_tokens

@@ -67,6 +67,7 @@ group :development, :test do
   gem "factory_bot_rails" # Test data factories
   gem "faker" # Fake data generation
   gem "rspec-rails" # RSpec testing framework
+  gem "shoulda-matchers", "~> 5.0" # RSpec matchers for validations/associations
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false

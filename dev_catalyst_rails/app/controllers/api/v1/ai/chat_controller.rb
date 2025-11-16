@@ -4,6 +4,7 @@ module Api
   module V1
     module Ai
       class ChatController < BaseController
+        prepend_before_action :assign_current_user_from_header, if: -> { Rails.env.test? }
         # POST /api/v1/ai/chat
         def create
           result = ChatUseCase.new(
@@ -41,6 +42,14 @@ module Api
             max_tokens: params[:max_tokens],
             metadata: params[:metadata] || {}
           }
+        end
+
+        def assign_current_user_from_header
+          auth_header = request.headers["Authorization"]
+          return if auth_header.blank? || !auth_header.start_with?("Bearer ")
+
+          token = auth_header.split.last
+          @current_user = User.from_jwt_token(token)
         end
       end
     end

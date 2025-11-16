@@ -228,8 +228,8 @@ class PsychologicalProfile < ApplicationRecord
 
   # 配列フィールドの正規化
   def normalize_arrays
-    self.bias_awareness = bias_awareness&.compact&.uniq || []
-    self.motivation_factors = motivation_factors&.compact&.uniq || []
+    self.bias_awareness = normalize_text_array_field(bias_awareness)
+    self.motivation_factors = normalize_text_array_field(motivation_factors)
   end
 
   # 心理学的変化のログ記録
@@ -237,5 +237,29 @@ class PsychologicalProfile < ApplicationRecord
     return unless saved_changes.any?
 
     Rails.logger.info "Psychological profile updated for user #{user_id}: #{saved_changes.keys.join(', ')}"
+  end
+
+  def normalize_text_array_field(value)
+    # nil -> []
+    return [] if value.nil?
+
+    # String（保存時に文字列化されている可能性）を配列化
+    if value.is_a?(String)
+      stripped = value.strip
+      # JSON風の"[]"や'["a","b"]'はJSONとして解釈を試みる
+      if stripped.start_with?("[") && stripped.end_with?("]")
+        begin
+          parsed = JSON.parse(stripped)
+          return Array(parsed).compact.uniq.map(&:to_s)
+        rescue JSON::ParserError
+          # 失敗したらカンマ区切りとして解釈
+          return stripped.tr("[]", "").split(",").map(&:strip).compact_blank.uniq
+        end
+      end
+      # カンマ区切り文字列 "a,b"
+      return stripped.split(",").map(&:strip).compact_blank.uniq
+    end
+    # 既に配列なら整理
+    Array(value).compact.uniq
   end
 end

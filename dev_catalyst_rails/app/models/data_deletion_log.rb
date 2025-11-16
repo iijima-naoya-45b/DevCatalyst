@@ -27,7 +27,7 @@ class DataDeletionLog < ApplicationRecord
     update!(
       status: :completed,
       completed_at: Time.current,
-      deleted_data_summary: summary
+      deleted_data_summary: serialize_summary(summary)
     )
   end
 
@@ -35,7 +35,15 @@ class DataDeletionLog < ApplicationRecord
   def mark_failed!(error_message)
     update!(
       status: :failed,
-      deleted_data_summary: { error: error_message }
+      deleted_data_summary: serialize_summary({ error: error_message })
     )
+  end
+
+  private
+
+  def serialize_summary(value)
+    return value if value.is_a?(String)
+
+    value.to_json
   end
 end

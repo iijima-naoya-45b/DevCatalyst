@@ -54,21 +54,21 @@ module Gdpr
     def perform_anonymization
       @user.transaction do
         # 個人情報の匿名化
-        @user.update!(
+        @user.update_columns(
           email: "deleted_#{@user.id}@example.com",
           name: "Deleted User",
           avatar_url: nil,
           provider: nil,
           uid: nil,
           encrypted_password: "",
-          deleted_at: Time.current
+          deleted_at: Time.current,
+          updated_at: Time.current
         )
 
         # チャットデータの匿名化
         @user.chat_sessions.update_all(archived: true)
-        @user.chat_messages.update_all(
-          content: "[Content deleted for privacy]"
-        )
+        ChatMessage.where(chat_session_id: @user.chat_sessions.select(:id))
+          .update_all(content: "[Content deleted for privacy]")
       end
     end
 

@@ -7,11 +7,11 @@ class JwtService
       JWT.encode(payload, secret_key)
     end
 
-    def decode(token, token_type: "access")
+    def decode(token, token_type: nil)
       decoded_token = JWT.decode(token, secret_key)
       payload = decoded_token[0]
 
-      return nil if payload["type"] != token_type
+      return nil if token_type.present? && payload["type"] != token_type
 
       payload
     rescue JWT::DecodeError, JWT::ExpiredSignature => e

@@ -65,17 +65,14 @@ Rails.application.routes.draw do
         end
       end
 
-      # GDPR
-      namespace :gdpr do
+      # GDPR (コントローラは Api::V1::GdprController を使用)
+      scope :gdpr do
         get "export", to: "gdpr#export_data"
         post "delete_account", to: "gdpr#delete_account"
+        get "consents", to: "gdpr#consents"
+        post "consents", to: "gdpr#create_consent"
+        delete "consents/:consent_type", to: "gdpr#revoke_consent"
         get "data_summary", to: "gdpr#data_summary"
-
-        resources :consents, only: [:index, :create] do
-          collection do
-            delete ":consent_type", to: "gdpr#revoke_consent"
-          end
-        end
       end
 
       # 旧エンドポイント（後方互換性のため一時的に保持）

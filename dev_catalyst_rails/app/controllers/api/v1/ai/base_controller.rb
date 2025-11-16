@@ -52,6 +52,8 @@ module Api
 
           "Bearer #{cookie_token}" if cookie_token.present?
         end
+
+        # テスト用のユーザー注入は各コントローラで必要に応じて実施する
       end
     end
   end

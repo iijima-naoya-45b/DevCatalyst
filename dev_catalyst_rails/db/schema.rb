@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_15_064027) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_16_000200) do
   create_table "chat_messages", force: :cascade do |t|
     t.integer "chat_session_id", null: false
     t.string "sender_role", null: false
@@ -53,6 +53,39 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_15_064027) do
     t.index ["requested_at"], name: "index_data_deletion_logs_on_requested_at"
     t.index ["status"], name: "index_data_deletion_logs_on_status"
     t.index ["user_id"], name: "index_data_deletion_logs_on_user_id"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "name", default: "Test Project", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "psychological_profiles", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "cognitive_load_level", default: 5, null: false
+    t.integer "self_efficacy_score", default: 50, null: false
+    t.text "bias_awareness"
+    t.text "motivation_factors"
+    t.string "learning_style", limit: 50
+    t.integer "risk_tolerance", default: 5, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_psychological_profiles_on_user_id", unique: true
+  end
+
+  create_table "refresh_tokens", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "token", null: false
+    t.string "jti"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["jti"], name: "index_refresh_tokens_on_jti"
+    t.index ["token"], name: "index_refresh_tokens_on_token", unique: true
+    t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
   end
 
   create_table "spec_sections", force: :cascade do |t|
@@ -139,6 +172,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_15_064027) do
 
   add_foreign_key "chat_messages", "chat_sessions"
   add_foreign_key "chat_sessions", "users"
+  add_foreign_key "projects", "users"
+  add_foreign_key "psychological_profiles", "users"
+  add_foreign_key "refresh_tokens", "users"
   add_foreign_key "spec_sections", "specs"
   add_foreign_key "specs", "chat_sessions"
   add_foreign_key "specs", "users"

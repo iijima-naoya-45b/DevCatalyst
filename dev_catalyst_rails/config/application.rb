@@ -31,6 +31,8 @@ module DevCatalystRails
 
     # タイムゾーン設定
     config.time_zone = "UTC"
+    # デフォルトロケールを日本語へ
+    config.i18n.default_locale = :ja
 
     # CORS設定は config/initializers/cors.rb で行う
 
@@ -55,8 +57,9 @@ module DevCatalystRails
     # Rate limiting
     config.middleware.use Rack::Attack
 
-    # 自動読み込みパス
-    config.autoload_paths += ["#{config.root}/app/services"]
-    config.autoload_paths += ["#{config.root}/app/serializers"]
+    # 自動読み込みパス（Rails 8でfreezeされるため、新配列を代入）
+    services_path = Rails.root.join("app/services").to_s
+    serializers_path = Rails.root.join("app/serializers").to_s
+    config.autoload_paths = config.autoload_paths.dup + [services_path, serializers_path]
   end
 end

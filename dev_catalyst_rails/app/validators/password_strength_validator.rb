@@ -27,11 +27,8 @@ class PasswordStrengthValidator < ActiveModel::EachValidator
     strength_errors << :no_digit unless value.match?(/\d/)
     strength_errors << :no_special_char unless value.match?(%r{[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]})
 
-    # 少なくとも3つの条件を満たす必要がある
-    if strength_errors.size > 1
-      record.errors.add(attribute, :weak_password,
-                        message: "must contain at least 3 of: uppercase, lowercase, digit, special character")
-    end
+    # 大文字/小文字/数字の3条件は必須（特殊文字は任意）
+    record.errors.add(attribute, :password_strength) unless value.match?(/[A-Z]/) && value.match?(/[a-z]/) && value.match?(/\d/)
 
     # 一般的な弱いパスワードをチェック
     return unless common_password?(value)

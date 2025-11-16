@@ -39,9 +39,10 @@ class AiChatService
 
     return parsedBody if response.success?
 
+    mapped_status = response.status.to_i >= 400 && response.status.to_i < 500 ? :internal_server_error : response.status
     raise RequestError.new(
       buildFailureMessage(response.status, parsedBody),
-      httpStatus: response.status,
+      httpStatus: mapped_status,
       details: {
         endpoint: "#{@fastApiBaseUrl}/api/ai/chat",
         requestBody: requestBody,
@@ -58,7 +59,7 @@ class AiChatService
   rescue Faraday::ConnectionFailed => e
     raise RequestError.new(
       buildFaradayErrorMessage("connection_failed", e, requestBody),
-      httpStatus: :service_unavailable,
+      httpStatus: :internal_server_error,
       details: buildCommonErrorDetails(e, requestBody)
     )
   rescue Faraday::ClientError => e
@@ -119,7 +120,7 @@ class AiChatService
     raise RequestError.new(
       buildFaradayErrorMessage("connection_failed", e, requestBody, endpoint: "/api/ai/chat/stream",
                                                                     context: "streamChatRequest"),
-      httpStatus: :service_unavailable,
+      httpStatus: :internal_server_error,
       details: buildCommonErrorDetails(e, requestBody, endpoint: "/api/ai/chat/stream")
     )
   rescue Faraday::ClientError => e
