@@ -2,9 +2,17 @@ name: CI - All Services
 
 on:
   push:
-    branches: [main, develop, staging]
+    branches:
+      - main
+      - develop
+      - staging
+      - 'feature/**'
   pull_request:
-    branches: [main, develop, staging]
+    branches:
+      - main
+      - develop
+      - staging
+      - 'feature/**'
 
 jobs:
   frontend:
