@@ -24,6 +24,9 @@ class GdprService {
   async getDataSummary(): Promise<DataSummary> {
     try {
       const response = await gdprApi.getDataSummary();
+      if (!response.data) {
+        throw new Error('GDPR:getDataSummary response.data is undefined');
+      }
       return response.data;
     } catch (error: any) {
       this.handleError(error);
@@ -44,8 +47,8 @@ class GdprService {
     try {
       const response = await gdprApi.deleteAccount({ deletion_type: deletionType, reason });
       return {
-        message: response.message,
-        deletion_log_id: response.deletion_log_id,
+        message: response.message ?? 'アカウント削除が完了しました。',
+        deletion_log_id: (response.data as any)?.deletion_log_id as number,
       };
     } catch (error: any) {
       this.handleError(error);
@@ -72,6 +75,9 @@ class GdprService {
   async giveConsent(consentType: string, version: string = '1.0'): Promise<Consent> {
     try {
       const response = await gdprApi.giveConsent(consentType, version);
+      if (!response.data) {
+        throw new Error('GDPR:giveConsent response.data is undefined');
+      }
       return response.data;
     } catch (error: any) {
       this.handleError(error);
