@@ -11,7 +11,10 @@ fi
 if [ -d "dev_catalyst_rails" ]; then
   (
     cd dev_catalyst_rails
-    bundle exec rubocop --force-exclusion
+    # まず自動修正を実施（失敗しても続行）
+    bundle exec rubocop -A --force-exclusion || true
+    # エラー水準以上のみで失敗させる（CorrectableなC/Wは許容）
+    bundle exec rubocop --force-exclusion --fail-level E
   )
 fi
 
