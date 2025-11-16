@@ -1,5 +1,16 @@
+import os
+import sys
+
 import pytest
 from fastapi.testclient import TestClient
+
+#
+# テスト実行ディレクトリがリポジトリルートの場合でも
+# `from app ...` が解決できるように、サービスディレクトリをPYTHONPATHへ追加
+#
+SERVICE_ROOT = os.path.dirname(os.path.dirname(__file__))  # dev_catalyst_fastapi/
+if SERVICE_ROOT not in sys.path:
+    sys.path.insert(0, SERVICE_ROOT)
 
 from app.auth import get_current_user
 from app.models import AuthResponse, AuthTokens, User
