@@ -34,7 +34,9 @@ class JwtService
         user_id: user.id,
         email: user.email,
         type: 'refresh',
-        exp: refresh_token_expiration.to_i
+        exp: refresh_token_expiration.to_i,
+        jti: SecureRandom.uuid, # JWT ID: リフレッシュトークンを一意に識別するためのランダムな識別子
+        iat: Time.current.to_i # Issued At: トークン発行時刻
       }
       encode(payload)
     end
@@ -54,11 +56,13 @@ class JwtService
     end
 
     def access_token_duration
-      (ENV['JWT_ACCESS_TOKEN_EXPIRATION']&.to_i || 15).minutes.to_i
+      # アクセストークン: 1日
+      1.day.to_i
     end
 
     def refresh_token_duration
-      (ENV['JWT_REFRESH_TOKEN_EXPIRATION']&.to_i || 7).days.to_i
+      # リフレッシュトークン: 7日
+      7.days.to_i
     end
 
     def access_token_expiration

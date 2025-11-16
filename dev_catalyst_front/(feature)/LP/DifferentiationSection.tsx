@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Brain, TrendingUp, Users, Target, Zap, CheckCircle, XCircle, ArrowRight, AlertTriangle, Clock, DollarSign, Lightbulb } from 'lucide-react';
+import { Brain, TrendingUp, Users, Target, Zap, CheckCircle, XCircle, ArrowRight, AlertTriangle, Clock, DollarSign, Lightbulb, Database, Palette } from 'lucide-react';
 import { Card, CardContent } from '../common/ui/card';
 import { Badge } from '../common/ui/badge';
 import { useInView } from '../../hooks/use-in-view';
@@ -129,10 +129,45 @@ export function DifferentiationSection() {
           <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4 text-gray-900 dark:text-white">
             なぜ、DevCatalystは違うのか？
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-6">
             行動経済学と戦略フレームワークに基づいた、<br />
             科学的なアプローチで、あなたのプロダクト成功を支援します。
           </p>
+          
+          {/* RAGとデザインの強調 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mt-8">
+            <Card className="border-2 border-gold/40 bg-gradient-to-br from-gold/5 to-gold/10 dark:from-gold/10 dark:to-gold/5">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-lg gold-soft-gradient flex items-center justify-center">
+                    <Database className="w-6 h-6 text-aria-dark-soft" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">RAGによる戦略特化</h3>
+                </div>
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <span className="gold-soft-text font-semibold">Retrieval-Augmented Generation（RAG）技術</span>により、
+                  戦略立案に特化した専門知識ベースから最適な情報を取得。
+                  一般的なAIとは異なり、<span className="font-semibold">戦略・マーケティング・行動経済学に特化した提案</span>を実現します。
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-2 border-gold/40 bg-gradient-to-br from-gold/5 to-gold/10 dark:from-gold/10 dark:to-gold/5">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-lg gold-soft-gradient flex items-center justify-center">
+                    <Palette className="w-6 h-6 text-aria-dark-soft" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">視覚的に優れたデザイン</h3>
+                </div>
+                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  洗練されたUI/UXデザインと、直感的なインターフェース。
+                  <span className="font-semibold">美しいビジュアルと使いやすさを両立</span>し、
+                  戦略立案のプロセスを視覚的に理解しやすく、楽しみながら進められます。
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* タブ */}

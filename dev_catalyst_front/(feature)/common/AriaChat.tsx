@@ -878,7 +878,7 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // IME入力中（変換確定前）の場合は送信しない
     if (isComposing) return;
-    
+
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -902,9 +902,8 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
               return (
                 <div
                   key={message.id}
-                  className={`flex items-start space-x-3 transition-all duration-300 ${
-                    message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                  }`}
+                  className={`flex items-start space-x-3 transition-all duration-300 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
+                    }`}
                 >
                   {isAssistant && (
                     <div className="flex-shrink-0">
@@ -923,26 +922,23 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
                     </div>
                   )}
                   <div
-                    className={`flex-1 transition-all duration-300 ${
-                      message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'
-                    }`}
+                    className={`flex-1 transition-all duration-300 ${message.type === 'user' ? 'max-w-xs ml-auto' : 'max-w-2xl'
+                      }`}
                   >
                     <div
-                      className={`rounded-2xl p-4 ${
-                        isAssistant
-                          ? 'gold-soft-tint border border-gold/20 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 dark:border-gold/30'
-                          : 'aria-gold-surface text-aria-dark-soft'
-                      } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}
+                      className={`rounded-2xl p-4 ${isAssistant
+                        ? 'bg-white border border-gold/20 dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-700 dark:border-gold/30'
+                        : 'aria-gold-surface text-aria-dark-soft'
+                        } ${message.isStreaming ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''}`}
                     >
                       {isAssistant && message.chartData ? (
                         renderMessageWithCharts(message.displayedContent || message.content, message.chartData)
                       ) : (
                         <p
-                          className={`whitespace-pre-wrap leading-relaxed ${
-                            isAssistant 
-                              ? 'text-gray-800 dark:text-gray-100' 
-                              : '!text-[#0f172a] dark:!text-[#0f172a]'
-                          }`}
+                          className={`whitespace-pre-wrap leading-relaxed ${isAssistant
+                            ? '!text-black dark:text-gray-100'
+                            : '!text-black dark:!text-black'
+                            }`}
                         >
                           {isAssistant ? message.displayedContent || message.content : message.content}
                         </p>
@@ -954,16 +950,15 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
                         {message.insights.map((insight, index) => (
                           <div
                             key={`${message.id}-insight-${index}`}
-                            className="flex items-center space-x-3 p-3 gold-soft-tint dark:bg-slate-700/70 border border-gold/35 dark:border-gold/30 rounded-lg"
+                            className="flex items-center space-x-3 p-3 bg-amber-50/50 dark:bg-slate-700/70 border border-gold/35 dark:border-gold/30 rounded-lg"
                           >
                             <div
-                              className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                                insight.type === 'strategy'
-                                  ? 'gold-soft-gradient'
-                                  : insight.type === 'opportunity'
+                              className={`w-6 h-6 rounded-full flex items-center justify-center ${insight.type === 'strategy'
+                                ? 'gold-soft-gradient'
+                                : insight.type === 'opportunity'
                                   ? 'bg-green-500/20'
                                   : 'bg-orange-400/20'
-                              }`}
+                                }`}
                             >
                               {insight.type === 'strategy' && <Target className="w-3 h-3 text-aria-dark-soft" />}
                               {insight.type === 'opportunity' && <TrendingUp className="w-3 h-3 text-green-400" />}
@@ -996,9 +991,8 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
                     ) : null}
 
                     <div
-                      className={`mt-2 text-xs text-muted-foreground transition-all duration-200 ${
-                        message.type === 'user' ? 'text-right' : ''
-                      }`}
+                      className={`mt-2 text-xs text-muted-foreground transition-all duration-200 ${message.type === 'user' ? 'text-right' : ''
+                        }`}
                     >
                       {timestamp.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}
                     </div>

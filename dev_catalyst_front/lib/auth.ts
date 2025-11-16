@@ -100,16 +100,19 @@ export class TokenManager {
 
     static setTokens(accessToken: string, refreshToken: string): void {
         if (typeof window !== 'undefined') {
-            CookieManager.setCookie(this.ACCESS_TOKEN_KEY, accessToken, { days: 7, path: '/', sameSite: 'Lax' });
+            // アクセストークン: 1日（JWTトークンの有効期限に合わせる）
+            CookieManager.setCookie(this.ACCESS_TOKEN_KEY, accessToken, { days: 1, path: '/', sameSite: 'Lax' });
+            // リフレッシュトークン: 7日（JWTトークンの有効期限に合わせる）
             CookieManager.setCookie(this.REFRESH_TOKEN_KEY, refreshToken, { days: 7, path: '/', sameSite: 'Lax' });
-            CookieManager.setCookie(this.TOKEN_KEY, accessToken, { days: 7, path: '/', sameSite: 'Lax' });
+            CookieManager.setCookie(this.TOKEN_KEY, accessToken, { days: 1, path: '/', sameSite: 'Lax' });
         }
     }
 
     static setToken(token: string): void {
         if (typeof window !== 'undefined') {
-            CookieManager.setCookie(this.ACCESS_TOKEN_KEY, token, { days: 7, path: '/', sameSite: 'Lax' });
-            CookieManager.setCookie(this.TOKEN_KEY, token, { days: 7, path: '/', sameSite: 'Lax' });
+            // アクセストークン: 1日（JWTトークンの有効期限に合わせる）
+            CookieManager.setCookie(this.ACCESS_TOKEN_KEY, token, { days: 1, path: '/', sameSite: 'Lax' });
+            CookieManager.setCookie(this.TOKEN_KEY, token, { days: 1, path: '/', sameSite: 'Lax' });
         }
     }
 

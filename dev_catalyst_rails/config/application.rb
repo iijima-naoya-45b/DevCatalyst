@@ -49,6 +49,9 @@ module DevCatalystRails
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_dev_catalyst_session'
     config.middleware.use ActionDispatch::Flash
+    
+    # Rate limiting
+    config.middleware.use Rack::Attack
 
     # 自動読み込みパス
     config.autoload_paths += %W(#{config.root}/app/services)

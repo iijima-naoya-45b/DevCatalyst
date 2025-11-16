@@ -204,43 +204,89 @@ export class RailsApiService {
         return response as unknown as ApiResponse<AiChatResponsePayload>;
     }
 
+    // AI Sessions - 新しいAPI構造
     static async getChatSessions(limit?: number): Promise<ApiResponse<ChatSessionSummary[]>> {
-        const response = await railsApiClient.get<{ success: boolean; data: ChatSessionSummary[] }>(
-            `${API_ENDPOINTS.RAILS.AI_CHAT_SESSIONS}${limit ? `?limit=${limit}` : ''}`,
+        const response = await railsApiClient.get<{ success: boolean; sessions: ChatSessionSummary[] }>(
+            `${API_ENDPOINTS.RAILS.AI.SESSIONS}${limit ? `?limit=${limit}` : ''}`,
         );
 
-        if (response.data && (response.data as { data?: ChatSessionSummary[] }).data) {
-            const envelope = response.data as { success: boolean; data: ChatSessionSummary[] };
+        if (response.data && (response.data as { sessions?: ChatSessionSummary[] }).sessions) {
+            const envelope = response.data as { success: boolean; sessions: ChatSessionSummary[] };
             return {
                 status: response.status,
-                data: envelope.data,
+                data: envelope.sessions,
             };
         }
 
         return response as unknown as ApiResponse<ChatSessionSummary[]>;
     }
 
+    static async getChatSession(sessionId: number): Promise<ApiResponse<ChatSessionSummary>> {
+        const response = await railsApiClient.get<{ success: boolean; data: ChatSessionSummary }>(
+            `${API_ENDPOINTS.RAILS.AI.SESSIONS}/${sessionId}`,
+        );
+
+        if (response.data && (response.data as { data?: ChatSessionSummary }).data) {
+            const envelope = response.data as { success: boolean; data: ChatSessionSummary };
+            return {
+                status: response.status,
+                data: envelope.data,
+            };
+        }
+
+        return response as unknown as ApiResponse<ChatSessionSummary>;
+    }
+
+    static async deleteChatSession(sessionId: number): Promise<ApiResponse<{ message: string }>> {
+        return railsApiClient.delete<{ message: string }>(
+            `${API_ENDPOINTS.RAILS.AI.SESSIONS}/${sessionId}`,
+        );
+    }
+
+    static async archiveChatSession(sessionId: number): Promise<ApiResponse<ChatSessionSummary>> {
+        const response = await railsApiClient.patch<{ success: boolean; data: ChatSessionSummary }>(
+            `${API_ENDPOINTS.RAILS.AI.SESSIONS}/${sessionId}/archive`,
+        );
+
+        if (response.data && (response.data as { data?: ChatSessionSummary }).data) {
+            const envelope = response.data as { success: boolean; data: ChatSessionSummary };
+            return {
+                status: response.status,
+                data: envelope.data,
+            };
+        }
+
+        return response as unknown as ApiResponse<ChatSessionSummary>;
+    }
+
+    // 後方互換性のため残す（非推奨）
     static async getChatSessionMessages(
         sessionId: number,
         params?: { page?: number; per_page?: number },
     ): Promise<ApiResponse<ChatSessionMessagesPayload>> {
-        const query = new URLSearchParams();
-        if (params?.page) {
-            query.set('page', String(params.page));
-        }
-        if (params?.per_page) {
-            query.set('per_page', String(params.per_page));
-        }
+        // 新しいAPIでは show エンドポイントを使用
+        const response = await this.getChatSession(sessionId);
 
-        const url = `${API_ENDPOINTS.RAILS.AI_CHAT_SESSIONS}/${sessionId}/messages${query.toString() ? `?${query.toString()}` : ''}`;
-
-        const response = await railsApiClient.get<{ success: boolean; data: ChatSessionMessagesPayload }>(url);
-
-        if (response.data && (response.data as { data?: ChatSessionMessagesPayload }).data) {
-            const envelope = response.data as { success: boolean; data: ChatSessionMessagesPayload };
+        if (response.data && (response.data as any).messages) {
+            const session = response.data as any;
             return {
                 status: response.status,
-                data: envelope.data,
+                data: {
+                    session: {
+                        id: session.id,
+                        title: session.title,
+                        archived: session.archived,
+                        last_interacted_at: session.last_interacted_at,
+                        created_at: session.created_at,
+                    },
+                    messages: session.messages,
+                    pagination: {
+                        page: 1,
+                        per_page: session.messages?.length || 0,
+                        total: session.messages?.length || 0,
+                        total_pages: 1,
+                    },
+                },
             };
         }
 

@@ -32,7 +32,51 @@ Rails.application.routes.draw do
       put 'users/change_password', to: 'users#change_password'
       delete 'users/me', to: 'users#destroy'
 
-      # AI chat proxy
+      # AI chat (新しい構造)
+      namespace :ai do
+        # チャット
+        post 'chat', to: 'chat#create'
+        
+        # ストリーミング
+        post 'chat/stream', to: 'stream#create'
+        
+        # セッション管理
+        resources :sessions, only: [:index, :show, :destroy] do
+          member do
+            patch :archive
+          end
+        end
+      end
+      
+      # Spec Generator
+      resources :specs, only: [:index, :show, :create, :update, :destroy] do
+        member do
+          post :generate_section
+          post :export_markdown
+          post :export_pdf
+          post :export_notion
+          post :start_conversation
+          post :respond_to_question
+        end
+        collection do
+          post 'from_session/:session_id', to: 'specs#create_from_session', as: :from_session
+        end
+      end
+      
+      # GDPR
+      namespace :gdpr do
+        get 'export', to: 'gdpr#export_data'
+        post 'delete_account', to: 'gdpr#delete_account'
+        get 'data_summary', to: 'gdpr#data_summary'
+        
+        resources :consents, only: [:index, :create] do
+          collection do
+            delete ':consent_type', to: 'gdpr#revoke_consent'
+          end
+        end
+      end
+      
+      # 旧エンドポイント（後方互換性のため一時的に保持）
       post 'ai/chat', to: 'ai#chat'
       post 'ai/chat/stream', to: 'ai#chatStream'
       get 'ai/chat_sessions', to: 'ai#chatSessions'

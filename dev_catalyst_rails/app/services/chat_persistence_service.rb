@@ -18,7 +18,7 @@ class ChatPersistenceService
       content: messagePayload[:content],
       metadata: buildUserMetadata(messagePayload, fullRequestPayload)
     )
-    session.touchLastInteracted!
+    session.touch_last_interacted!
   end
 
   def recordAiMessage(session:, responsePayload:, cacheHit:)
@@ -40,7 +40,7 @@ class ChatPersistenceService
       cached_response: cacheHit,
       responded_at: Time.current
     )
-    session.touchLastInteracted!
+    session.touch_last_interacted!
   end
 
   private

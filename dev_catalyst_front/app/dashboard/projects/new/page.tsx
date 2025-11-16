@@ -17,16 +17,12 @@ import {
   Lightbulb,
   Rocket,
 } from 'lucide-react';
-import {
-  RailsApiService,
-  aiService,
-  type AiChatMessage,
-  type ChatRequest,
-  type IdeaConfidenceLevel,
-} from '@/lib/services';
+import { aiService } from '@/lib/services';
+import type { ChatRequest, ChatMessage } from '@/lib/api';
 import { withAuthToken } from '@/lib/hooks/use-auth-token';
 
 type MessageRole = 'assistant' | 'user';
+type IdeaConfidenceLevel = 'high' | 'low';
 
 interface ConversationMessage {
   id: string;
@@ -119,7 +115,7 @@ export default function NewProjectPage() {
     setSessionId(null);
   }, []);
 
-  const conversationPayload = useMemo<AiChatMessage[]>(() => {
+  const conversationPayload = useMemo<ChatMessage[]>(() => {
     return messages.map((message) => ({
       role: message.role === 'assistant' ? 'assistant' : 'user',
       content: message.content,
@@ -139,7 +135,7 @@ export default function NewProjectPage() {
       setIsLoading(true);
 
       try {
-        const payload: AiChatMessage[] = [
+        const payload: ChatMessage[] = [
           ...conversationPayload,
           {
             role: 'user',
@@ -154,87 +150,54 @@ export default function NewProjectPage() {
         let collectedContent = '';
 
         const streamPayload: ChatRequest = {
-          messages: payload.map((message) => ({
-            role: message.role,
-            content: message.content,
-          })),
+          messages: payload,
           provider: 'openai',
-          stream: true,
-          session_id: sessionId ?? undefined,
         };
 
         await withAuthToken(() =>
           aiService.chatCompletionStream(
             streamPayload,
-            (chunk) => {
-              collectedContent += chunk;
-              setMessages((prev) =>
-                prev.map((message) =>
-                  message.id === streamingMessageId
-                    ? {
-                      ...message,
-                      content: message.content + chunk,
-                      timestamp: Date.now(),
-                    }
-                    : message,
-                ),
-              );
-            },
-            async (streamError) => {
-              setError(streamError || 'ストリーミング中にエラーが発生しました。');
-              // フォールバックとして通常のAPI呼び出しを試行
-              try {
-                const fallbackResponse = await RailsApiService.sendAiChatMessage({
-                  idea_confidence: ideaConfidence,
-                  messages: payload,
-                  session_id: sessionId ?? undefined,
-                });
-                const { data } = fallbackResponse;
-                if (data?.assistant_message) {
-                  collectedContent = data.assistant_message;
-                  setMessages((prev) =>
-                    prev.map((message) =>
-                      message.id === streamingMessageId
-                        ? {
-                          ...message,
-                          content: data.assistant_message,
-                          suggestions:
-                            ideaConfidence
-                              ? SUGGESTION_OPTIONS[ideaConfidence]
-                              : DEFAULT_SUGGESTIONS,
-                          isStreaming: false,
-                        }
-                        : message,
-                    ),
-                  );
-                  if (typeof data.session_id === 'number') {
-                    setSessionId(data.session_id);
-                  }
-                  setError(null);
-                  return;
-                }
-              } catch (fallbackError) {
-                console.error(fallbackError);
+            sessionId ?? undefined,
+            {
+              onChunk: (chunk) => {
+                collectedContent += chunk;
+                setMessages((prev) =>
+                  prev.map((message) =>
+                    message.id === streamingMessageId
+                      ? {
+                        ...message,
+                        content: message.content + chunk,
+                        timestamp: Date.now(),
+                      }
+                      : message,
+                  ),
+                );
+              },
+              onError: (streamError) => {
+                setError(streamError || 'ストリーミング中にエラーが発生しました。');
                 setMessages((prev) => prev.filter((message) => message.id !== streamingMessageId));
-              }
-            },
-            () => {
-              setMessages((prev) =>
-                prev.map((message) =>
-                  message.id === streamingMessageId
-                    ? {
-                      ...message,
-                      content: collectedContent || message.content,
-                      isStreaming: false,
-                      suggestions:
-                        ideaConfidence
-                          ? SUGGESTION_OPTIONS[ideaConfidence]
-                          : DEFAULT_SUGGESTIONS,
-                    }
-                    : message,
-                ),
-              );
-            },
+              },
+              onComplete: (newSessionId) => {
+                setMessages((prev) =>
+                  prev.map((message) =>
+                    message.id === streamingMessageId
+                      ? {
+                        ...message,
+                        content: collectedContent || message.content,
+                        isStreaming: false,
+                        suggestions:
+                          ideaConfidence
+                            ? SUGGESTION_OPTIONS[ideaConfidence]
+                            : DEFAULT_SUGGESTIONS,
+                      }
+                      : message,
+                  ),
+                );
+                if (newSessionId) {
+                  setSessionId(newSessionId);
+                }
+              },
+            }
           ),
         );
 

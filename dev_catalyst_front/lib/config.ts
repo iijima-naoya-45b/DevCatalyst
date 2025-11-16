@@ -10,19 +10,21 @@ export const API_ENDPOINTS = {
     // Rails APIエンドポイント
     RAILS: {
         AUTH: {
-            LOGIN: '/auth/login',
-            REGISTER: '/auth/register',
-            REFRESH: '/auth/refresh',
-            LOGOUT: '/auth/logout',
+            LOGIN: '/api/auth/login',
+            REGISTER: '/api/auth/register',
+            REFRESH: '/api/auth/refresh',
+            LOGOUT: '/api/auth/logout',
         },
-        PROJECTS: '/projects',
-        COMPETITORS: '/competitors',
-        ROADMAPS: '/roadmaps',
-        PAYMENTS: '/payments',
-        SUBSCRIPTIONS: '/subscriptions',
-        AI_CHAT: '/api/v1/ai/chat',
-        AI_CHAT_STREAM: '/api/v1/ai/chat/stream',
-        AI_CHAT_SESSIONS: '/api/v1/ai/chat_sessions',
+        PROJECTS: '/api/v1/projects',
+        COMPETITORS: '/api/v1/competitors',
+        ROADMAPS: '/api/v1/roadmaps',
+        PAYMENTS: '/api/v1/payments',
+        SUBSCRIPTIONS: '/api/v1/subscriptions',
+        AI: {
+            CHAT: '/api/v1/ai/chat',
+            STREAM: '/api/v1/ai/chat/stream',
+            SESSIONS: '/api/v1/ai/sessions',
+        },
     },
     // FastAPI AIサービスエンドポイント
     AI: {

@@ -463,43 +463,45 @@ html.dark {
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
     }
+
     .text-aria-dark-soft {
-        color: #0f172a !important;
+        color: #000000 !important;
     }
 
     .dark .text-aria-dark-soft {
-        color: #0f172a !important;
+        color: #000000 !important;
     }
 
     .aria-gold-surface {
         background-image: linear-gradient(135deg, var(--gold-soft-start), var(--gold-soft-mid), var(--gold-soft-end));
-        color: #0f172a !important;
+        color: #000000 !important;
         box-shadow: 0 20px 45px -25px rgba(15, 23, 42, 0.45);
     }
 
     .aria-gold-surface *,
-    .aria-gold-surface > *,
+    .aria-gold-surface>*,
     .aria-gold-surface button,
     .aria-gold-surface span,
     .aria-gold-surface p {
-        color: #0f172a !important;
+        color: #000000 !important;
     }
 
     .dark .aria-gold-surface {
         background-image: linear-gradient(135deg, var(--gold-soft-start-dark), var(--gold-soft-mid-dark), var(--gold-soft-end-dark));
-        color: #0f172a !important;
+        color: #000000 !important;
         box-shadow: 0 20px 45px -25px rgba(15, 23, 42, 0.45);
     }
 
     .dark .aria-gold-surface *,
-    .dark .aria-gold-surface > *,
+    .dark .aria-gold-surface>*,
     .dark .aria-gold-surface button,
     .dark .aria-gold-surface span,
     .dark .aria-gold-surface p {
-        color: #0f172a !important;
+        color: #000000 !important;
     }
 
     .gold-soft-gradient {
@@ -786,33 +788,33 @@ html.dark {
 
 /* 行動経済学用アニメーション */
 @keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate-slide-down {
-  animation: slide-down 0.5s ease-out;
+    animation: slide-down 0.5s ease-out;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.3s ease-out;
+    animation: slide-up 0.3s ease-out;
 }

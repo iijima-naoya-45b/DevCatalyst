@@ -24,6 +24,7 @@ gem "pundit"  # Authorization
 
 # API & CORS
 gem "rack-cors"  # Cross-Origin Resource Sharing
+gem "rack-attack"  # Rate limiting and throttling
 
 # External APIs
 gem "stripe"  # Stripe payment processing
@@ -69,6 +70,10 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  
+  # Additional RuboCop extensions
+  gem "rubocop-performance", require: false
+  gem "rubocop-rspec", require: false
 end
 
 group :development do

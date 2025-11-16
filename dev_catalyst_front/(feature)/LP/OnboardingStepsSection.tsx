@@ -7,13 +7,13 @@ export function OnboardingStepsSection() {
   const { ref, isInView } = useInView({ threshold: 0.1 });
 
   return (
-    <section ref={ref} className="py-20 px-4 bg-white dark:bg-slate-950">
+    <section ref={ref} className="py-16 sm:py-20 px-3 sm:px-4 bg-white dark:bg-slate-950 overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className={`text-center mb-16 fade-in-up ${isInView ? 'in-view' : ''}`}>
-          <h3 className="text-4xl font-serif font-semibold mb-6 text-gray-900 dark:text-white">
+        <div className={`text-center mb-12 sm:mb-16 fade-in-up ${isInView ? 'in-view' : ''}`}>
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-semibold mb-4 sm:mb-6 text-gray-900 dark:text-white px-2">
             今夜から、アリアと話せます
           </h3>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 px-2">
             深夜でも、すぐに始められる。思考のパートナーは、いつでもそっと傍に。
           </p>
         </div>

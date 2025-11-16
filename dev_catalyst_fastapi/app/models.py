@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, validator
 from typing import Optional, List, Dict, Any
 from enum import Enum
 
@@ -13,15 +13,49 @@ class ChatRole(str, Enum):
 
 class ChatMessage(BaseModel):
     role: ChatRole
-    content: str
+    content: str = Field(..., min_length=1, max_length=10000)
+    
+    @validator('content')
+    def content_not_empty(cls, v):
+        if not v.strip():
+            raise ValueError('Content cannot be empty or whitespace only')
+        return v.strip()
 
 class ChatRequest(BaseModel):
-    messages: List[ChatMessage]
+    messages: List[ChatMessage] = Field(..., min_items=1, max_items=100)
     provider: AIProvider = AIProvider.OPENAI
-    model: Optional[str] = None
-    temperature: Optional[float] = 0.7
-    max_tokens: Optional[int] = 1000
+    model: Optional[str] = Field(None, max_length=100)
+    temperature: Optional[float] = Field(0.7, ge=0.0, le=2.0)
+    max_tokens: Optional[int] = Field(1000, ge=1, le=4000)
     stream: Optional[bool] = False
+    metadata: Optional[Dict[str, Any]] = None
+    
+    @validator('messages')
+    def validate_message_sequence(cls, v):
+        if not v:
+            raise ValueError('Messages list cannot be empty')
+        
+        # 最後のメッセージはuserである必要がある
+        if v[-1].role != ChatRole.USER:
+            raise ValueError('Last message must be from user')
+        
+        return v
+    
+    @validator('model')
+    def validate_model(cls, v, values):
+        if v is None:
+            return v
+        
+        provider = values.get('provider')
+        valid_models = {
+            AIProvider.OPENAI: ['gpt-4o-mini', 'gpt-4o', 'gpt-3.5-turbo'],
+            AIProvider.ANTHROPIC: ['claude-3-haiku-20240307', 'claude-3-sonnet-20240229']
+        }
+        
+        if provider and v not in valid_models.get(provider, []):
+            raise ValueError(f'Invalid model {v} for provider {provider}')
+        
+        return v
 
 class ChatResponse(BaseModel):
     message: str

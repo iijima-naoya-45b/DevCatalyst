@@ -1,19 +1,15 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import type { FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
-import type { LoginCredentials } from '@/lib/types';
 import { Header } from "@/(feature)/layouts/Header";
 import { Footer } from "@/(feature)/layouts/Footer";
 import { LoginHero } from './components/login-hero';
 import { LoginOAuthOptions } from './components/login-oauth-options';
-import { LoginDivider } from './components/login-divider';
-import { LoginForm, type LoginValidationErrors } from './components/login-form';
 import { LoginFooterLinks } from './components/login-footer-links';
 import { LoginLegalLinks } from './components/login-legal-links';
 
@@ -22,13 +18,7 @@ function LoginPageContent() {
     const searchParams = useSearchParams();
     const { login, isAuthenticated } = useAuth();
 
-    const [credentials, setCredentials] = useState<LoginCredentials>({
-        email: '',
-        password: '',
-    });
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [validationErrors, setValidationErrors] = useState<LoginValidationErrors>({});
 
     useEffect(() => {
         // ページ固有の背景クラスを適用
@@ -52,66 +42,6 @@ function LoginPageContent() {
         };
     }, [router, searchParams, isAuthenticated]);
 
-    const validateForm = (): boolean => {
-        const errors: { email?: string; password?: string } = {};
-
-        // メールアドレスのバリデーション
-        if (!credentials.email) {
-            errors.email = 'メールアドレスを入力してください';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(credentials.email)) {
-            errors.email = '有効なメールアドレスを入力してください';
-        }
-
-        // パスワードのバリデーション
-        if (!credentials.password) {
-            errors.password = 'パスワードを入力してください';
-        } else if (credentials.password.length < 6) {
-            errors.password = 'パスワードは6文字以上で入力してください';
-        }
-
-        setValidationErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        // バリデーション実行
-        if (!validateForm()) {
-            return;
-        }
-
-        setLoading(true);
-        setError(null);
-
-        try {
-            await login(credentials);
-            const redirectTo = searchParams.get('redirect') || '/dashboard';
-            router.push(redirectTo);
-        } catch (err) {
-            console.error('Login error:', err);
-            setError(err instanceof Error ? err.message : 'ログイン処理中にエラーが発生しました。もう一度お試しください。');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleCredentialChange = (field: keyof LoginCredentials, value: string) => {
-        setCredentials(prevCredentials => ({
-            ...prevCredentials,
-            [field]: value,
-        }));
-
-        setValidationErrors(prevErrors => ({
-            ...prevErrors,
-            [field]: undefined,
-        }));
-
-        if (error) {
-            setError(null);
-        }
-    };
 
     return (
         <main className="relative flex flex-1 items-center justify-center px-4 py-8 sm:px-6 lg:px-10 xl:px-16 overflow-hidden">
@@ -140,17 +70,6 @@ function LoginPageContent() {
 
                                 {/* OAuth認証 */}
                                 <LoginOAuthOptions />
-
-                                {/* 区切り線 */}
-                                <LoginDivider />
-
-                                <LoginForm
-                                    credentials={credentials}
-                                    validationErrors={validationErrors}
-                                    loading={loading}
-                                    onSubmit={handleSubmit}
-                                    onChange={handleCredentialChange}
-                                />
 
                                 <LoginFooterLinks />
 

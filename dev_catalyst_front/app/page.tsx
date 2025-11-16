@@ -48,7 +48,7 @@ export default function LandingPage() {
       {/* メインコンテンツ */}
       <div className={`relative transition-opacity duration-500 ${isLoading || !isMounted ? 'opacity-0' : 'opacity-100'}`}>
         <Header />
-        <div className="min-h-screen bg-gradient-to-br from-gradient-start via-gradient-mid to-gradient-end dark:bg-gradient-to-br dark:from-navy-main dark:via-navy-secondary dark:to-navy-card">
+        <div className="min-h-screen bg-gradient-to-br from-gradient-start via-gradient-mid to-gradient-end dark:bg-gradient-to-br dark:from-navy-main dark:via-navy-secondary dark:to-navy-card overflow-x-hidden">
           {/* Hero - フック */}
           <HeroSection />
           

@@ -85,22 +85,22 @@ export function WhySection() {
           )}
           style={{ transitionDelay: '800ms' }}
         >
-          <div className="rounded-3xl border-2 border-gold/35 bg-gold/15 p-12 text-center dark:border-gold/30 dark:bg-gold/20">
-            <h3 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 dark:text-white">
+          <div className="rounded-2xl sm:rounded-3xl border-2 border-gold/35 bg-gold/15 p-6 sm:p-8 md:p-12 text-center dark:border-gold/30 dark:bg-gold/20">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-gray-900 dark:text-white">
               すべてのソロプレナーに、
               <br />
               <span className="gold-soft-text">
                 戦略的思考のパートナーを
               </span>
             </h3>
-            <p className="mt-6 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+            <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg leading-relaxed text-gray-700 dark:text-gray-300">
               ひとりで事業を回すソロプレナーが、リソース不足で市場機会を逃してしまう。
               <br />
               戦略コンサルは高額すぎて使えない。でも、戦略なしでは勝てない。
               <br />
               そんな世界を変えたい。
             </p>
-            <p className="mt-4 text-base leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base leading-relaxed text-gray-600 dark:text-gray-400">
               AIを活用することで、ソロでも24時間365日、
               <br />
               プロレベルの市場分析・戦略立案・実行支援にアクセスできる。
