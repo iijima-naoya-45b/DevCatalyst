@@ -1,6 +1,6 @@
 import { BaseApiClient, type ApiResponse } from '../client';
 
-const RAILS_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
+const RAILS_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
 const client = new BaseApiClient(RAILS_API_URL);
 
 export interface DataSummary {

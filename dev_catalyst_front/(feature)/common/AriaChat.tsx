@@ -20,6 +20,8 @@ import {
 import { Doughnut, Bar, Radar } from 'react-chartjs-2';
 import { Message, AriaChatProps } from './types';
 import { useOptionalAuth } from '@/contexts/auth-context';
+import { AriaCharacter, type CharacterState } from './AriaCharacter';
+import { useAriaAnimationController } from './AriaAnimationController';
 
 // Chart.jsの登録
 ChartJS.register(
@@ -49,7 +51,11 @@ const deriveInitials = (name: string) => {
   return initials.slice(0, 2).toUpperCase();
 };
 
-export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatProps) {
+export function AriaChat({ 
+  onStartAnalysis, 
+  showUserAvatar = true,
+  characterVariant = 'celestia'
+}: AriaChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
 
@@ -64,6 +70,16 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
 
   // ストリーミング中かチェック
   const isStreaming = messages.some((msg) => msg.isStreaming);
+
+  // 最後のユーザーメッセージを取得（感情状態検出用）
+  const lastUserMessage = messages.filter((msg) => msg.type === 'user').slice(-1)[0]?.content || null;
+
+  // 立ち絵アニメーションコントローラー
+  const { characterState, incrementEnergyLevel } = useAriaAnimationController({
+    userMessage: lastUserMessage,
+    isStreaming,
+    isThinking: ariaThinking,
+  });
 
   // チャットコンテナ内のみスクロール（ページ全体はスクロールしない）
   const scrollToBottom = () => {
@@ -496,6 +512,9 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
     addUserMessage(inputValue);
     simulateAriaResponse(inputValue);
     setInputValue('');
+    
+    // メッセージ送信時に元気レベルを少し増加（ゲーミフィケーション）
+    incrementEnergyLevel(2);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -994,13 +1013,24 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
 
   return (
     <div className="max-w-9xl mx-auto">
-      {/* チャット履歴 */}
+      {/* チャット履歴（2カラムレイアウト：左に立ち絵、右にチャット） */}
       <Card className="border border-gold/25 dark:border-gold/25 bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 backdrop-blur-md shadow-2xl mb-6">
         <CardContent className="p-0">
-          <div
-            ref={chatContainerRef}
-            className="h-[600px] lg:h-[700px] overflow-y-auto p-6 space-y-6"
-          >
+          <div className="flex h-[600px] lg:h-[700px]">
+            {/* 左側：立ち絵エリア */}
+            <div className="hidden lg:flex w-64 xl:w-80 flex-shrink-0 items-center justify-center p-6 border-r border-gold/20 dark:border-gold/20 bg-gradient-to-br from-gold/5 to-amber/5 dark:from-slate-800/50 dark:to-slate-900/50">
+              <AriaCharacter 
+                state={characterState} 
+                className="w-full h-full"
+                characterVariant={characterVariant}
+              />
+            </div>
+
+            {/* 右側：チャットエリア */}
+            <div
+              ref={chatContainerRef}
+              className="flex-1 overflow-y-auto p-6 space-y-6"
+            >
             {messages.map((message) => {
               const isAssistant = message.type === 'aria';
               const timestamp =
@@ -1161,6 +1191,7 @@ export function AriaChat({ onStartAnalysis, showUserAvatar = true }: AriaChatPro
                 </div>
               </div>
             )}
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -39,6 +39,11 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = Field(1000, ge=1, le=4000)
     stream: Optional[bool] = False
     metadata: Optional[Dict[str, Any]] = None
+    # 多層プロンプトシステム用
+    mode: Optional[str] = Field(
+        None,
+        description="Aria mode: 'strategy', 'action', 'psychology', or 'integrated' (default)"
+    )
 
     @validator("messages")
     def validate_message_sequence(cls, v):

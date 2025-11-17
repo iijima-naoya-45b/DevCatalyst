@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/bin/zsh
+
+# venv が無ければ作成
+if [ ! -d "venv" ]; then
+  echo "Creating virtual environment..."
+  python3 -m venv venv
+fi
 
 # 仮想環境をアクティベート
 source venv/bin/activate

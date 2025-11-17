@@ -3,12 +3,13 @@
 import { Brain } from 'lucide-react';
 import Link from 'next/link';
 import { Header } from '@/(feature)/layouts/Header';
+import { Footer } from '@/(feature)/layouts/Footer';
 
 export default function PrivacyPolicyPage() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-4xl">
           <div className="bg-white/95 dark:bg-black/80 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gold/20 p-8 md:p-12">
             {/* ヘッダー */}
@@ -385,6 +386,7 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }

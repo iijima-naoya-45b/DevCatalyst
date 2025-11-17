@@ -50,6 +50,7 @@ export interface Message {
 export interface AriaChatProps {
   onStartAnalysis?: () => void;
   showUserAvatar?: boolean;
+  characterVariant?: 'celestia' | 'nocturne' | 'orbit';
 }
 
 export interface LandingPageProps {

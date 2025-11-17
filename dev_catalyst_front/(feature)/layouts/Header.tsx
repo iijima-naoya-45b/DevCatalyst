@@ -12,6 +12,7 @@ import {
   Shield,
   Mail,
   X,
+  LogOut,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { ThemeToggleSwitch } from '@/components/theme-toggle-switch';
@@ -42,12 +43,8 @@ export function Header() {
     setAuthenticated(isAuthenticated());
   }, [isAuthenticated]);
 
-  const handleGetStarted = () => {
-    if (authenticated) {
-      router.push('/dashboard');
-    } else {
-      router.push('/login');
-    }
+  const handleLogout = async () => {
+    router.push('/auth/logout');
   };
 
   const handleClickHome = () => {
@@ -244,7 +241,7 @@ export function Header() {
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gold-600 dark:hover:text-gold-400'
                     }`}
                   >
-                    <span>Home</span>
+                    <span>トップページ</span>
                   </button>
                 </li>
                 <li>
@@ -339,14 +336,26 @@ export function Header() {
             </div>
             <div className="hidden lg:flex items-center gap-2">
               <ThemeToggleAnimated />
-              <div className="ml-2">
-                <Button
-                  onClick={handleGetStarted}
-                  className="aria-gold-surface text-aria-dark-soft hover:shadow-[0_18px_36px_-20px_rgba(15,23,42,0.55)] transition-all duration-300 font-semibold px-5"
-                >
-                  {isClient && authenticated ? 'ダッシュボード' : '始める'}
-                </Button>
-              </div>
+              {isClient && authenticated ? (
+                <div className="ml-2">
+                  <Button
+                    onClick={handleLogout}
+                    className="aria-gold-surface text-aria-dark-soft hover:shadow-[0_18px_36px_-20px_rgba(15,23,42,0.55)] transition-all duration-300 font-semibold px-5 flex items-center gap-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    ログアウト
+                  </Button>
+                </div>
+              ) : (
+                <div className="ml-2">
+                  <Button
+                    onClick={() => router.push('/login')}
+                    className="aria-gold-surface text-aria-dark-soft hover:shadow-[0_18px_36px_-20px_rgba(15,23,42,0.55)] transition-all duration-300 font-semibold px-5"
+                  >
+                    始める
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </nav>

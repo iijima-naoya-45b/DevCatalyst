@@ -40,6 +40,9 @@ import { useAuth } from '@/contexts/auth-context';
 import { aiService } from '@/lib/services';
 import type { ChatSession, ChatRequest } from '@/lib/api/rails/ai';
 import { withAuthToken } from '@/lib/hooks/use-auth-token';
+import { AriaCharacter } from '@/(feature)/common/AriaCharacter';
+import { useAriaAnimationController } from '@/(feature)/common/AriaAnimationController';
+import ReactMarkdown from 'react-markdown';
 
 type ConversationMessage = {
   id: string;
@@ -88,6 +91,14 @@ export default function DashboardPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isMounted, setIsMounted] = useState(false);
+
+  // AriaCharacterのアニメーション制御
+  const [lastUserMessage, setLastUserMessage] = useState<string | null>(null);
+  const { characterState, incrementEnergyLevel } = useAriaAnimationController({
+    userMessage: lastUserMessage,
+    isStreaming: assistantThinking,
+    isThinking: assistantThinking,
+  });
 
   const filteredSessions = useMemo(() => {
     if (!searchTerm.trim()) {
@@ -310,6 +321,10 @@ export default function DashboardPage() {
         createdAt: new Date(),
       };
 
+      // AriaCharacterの状態を更新
+      setLastUserMessage(trimmed);
+      incrementEnergyLevel(2);
+
       const streamingMessageId = `assistant-${Date.now()}`;
       const streamingMessage: ConversationMessage = {
         id: streamingMessageId,
@@ -451,7 +466,8 @@ export default function DashboardPage() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
+      <div className="space-y-4 sm:space-y-6">
+        {/* タイトルと説明 */}
         <div className="space-y-1.5 sm:space-y-2">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white">
             チャットセッション
@@ -460,42 +476,32 @@ export default function DashboardPage() {
             アリアとの対話をセッションごとに整理し、次のアクションを素早く見つけましょう。
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+
+        {/* PCモード: アクションボタン群（上部） */}
+        <div className="hidden sm:flex flex-row items-center gap-3 sm:ml-auto sm:w-auto">
           <Button
             variant="outline"
             onClick={() => router.push('/specs/new')}
-            className="flex items-center gap-2"
+            className="flex items-center justify-center gap-2"
           >
             <FileText className="h-4 w-4" />
-            Spec生成
+            仕様の作成
           </Button>
           <Button
             onClick={() => router.push('/dashboard/projects/new')}
-            className="aria-gold-surface font-medium shadow-md transition-all duration-300 !text-black"
+            className="aria-gold-surface font-medium shadow-md transition-all duration-300 !text-black flex items-center justify-center gap-2"
           >
-            <Plus className="mr-2 h-4 w-4 !text-black" />
-            新しい対話を始める
+            <Plus className="h-4 w-4 !text-black" />
+            新しい対話
           </Button>
         </div>
       </div>
 
       {sessionsError && (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="mt-4">
           <AlertDescription>{sessionsError}</AlertDescription>
         </Alert>
       )}
-
-      {/* スマホ: ドロワーオープンボタン */}
-      <div className="lg:hidden mb-4">
-        <Button
-          variant="outline"
-          onClick={() => setIsDrawerOpen(true)}
-          className="flex items-center gap-2"
-        >
-          <Menu className="h-4 w-4" />
-          セッション一覧
-        </Button>
-      </div>
 
       {/* スマホ: ドロワー（Portal経由でbody直下にレンダリング） */}
       {isMounted &&
@@ -806,35 +812,45 @@ export default function DashboardPage() {
         </Card>
 
         <Card className="flex-1 border border-gold/25 dark:border-gold/25 bg-white/90 dark:bg-slate-900/70 backdrop-blur">
-          <CardHeader className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {activeSessionMeta?.title ?? 'セッションを選択してください'}
-                </CardTitle>
-                {activeSessionMeta && (
-                  <CardDescription className="text-xs text-gray-500 dark:text-gray-400">
-                    最終更新:{' '}
-                    {new Date(activeSessionMeta.last_interacted_at).toLocaleString('ja-JP')}
-                  </CardDescription>
-                )}
+          <CardContent className="flex flex-col h-[24rem] sm:h-[28rem] lg:h-[36rem] p-0 pb-2 sm:pb-4">
+            {/* ヘッダー情報（スクロール可能） */}
+            <div className="px-4 sm:px-6 pt-4 sm:pt-6 pb-2 space-y-2 border-b border-gold/10 flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">
+                    {activeSessionMeta?.title ?? 'セッションを選択してください'}
+                  </h3>
+                  {activeSessionMeta && (
+                    <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      最終更新:{' '}
+                      {new Date(activeSessionMeta.last_interacted_at).toLocaleString('ja-JP')}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 ml-2 flex-shrink-0">
+                  <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                  {messages.length} 件
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <MessageCircle className="h-4 w-4" />
-                {messages.length} 件
-              </div>
+
             </div>
             {messagesError && (
-              <Alert variant="destructive">
-                <AlertDescription>{messagesError}</AlertDescription>
+              <Alert variant="destructive" className="mx-4 sm:mx-6 mt-2">
+                <AlertDescription className="text-xs sm:text-sm">{messagesError}</AlertDescription>
               </Alert>
             )}
-          </CardHeader>
-          <CardContent className="flex flex-col h-[24rem] sm:h-[28rem] lg:h-[36rem]">
-            <div
-              ref={chatContainerRef}
-              className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-3 sm:space-y-4 lg:space-y-5"
-            >
+            {/* 2カラムレイアウト: 左にAriaCharacter、右にチャットメッセージ */}
+            <div className="flex-1 flex flex-row gap-2 md:gap-4 lg:gap-6 overflow-hidden">
+              {/* 左側: AriaCharacter（SP: 非表示、PC: 左） */}
+              <div className="hidden md:flex items-start justify-start w-48 lg:w-56 flex-shrink-0">
+                <AriaCharacter state={characterState} characterVariant="celestia" />
+              </div>
+
+              {/* 右側: チャットメッセージ */}
+              <div
+                ref={chatContainerRef}
+                className="flex-1 min-h-0 overflow-y-auto pr-2 sm:pr-3 md:pr-4 lg:pr-6 space-y-3 sm:space-y-4 md:space-y-4 lg:space-y-5"
+              >
               {messagesLoading ? (
                 <div className="h-full flex items-center justify-center text-sm text-gray-500 dark:text-gray-300">
                   <Loader2 className="h-5 w-5 animate-spin mr-2" />
@@ -849,41 +865,76 @@ export default function DashboardPage() {
                 messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'} space-y-1.5`}
+                    className={`flex gap-2 md:gap-3 lg:gap-4 ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start`}
                   >
-                    <div
-                      className={`max-w-full rounded-lg px-3 py-2 sm:px-4 sm:py-3 shadow ${
-                        message.role === 'user'
-                          ? 'bg-gradient-to-br from-amber-100 via-amber-200 to-amber-100 text-slate-900 dark:!text-slate-900'
-                          : 'bg-white dark:bg-slate-900/80 text-gray-900 dark:text-amber-100 border border-gold/30'
-                      } ${message.isStreaming ? 'animate-pulse' : ''}`}
-                    >
-                      <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0 [&>ul]:mb-1.5 [&>ol]:mb-1.5 [&>li]:mb-0.5 [&>h1]:mb-1.5 [&>h2]:mb-1.5 [&>h3]:mb-1.5 [&>h4]:mb-1.5">
-                        {message.content}
+                    {/* SPモード: アシスタントメッセージの左側にAriaCharacterを表示 */}
+                    {message.role === 'assistant' && (
+                      <div className="hidden md:block w-8 h-8 flex-shrink-0" />
+                    )}
+                    <div className="flex-1 flex flex-col space-y-1.5 sm:space-y-2">
+                      <div
+                        className={`max-w-[80%] sm:max-w-[85%] md:max-w-[90%] lg:max-w-full rounded-lg px-3 py-2 sm:px-4 sm:py-2.5 md:py-3 shadow ${
+                          message.role === 'user'
+                            ? 'bg-gradient-to-br from-amber-100 via-amber-200 to-amber-100 text-slate-900 dark:!text-slate-900 ml-auto'
+                            : 'bg-white dark:bg-slate-900/80 text-gray-900 dark:text-amber-100 border border-gold/30 md:ml-0'
+                        } ${message.isStreaming ? 'animate-pulse' : ''}`}
+                      >
+                        {message.role === 'assistant' ? (
+                          <div className="text-[11px] sm:text-sm leading-relaxed [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mb-1.5 [&_ol]:mb-1.5 [&_li]:mb-0.5 [&_h1]:mb-1.5 [&_h1]:text-sm [&_h1]:font-semibold [&_h1]:mt-2 [&_h2]:mb-1.5 [&_h2]:text-xs [&_h2]:font-semibold [&_h2]:mt-2 [&_h3]:mb-1.5 [&_h3]:text-xs [&_h3]:font-semibold [&_h3]:mt-2 [&_h4]:mb-1.5 [&_h4]:text-[11px] [&_h4]:font-semibold [&_h4]:mt-2 [&_code]:bg-gray-100 [&_code]:dark:bg-gray-800 [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-[10px] [&_code]:font-mono [&_pre]:bg-gray-100 [&_pre]:dark:bg-gray-800 [&_pre]:p-2 [&_pre]:rounded [&_pre]:overflow-x-auto [&_pre]:text-[10px] [&_pre]:my-2 [&_pre>code]:bg-transparent [&_pre>code]:p-0 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-4 [&_ol]:my-1.5 [&_li]:ml-2 [&_strong]:font-semibold [&_em]:italic">
+                            <ReactMarkdown
+                              components={{
+                                h1: ({ children }) => <h1 className="text-sm font-semibold mb-1.5 mt-2">{children}</h1>,
+                                h2: ({ children }) => <h2 className="text-xs font-semibold mb-1.5 mt-2">{children}</h2>,
+                                h3: ({ children }) => <h3 className="text-xs font-semibold mb-1.5 mt-2">{children}</h3>,
+                                h4: ({ children }) => <h4 className="text-[11px] font-semibold mb-1.5 mt-2">{children}</h4>,
+                                p: ({ children }) => <p className="mb-1.5 last:mb-0">{children}</p>,
+                                ul: ({ children }) => <ul className="list-disc pl-4 my-1.5">{children}</ul>,
+                                ol: ({ children }) => <ol className="list-decimal pl-4 my-1.5">{children}</ol>,
+                                li: ({ children }) => <li className="ml-2 mb-0.5">{children}</li>,
+                                code: ({ children, className }) => {
+                                  const isInline = !className;
+                                  return isInline ? (
+                                    <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-[10px] font-mono">
+                                      {children}
+                                    </code>
+                                  ) : (
+                                    <code className="text-[10px] font-mono">{children}</code>
+                                  );
+                                },
+                                pre: ({ children }) => (
+                                  <pre className="bg-gray-100 dark:bg-gray-800 p-2 rounded overflow-x-auto text-[10px] my-2">
+                                    {children}
+                                  </pre>
+                                ),
+                                strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                                em: ({ children }) => <em className="italic">{children}</em>,
+                              }}
+                            >
+                              {message.content}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          <div className="text-[11px] sm:text-sm leading-relaxed whitespace-pre-wrap">
+                            {message.content}
+                          </div>
+                        )}
                       </div>
+                      <span className={`text-[10px] sm:text-[11px] text-gray-400 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
+                        {message.createdAt.toLocaleTimeString('ja-JP', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
                     </div>
-                    <span className="text-[10px] sm:text-[11px] text-gray-400">
-                      {message.createdAt.toLocaleTimeString('ja-JP', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
                   </div>
                 ))
               )}
 
-              {assistantThinking && (
-                <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-300">
-                  <div className="flex items-center justify-center h-8 w-8 rounded-full bg-gold/15 border border-gold/30">
-                    <Sparkles className="h-4 w-4 text-gold animate-pulse" />
-                  </div>
-                  <span>アリアが考えています...</span>
-                </div>
-              )}
+              </div>
             </div>
 
-            <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
-              <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="mt-3 sm:mt-4 md:mt-4 space-y-2 sm:space-y-2.5 md:space-y-3 px-3 sm:px-4 md:px-6">
+              <div className="flex items-center gap-1.5 sm:gap-2 md:gap-2">
                 <div className="flex-1 relative">
                   <Textarea
                     ref={textareaRef}
@@ -907,32 +958,30 @@ export default function DashboardPage() {
                         : '左側のリストからセッションを選択してください。'
                     }
                     rows={1}
-                    className="flex-1 min-h-[2.5rem] sm:min-h-[3rem] max-h-24 sm:max-h-32 resize-none rounded-lg border border-gold/25 dark:border-gold/20 bg-white/90 dark:bg-slate-900/70 px-3 py-2 sm:px-4 sm:py-3 pr-10 sm:pr-12 text-xs sm:text-sm text-gray-900 dark:text-gray-100 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30 transition overflow-hidden"
+                    className="flex-1 min-h-[2.25rem] sm:min-h-[3rem] max-h-20 sm:max-h-32 resize-none rounded-lg border border-gold/25 dark:border-gold/20 bg-white/90 dark:bg-slate-900/70 px-2.5 py-1.5 sm:px-4 sm:py-3 pr-8 sm:pr-12 text-[11px] sm:text-sm text-gray-900 dark:text-gray-100 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30 transition overflow-hidden"
                   />
                   <Button
                     onClick={() => void handleSendMessage()}
                     disabled={!activeSessionId || assistantThinking || !messageInput.trim()}
                     size="sm"
-                    className="absolute right-1.5 sm:right-2 bottom-1.5 sm:bottom-2 aria-gold-surface h-7 w-7 sm:h-9 sm:w-9 rounded-full flex items-center justify-center"
+                    className="absolute right-1 sm:right-2 bottom-1 sm:bottom-2 aria-gold-surface h-6 w-6 sm:h-9 sm:w-9 rounded-full flex items-center justify-center p-0"
                   >
                     <Send className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1 sm:gap-1.5">
                 {DEFAULT_QUICK_REPLIES.map((reply) => (
-                  <Button
+                  <button
                     key={reply}
                     type="button"
-                    variant="outline"
-                    size="sm"
                     disabled={!activeSessionId || assistantThinking}
                     onClick={() => void handleSendMessage(reply)}
-                    className="border-gold/35 dark:border-gold/25 text-[11px] px-2.5 py-1 h-7 text-amber-700 dark:text-amber-200 hover:bg-gold/15 dark:hover:bg-slate-800 transition-all rounded-lg"
+                    className="border border-gold/35 dark:border-gold/25 text-[10px] sm:text-[11px] px-2 py-0.5 h-6 sm:h-7 text-amber-700 dark:text-amber-200 hover:bg-gold/15 dark:hover:bg-slate-800 transition-all rounded-md disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                   >
                     {reply}
-                  </Button>
+                  </button>
                 ))}
               </div>
             </div>

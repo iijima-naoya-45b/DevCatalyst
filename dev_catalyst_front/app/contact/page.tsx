@@ -7,10 +7,13 @@ import { Textarea } from '../../(feature)/common/ui/textarea';
 import { Label } from '../../(feature)/common/ui/label';
 import { Separator } from '../../(feature)/common/ui/separator';
 import { Mail, Phone, MapPin, Shield, FileText, AlertTriangle } from 'lucide-react';
+import { Header } from '../../(feature)/layouts/Header';
+import { Footer } from '../../(feature)/layouts/Footer';
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background/70 to-background">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background/70 to-background flex flex-col">
+      <Header />
       {/* Header */}
       <div className="bg-navy-dark/30 border-b border-gold/20">
         <div className="max-w-7xl mx-auto px-4 py-16">
@@ -280,6 +283,7 @@ export default function ContactPage() {
           </Card>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
